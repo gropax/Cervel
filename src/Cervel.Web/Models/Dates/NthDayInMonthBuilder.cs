@@ -5,23 +5,16 @@ using System.Threading.Tasks;
 
 namespace Cervel.Web.Models.Dates
 {
-    public class NthDayInMonth : IYearlyDateBuilder
+    public class NthDayInMonthBuilder : IYearlyDateBuilder
     {
         private readonly int _day;
         private readonly Month _month;
 
-        public NthDayInMonth(int day, Month month)
+        public NthDayInMonthBuilder(int day, Month month)
         {
             ValidateDayRank(month, day);
             _day = day;
             _month = month;
-        }
-
-        public DateTime GetDateTime(int year)
-        {
-            int daysInMonth = DateTime.DaysInMonth(year, (int)_month);
-            int day = _day > 0 ? Math.Min(_day, daysInMonth) : daysInMonth + 1 + _day;
-            return new DateTime(year, (int)_month, day);
         }
 
         public bool TryBuild(int year, out DateTime date)

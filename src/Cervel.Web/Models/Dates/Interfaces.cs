@@ -7,7 +7,6 @@ namespace Cervel.Web.Models.Dates
 {
     public interface IYearlyDateBuilder
     {
-        DateTime GetDateTime(int year);
         bool TryBuild(int year, out DateTime date);
     }
 }
