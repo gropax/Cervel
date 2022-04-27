@@ -9,13 +9,13 @@ namespace Cervel.Web.Models.Dates.Tests
         [Fact]
         public void Test_InvalidDayValue()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new NthDayInMonth(0, Month.January));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new NthDayInMonth(32, Month.January));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new NthDayInMonth(31, Month.April));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new NthDayInMonth(30, Month.February));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new NthDayInMonth(-32, Month.January));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new NthDayInMonth(-31, Month.April));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new NthDayInMonth(-30, Month.February));
+            Assert.Throws<Exception>(() => new NthDayInMonth(0, Month.January));
+            Assert.Throws<Exception>(() => new NthDayInMonth(32, Month.January));
+            Assert.Throws<Exception>(() => new NthDayInMonth(31, Month.April));
+            Assert.Throws<Exception>(() => new NthDayInMonth(30, Month.February));
+            Assert.Throws<Exception>(() => new NthDayInMonth(-32, Month.January));
+            Assert.Throws<Exception>(() => new NthDayInMonth(-31, Month.April));
+            Assert.Throws<Exception>(() => new NthDayInMonth(-30, Month.February));
         }
 
         [Fact]
