@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.Web.Models.Dates.Yearly
 {
-    public class NthDayInMonthBuilder : IYearlyDateBuilder
+    public class NthDayInMonthBuilder : NthDayBuilderBase, IYearlyDateBuilder
     {
         private readonly int _day;
         private readonly Month _month;
@@ -19,20 +19,10 @@ namespace Cervel.Web.Models.Dates.Yearly
 
         public bool TryBuild(int year, out DateTime date)
         {
-            date = default;
-
-            int daysInMonth = DateTime.DaysInMonth(year, (int)_month);
-            if (Math.Abs(_day) > daysInMonth)
-                return false;
-            else
-            {
-                int day = _day > 0 ? _day : daysInMonth + 1 + _day;
-                date = new DateTime(year, (int)_month, day);
-                return true;
-            }
+            return TryBuild(year, _month, _day, out date);
         }
 
-        public void ValidateDayRank(Month month, int day)
+        private void ValidateDayRank(Month month, int day)
         {
             int dayAbs = Math.Abs(day);
             if (dayAbs == 0)
