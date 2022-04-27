@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.Web.Models.Dates
 {
-    public class NthDayOfWeekInMonth : IYearlyDate
+    public class NthDayOfWeekInMonth : IYearlyDateBuilder
     {
         private readonly int _rank;
         private readonly DayOfWeek _weekday;
@@ -33,6 +33,27 @@ namespace Cervel.Web.Models.Dates
                 day -= 7;
 
             return new DateTime(year, (int)_month, day);
+        }
+
+        public bool TryBuild(int year, out DateTime date)
+        {
+            date = default;
+
+            int fstDow = (int)new DateTime(year, (int)_month, 1).DayOfWeek;
+            if (fstDow > (int)_weekday)
+                fstDow -= 7;
+
+            int fstDay = (int)_weekday - fstDow + 1;
+            int day = fstDay + (_rank - 1) * 7;
+
+            int daysInMonth = DateTime.DaysInMonth(year, (int)_month);
+            if (day > daysInMonth)
+                return false;
+            else
+            {
+                date = new DateTime(year, (int)_month, day);
+                return true;
+            }
         }
 
         public void ValidateDayOfWeekRank(int rank)

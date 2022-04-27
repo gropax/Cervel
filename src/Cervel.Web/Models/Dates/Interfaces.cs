@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Cervel.Web.Models.Dates
 {
-    public interface IYearlyDate
+    public interface IYearlyDateBuilder
     {
         DateTime GetDateTime(int year);
+        bool TryBuild(int year, out DateTime date);
     }
 }

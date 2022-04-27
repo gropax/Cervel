@@ -18,36 +18,67 @@ namespace Cervel.Web.Models.Dates.Tests
         public void Test_Positive_First()
         {
             var descriptor = new NthDayOfWeekInMonth(1, DayOfWeek.Saturday, Month.January);
-            Assert.Equal(new DateTime(2022, 1, 1), descriptor.GetDateTime(2022));
-            Assert.Equal(new DateTime(2023, 1, 7), descriptor.GetDateTime(2023));
-            Assert.Equal(new DateTime(2024, 1, 6), descriptor.GetDateTime(2024));
-            Assert.Equal(new DateTime(2025, 1, 4), descriptor.GetDateTime(2025));
-            Assert.Equal(new DateTime(2026, 1, 3), descriptor.GetDateTime(2026));
-            Assert.Equal(new DateTime(2027, 1, 2), descriptor.GetDateTime(2027));
+
+            Assert.True(descriptor.TryBuild(2022, out var date2022));
+            Assert.Equal(new DateTime(2022, 1, 1), date2022);
+
+            Assert.True(descriptor.TryBuild(2023, out var date2023));
+            Assert.Equal(new DateTime(2023, 1, 7), date2023);
+
+            Assert.True(descriptor.TryBuild(2024, out var date2024));
+            Assert.Equal(new DateTime(2024, 1, 6), date2024);
+
+            Assert.True(descriptor.TryBuild(2025, out var date2025));
+            Assert.Equal(new DateTime(2025, 1, 4), date2025);
+
+            Assert.True(descriptor.TryBuild(2026, out var date2026));
+            Assert.Equal(new DateTime(2026, 1, 3), date2026);
+
+            Assert.True(descriptor.TryBuild(2027, out var date2027));
+            Assert.Equal(new DateTime(2027, 1, 2), date2027);
         }
 
         [Fact]
         public void Test_Positive_Second()
         {
             var descriptor = new NthDayOfWeekInMonth(2, DayOfWeek.Saturday, Month.January);
-            Assert.Equal(new DateTime(2022, 1, 8), descriptor.GetDateTime(2022));
-            Assert.Equal(new DateTime(2023, 1, 14), descriptor.GetDateTime(2023));
-            Assert.Equal(new DateTime(2024, 1, 13), descriptor.GetDateTime(2024));
-            Assert.Equal(new DateTime(2025, 1, 11), descriptor.GetDateTime(2025));
-            Assert.Equal(new DateTime(2026, 1, 10), descriptor.GetDateTime(2026));
-            Assert.Equal(new DateTime(2027, 1, 9), descriptor.GetDateTime(2027));
+
+            Assert.True(descriptor.TryBuild(2022, out var date2022));
+            Assert.Equal(new DateTime(2022, 1, 8), date2022);
+
+            Assert.True(descriptor.TryBuild(2023, out var date2023));
+            Assert.Equal(new DateTime(2023, 1, 14), date2023);
+
+            Assert.True(descriptor.TryBuild(2024, out var date2024));
+            Assert.Equal(new DateTime(2024, 1, 13), date2024);
+
+            Assert.True(descriptor.TryBuild(2025, out var date2025));
+            Assert.Equal(new DateTime(2025, 1, 11), date2025);
+
+            Assert.True(descriptor.TryBuild(2026, out var date2026));
+            Assert.Equal(new DateTime(2026, 1, 10), date2026);
+
+            Assert.True(descriptor.TryBuild(2027, out var date2027));
+            Assert.Equal(new DateTime(2027, 1, 9), date2027);
         }
 
         [Fact]
         public void Test_Positive_Fifth()
         {
             var descriptor = new NthDayOfWeekInMonth(5, DayOfWeek.Saturday, Month.January);
-            Assert.Equal(new DateTime(2022, 1, 29), descriptor.GetDateTime(2022));
-            Assert.Equal(new DateTime(2023, 1, 28), descriptor.GetDateTime(2023));
-            Assert.Equal(new DateTime(2024, 1, 27), descriptor.GetDateTime(2024));
-            Assert.Equal(new DateTime(2025, 1, 25), descriptor.GetDateTime(2025));
-            Assert.Equal(new DateTime(2026, 1, 31), descriptor.GetDateTime(2026));
-            Assert.Equal(new DateTime(2027, 1, 30), descriptor.GetDateTime(2027));
+
+            Assert.True(descriptor.TryBuild(2022, out var date2022));
+            Assert.Equal(new DateTime(2022, 1, 29), date2022);
+
+            Assert.False(descriptor.TryBuild(2023, out var date2023));
+            Assert.False(descriptor.TryBuild(2024, out var date2024));
+            Assert.False(descriptor.TryBuild(2025, out var date2025));
+
+            Assert.True(descriptor.TryBuild(2026, out var date2026));
+            Assert.Equal(new DateTime(2026, 1, 31), date2026);
+
+            Assert.True(descriptor.TryBuild(2027, out var date2027));
+            Assert.Equal(new DateTime(2027, 1, 30), date2027);
         }
     }
 }
