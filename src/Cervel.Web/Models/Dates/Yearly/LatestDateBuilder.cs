@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cervel.Web.Models.Dates
+namespace Cervel.Web.Models.Dates.Yearly
 {
     public class LatestDateBuilder : YearlyDateSelector
     {

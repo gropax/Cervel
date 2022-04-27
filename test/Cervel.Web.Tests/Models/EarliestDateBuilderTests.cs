@@ -2,7 +2,7 @@ using Cervel.Web.Models;
 using System;
 using Xunit;
 
-namespace Cervel.Web.Models.Dates.Tests
+namespace Cervel.Web.Models.Dates.Yearly.Tests
 {
     public class EarliestDateBuilderTests
     {
