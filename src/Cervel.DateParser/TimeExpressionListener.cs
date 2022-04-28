@@ -42,11 +42,19 @@ namespace Cervel.TimeParser
                 _timeIntervalGenerator = new TimeIntervals.NeverGenerator();
         }
 
+        public override void ExitToday(TimeExpressionParser.TodayContext context)
+        {
+            if (_parseDateTime)
+                _dateTimeGenerator = DateTimes.Generators.Today();
+            else
+                _timeIntervalGenerator = TimeIntervals.Generators.Today();
+        }
+
         private HashSet<DayOfWeek> _daysOfWeek = new HashSet<DayOfWeek>();
         public override void ExitNextDayOfWeek(TimeExpressionParser.NextDayOfWeekContext context)
         {
             if (_parseDateTime)
-                _dateTimeGenerator = new DateTimes.NeverGenerator();
+                _dateTimeGenerator = DateTimes.Generators.NextWeekDays(_daysOfWeek);
             else
                 _timeIntervalGenerator = TimeIntervals.Generators.NextWeekDays(_daysOfWeek);
 

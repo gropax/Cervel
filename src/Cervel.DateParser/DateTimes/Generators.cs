@@ -9,6 +9,11 @@ namespace Cervel.TimeParser.DateTimes
 {
     public static class Generators
     {
+        public static IDateTimeGenerator Today()
+        {
+            return new DayFilterGenerator(take: 1);
+        }
+
         public static IDateTimeGenerator NextWeekDays(IEnumerable<DayOfWeek> dows)
         {
             var hashset = new HashSet<DayOfWeek>(dows);

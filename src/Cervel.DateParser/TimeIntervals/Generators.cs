@@ -9,6 +9,11 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public static class Generators
     {
+        public static ITimeIntervalGenerator Today()
+        {
+            return new DayFilterGenerator(TimeSpan.FromDays(1), take: 1);
+        }
+
         public static ITimeIntervalGenerator NextWeekDays(IEnumerable<DayOfWeek> dows)
         {
             var hashset = new HashSet<DayOfWeek>(dows);

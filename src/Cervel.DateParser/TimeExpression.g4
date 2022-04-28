@@ -3,16 +3,18 @@
 timeIntervals
 	: always
 	| never
+	| today
 	| nextDayOfWeek
 	;
 
 dateTimes
 	: never
+	| today
+	| nextDayOfWeek
 	;
 
-nextDayOfWeek
-	: dayOfWeek NEXT?
-	;
+today : 'aujourd\'hui' | 'aujourd hui' | 'ajd' ;
+nextDayOfWeek : dayOfWeek NEXT?  ;
 
 dayOfWeek : monday | tuesday | wednesday | thursday | friday | saturday | sunday ;
 
@@ -27,6 +29,10 @@ sunday : SUNDAY ;
 always : ALWAYS ;
 never : NEVER ;
 
+ALWAYS : 'toujours' | 'tjrs' | 'tj' ;
+NEVER : 'jamais' | 'jam' | 'ja' ;
+NEXT : 'prochain' | 'proc' | 'pro' ;
+
 MONDAY : 'lundi' | 'lun' | 'lu' ;
 TUESDAY : 'mardi' | 'mar' | 'ma' ;
 WEDNESDAY : 'mercredi' | 'mer' | 'me' ;
@@ -34,7 +40,3 @@ THURSDAY : 'jeudi' | 'jeu' | 'je' ;
 FRIDAY : 'vendredi' | 'ven' | 've' ;
 SATURDAY : 'samedi' | 'sam' | 'sa' ;
 SUNDAY : 'dimanche' | 'dim' | 'di' ;
-
-ALWAYS : 'toujours' | 'tjrs' | 'tj' ;
-NEVER : 'jamais' | 'jam' | 'ja' ;
-NEXT : 'prochain' | 'proc' | 'pro' ;

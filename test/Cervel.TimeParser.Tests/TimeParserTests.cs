@@ -48,6 +48,20 @@ namespace Cervel.TimeParser.Tests
 
 
         [Theory]
+        [InlineData("aujourd'hui")]
+        [InlineData("aujourd hui")]
+        [InlineData("ajd")]
+        public void Test_ParseTimeIntervals_Today(string input)
+        {
+            var result = _timeParser.ParseTimeIntervals(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Intervals(DayInterval(2022, 1, 1)),
+                result.Value.Generate(_fromDate, _toDate));
+        }
+
+        [Theory]
         [InlineData("lundi")]
         [InlineData("lu")]
         [InlineData("lun")]
