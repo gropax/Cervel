@@ -198,6 +198,7 @@ namespace Cervel.TimeParser.Tests
         }
 
 
+        #region "Lundi prochain"
         [Theory]
         [InlineData("lundi")]
         [InlineData("lu")]
@@ -316,5 +317,36 @@ namespace Cervel.TimeParser.Tests
                 Intervals(DayInterval(2022, 1, 2)),
                 result.Value.Generate(_fromDate, _toDate));
         }
+        #endregion
+
+
+        #region "Le lundi"
+        [Theory]
+        [InlineData("le lundi")]
+        [InlineData("les lundis")]
+        [InlineData("le lun")]
+        [InlineData("ls lun")]
+        [InlineData("tous les lundis")]
+        [InlineData("ts ls lundis")]
+        [InlineData("chaque lundi")]
+        [InlineData("ch lundi")]
+        [InlineData("lundi de chaque semaine")]
+        [InlineData("le lundi de ch sem")]
+        [InlineData("le lundi chaque semaine")]
+        public void Test_ParseTimeIntervals_EveryMonday(string input)
+        {
+            var result = _timeParser.ParseTimeIntervals(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, 3),
+                    DayInterval(2022, 1, 10),
+                    DayInterval(2022, 1, 17),
+                    DayInterval(2022, 1, 24),
+                    DayInterval(2022, 1, 31)),
+                result.Value.Generate(_fromDate, new DateTime(2022, 2, 1)));
+        }
+        #endregion
     }
 }

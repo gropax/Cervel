@@ -2,6 +2,7 @@
 using Cervel.TimeParser;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cervel.TimeParser
 {
@@ -59,6 +60,15 @@ namespace Cervel.TimeParser
                 _timeIntervalGenerator = TimeIntervals.Generators.NextWeekDays(_daysOfWeek);
 
             _daysOfWeek.Clear();
+        }
+
+        public override void ExitEveryDayOfWeek(TimeExpressionParser.EveryDayOfWeekContext context)
+        {
+            var dow = _daysOfWeek.Single();
+            if (_parseDateTime)
+                _dateTimeGenerator = DateTimes.Generators.EveryDayOfWeek(dow);
+            else
+                _timeIntervalGenerator = TimeIntervals.Generators.EveryDayOfWeek(dow);
         }
 
         public override void ExitMonday(TimeExpressionParser.MondayContext context) => _daysOfWeek.Add(DayOfWeek.Monday);

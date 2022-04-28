@@ -5,38 +5,45 @@ timeIntervals
 	| never
 	| today
 	| nextDayOfWeek
+	| everyDayOfWeek
 	;
 
 dateTimes
 	: never
 	| today
 	| nextDayOfWeek
+	| everyDayOfWeek
 	;
 
 today : 'aujourd\'hui' | 'aujourd hui' | 'ajd' ;
-nextDayOfWeek : dayOfWeek NEXT?  ;
+
+nextDayOfWeek : dayOfWeek NEXT? ;
+
+everyDayOfWeek
+    : dayOfWeek DE CHAQUE SEMAINE
+    | LES dayOfWeek
+	| CHAQUE dayOfWeek
+	| LES dayOfWeek DE? CHAQUE SEMAINE
+    | TOUT LES dayOfWeek
+	;
+
+LES : 'les' | 'le' | 'ls' ;
+CHAQUE : 'chaque' | 'ch' ;
+SEMAINE : 'semaine' | 'sem' | 'se' ;
+TOUT : 'tout' | 'tous' | 'ts' | 'tt' ;
+DE : 'de' | 'du' ;
 
 dayOfWeek : monday | tuesday | wednesday | thursday | friday | saturday | sunday ;
 
-monday : MONDAY ;
-tuesday : TUESDAY ;
-wednesday : WEDNESDAY ;
-thursday : THURSDAY ;
-friday : FRIDAY ;
-saturday : SATURDAY ;
-sunday : SUNDAY ;
+monday : 'lundi' | 'lundis' | 'lun' | 'lu' ;
+tuesday : 'mardi' | 'mardis' | 'mar' | 'ma' ;
+wednesday : 'mercredi' | 'mercredis' | 'mer' | 'me' ;
+thursday : 'jeudi' | 'jeudis' | 'jeu' | 'je' ;
+friday : 'vendredi' | 'vendredis' | 'ven' | 've' ;
+saturday : 'samedi' | 'samedis' | 'sam' | 'sa' ;
+sunday : 'dimanche' | 'dimanches' | 'dim' | 'di' ;
 
-always : ALWAYS ;
-never : NEVER ;
+always : 'toujours' | 'tjrs' | 'tj' ;
+never : 'jamais' | 'jam' | 'ja' ;
 
-ALWAYS : 'toujours' | 'tjrs' | 'tj' ;
-NEVER : 'jamais' | 'jam' | 'ja' ;
 NEXT : 'prochain' | 'proc' | 'pro' ;
-
-MONDAY : 'lundi' | 'lun' | 'lu' ;
-TUESDAY : 'mardi' | 'mar' | 'ma' ;
-WEDNESDAY : 'mercredi' | 'mer' | 'me' ;
-THURSDAY : 'jeudi' | 'jeu' | 'je' ;
-FRIDAY : 'vendredi' | 'ven' | 've' ;
-SATURDAY : 'samedi' | 'sam' | 'sa' ;
-SUNDAY : 'dimanche' | 'dim' | 'di' ;

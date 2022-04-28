@@ -20,5 +20,10 @@ namespace Cervel.TimeParser.TimeIntervals
             return new DayFilterGenerator(TimeSpan.FromDays(1), (d) => hashset.Contains(d.DayOfWeek), take: 1)
                 .Shift(TimeSpan.FromDays(1));
         }
+
+        public static ITimeIntervalGenerator EveryDayOfWeek(DayOfWeek dow)
+        {
+            return new DayFilterGenerator(TimeSpan.FromDays(1), (d) => d.DayOfWeek == dow);
+        }
     }
 }
