@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cervel.TimeParser.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,8 @@ namespace Cervel.TimeParser.TimeIntervals
         public static ITimeIntervalGenerator NextWeekDays(IEnumerable<DayOfWeek> dows)
         {
             var hashset = new HashSet<DayOfWeek>(dows);
-            return new DayFilterGenerator(TimeSpan.FromDays(1),
-                (d) => hashset.Contains(d.DayOfWeek),
-                take: 1);
+            return new DayFilterGenerator(TimeSpan.FromDays(1), (d) => hashset.Contains(d.DayOfWeek), take: 1)
+                .Shift(TimeSpan.FromDays(1));
         }
     }
 }

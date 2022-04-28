@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
 {
+    [DebuggerDisplay("[{Start}, {End}]")]
     public struct TimeInterval
     {
         public DateTime Start { get; }
@@ -18,6 +20,11 @@ namespace Cervel.TimeParser
 
             Start = start;
             End = end;
+        }
+
+        public override string ToString()
+        {
+            return $"[{Start}, {End}]";
         }
     }
 }
