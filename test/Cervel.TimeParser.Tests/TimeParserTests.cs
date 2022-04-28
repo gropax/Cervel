@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Cervel.TimeParser.Tests
 {
-    public class TimeParserTests
+    public class TimeParserTests : TestBase
     {
         private TimeParser _timeParser = new TimeParser();
         private DateTime _fromDate = new DateTime(2022, 1, 1);
@@ -46,6 +46,7 @@ namespace Cervel.TimeParser.Tests
                 result.Value.Generate(_fromDate, _toDate));
         }
 
+
         //[Theory]
         //[InlineData("lundi")]
         //[InlineData("lun")]
@@ -60,15 +61,5 @@ namespace Cervel.TimeParser.Tests
         //        Intervals(DayInterval(2022, 1, 3)),
         //        result.Value.Generate(_fromDate, _toDate));
         //}
-
-
-        private TimeInterval[] Intervals(params TimeInterval[] timeSpans) => timeSpans;
-        private TimeInterval DayInterval(int year, int month, int day)
-        {
-            var start = new DateTime(year, month, day);
-            return new TimeInterval(
-                start: start,
-                end: start + TimeSpan.FromDays(1));
-        }
     }
 }
