@@ -18,12 +18,13 @@ namespace Cervel.TimeParser.Extensions.Tests
                 Interval(6, 12),
                 Interval(6, 9),
                 Interval(11, 12),
-                Interval(14, 15));
+                Interval(14, 15),
+                Interval(15, 16));
 
             var expected = Intervals(
                 Interval(0, 3),
                 Interval(5, 12),
-                Interval(14, 15));
+                Interval(14, 16));
 
             Assert.Equal(expected, intervals.Disjunction());
         }

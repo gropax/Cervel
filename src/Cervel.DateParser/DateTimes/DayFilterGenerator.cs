@@ -46,9 +46,16 @@ namespace Cervel.TimeParser.DateTimes
 
         private IEnumerable<DateTime> DateTimesFrom(DateTime fromDate)
         {
-            int inc = 0;
-            while (true)
-                yield return fromDate.AddDays(inc++);
+            var timeSpan = TimeSpan.FromDays(1);
+            var date = fromDate;
+
+            while (date < DateTime.MaxValue)
+            {
+                yield return date;
+                date = date.Shift(timeSpan);
+            }
+
+            yield return DateTime.MaxValue;
         }
     }
 }
