@@ -38,14 +38,15 @@ namespace Cervel.TimeParser
             walker.Walk(listener, context);
 
             if (context.exception != null)
-                throw new ParseError();
-
-            //string tree = context.ToStringTree();
-
-            var result = resultSelector(listener);
-            bool isSuccess = result != null;
-
-            return new ParseResult<TResult>(input, isSuccess, result);
+            {
+                return new ParseResult<TResult>(input, false);
+            }
+            else
+            {
+                //string tree = context.ToStringTree();
+                var result = resultSelector(listener);
+                return new ParseResult<TResult>(input, true, result);
+            }
         }
     }
 }

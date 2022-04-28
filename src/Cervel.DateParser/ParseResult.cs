@@ -6,7 +6,10 @@
         public bool IsSuccess { get; }
         public T Value { get; }
 
-        public ParseResult(string input, bool isSuccess, T value)
+        public ParseResult(
+            string input,
+            bool isSuccess,
+            T value = default)
         {
             Input = input;
             IsSuccess = isSuccess;

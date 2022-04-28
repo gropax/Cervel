@@ -1,5 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Cervel.TimeParser;
+using System;
+using System.Collections.Generic;
 
 namespace Cervel.TimeParser
 {
@@ -39,6 +41,25 @@ namespace Cervel.TimeParser
             else
                 _timeIntervalGenerator = new TimeIntervals.NeverGenerator();
         }
+
+        private HashSet<DayOfWeek> _daysOfWeek = new HashSet<DayOfWeek>();
+        public override void ExitNextDayOfWeek(TimeExpressionParser.NextDayOfWeekContext context)
+        {
+            if (_parseDateTime)
+                _dateTimeGenerator = new DateTimes.NeverGenerator();
+            else
+                _timeIntervalGenerator = TimeIntervals.Generators.NextWeekDays(_daysOfWeek);
+
+            _daysOfWeek.Clear();
+        }
+
+        public override void ExitMonday(TimeExpressionParser.MondayContext context) => _daysOfWeek.Add(DayOfWeek.Monday);
+        public override void ExitTuesday(TimeExpressionParser.TuesdayContext context) => _daysOfWeek.Add(DayOfWeek.Tuesday);
+        public override void ExitWednesday(TimeExpressionParser.WednesdayContext context) => _daysOfWeek.Add(DayOfWeek.Wednesday);
+        public override void ExitThursday(TimeExpressionParser.ThursdayContext context) => _daysOfWeek.Add(DayOfWeek.Thursday);
+        public override void ExitFriday(TimeExpressionParser.FridayContext context) => _daysOfWeek.Add(DayOfWeek.Friday);
+        public override void ExitSaturday(TimeExpressionParser.SaturdayContext context) => _daysOfWeek.Add(DayOfWeek.Saturday);
+        public override void ExitSunday(TimeExpressionParser.SundayContext context) => _daysOfWeek.Add(DayOfWeek.Sunday);
 
         
         private void EnsureSuccess(ParserRuleContext context)

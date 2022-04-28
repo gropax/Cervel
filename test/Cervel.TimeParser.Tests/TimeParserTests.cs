@@ -47,19 +47,21 @@ namespace Cervel.TimeParser.Tests
         }
 
 
-        //[Theory]
-        //[InlineData("lundi")]
-        //[InlineData("lun")]
-        //[InlineData("lundi prochain")]
-        //[InlineData("lun prochain")]
-        //[InlineData("lundi pro")]
-        //public void Test_ParseTimeIntervals_NextMonday(string input)
-        //{
-        //    var result = _timeParser.ParseTimeIntervals(input);
-        //    Assert.True(result.IsSuccess);
-        //    Assert.Equal(
-        //        Intervals(DayInterval(2022, 1, 3)),
-        //        result.Value.Generate(_fromDate, _toDate));
-        //}
+        [Theory]
+        [InlineData("lundi")]
+        [InlineData("lu")]
+        [InlineData("lun")]
+        [InlineData("lundi prochain")]
+        [InlineData("lun prochain")]
+        [InlineData("lundi pro")]
+        public void Test_ParseTimeIntervals_NextMonday(string input)
+        {
+            var result = _timeParser.ParseTimeIntervals(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Intervals(DayInterval(2022, 1, 3)),
+                result.Value.Generate(_fromDate, _toDate));
+        }
     }
 }
