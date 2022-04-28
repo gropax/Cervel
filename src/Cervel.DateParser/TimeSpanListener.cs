@@ -1,27 +1,43 @@
 ﻿using Antlr4.Runtime;
-using Cervel.TimeParser.TimeSpans;
+using Cervel.TimeParser;
 
 namespace Cervel.TimeParser
 {
     public class TimeSpanListener : TimeSpanBaseListener
     {
-        public ITimeSpanGenerator TimeSpanGenerator { get; set; }
-
-        public override void ExitTimeSet(TimeSpanParser.TimeSetContext context)
+        private bool _parseDateTime;
+        public TimeSpanListener(bool parseDateTime)
         {
-            //EnsureSuccess(context);
-            TimeSpanGenerator = _generator;
+            _parseDateTime = parseDateTime;
         }
+
+        public ITimeSpanGenerator TimeSpanGenerator { get; set; }
+        public IDateTimeGenerator DateTimeGenerator { get; set; }
         
         private ITimeSpanGenerator _generator;
+        private IDateTimeGenerator _dateTimeGenerator;
+
+        public override void ExitDateTimes(TimeSpanParser.DateTimesContext context)
+        {
+            DateTimeGenerator = _dateTimeGenerator;
+        }
+
+        public override void ExitTimeSpans(TimeSpanParser.TimeSpansContext context)
+        {
+            TimeSpanGenerator = _generator;
+        }
+
         public override void ExitAlways(TimeSpanParser.AlwaysContext context)
         {
-            _generator = new AlwaysGenerator();
+            _generator = new TimeSpans.AlwaysGenerator();
         }
 
         public override void ExitNever(TimeSpanParser.NeverContext context)
         {
-            _generator = new NeverGenerator();
+            if (_parseDateTime)
+                _dateTimeGenerator = new DateTimes.NeverGenerator();
+            else
+                _generator = new TimeSpans.NeverGenerator();
         }
 
         

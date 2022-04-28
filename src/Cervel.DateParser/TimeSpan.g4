@@ -1,8 +1,12 @@
 ﻿grammar TimeSpan;
 
-timeSet
+timeSpans
 	: always
 	| never
+	;
+
+dateTimes
+	: never
 	;
 
 always : ALWAYS ;

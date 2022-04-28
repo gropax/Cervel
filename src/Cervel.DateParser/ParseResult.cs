@@ -1,14 +1,16 @@
 ﻿namespace Cervel.TimeParser
 {
-    public class ParseResult
+    public class ParseResult<T>
     {
         public string Input { get; }
-        public ITimeSpanGenerator TimeSpanGenerator { get; }
+        public bool IsSuccess { get; }
+        public T Value { get; }
 
-        public ParseResult(string input, ITimeSpanGenerator timeSpanGenerator)
+        public ParseResult(string input, bool isSuccess, T value)
         {
             Input = input;
-            TimeSpanGenerator = timeSpanGenerator;
+            IsSuccess = isSuccess;
+            Value = value;
         }
     }
 }
