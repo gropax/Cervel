@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cervel.Web", "src\Cervel.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cervel.Web.Tests", "test\Cervel.Web.Tests\Cervel.Web.Tests.csproj", "{DDBD40D6-24E5-4A3A-BDB9-A424BA0801CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cervel.TimeParser", "src\Cervel.DateParser\Cervel.TimeParser.csproj", "{B046DB43-7371-482A-8EA7-E86C4A49B27F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cervel.TimeParser.Tests", "test\Cervel.TimeParser.Tests\Cervel.TimeParser.Tests.csproj", "{70A9C157-9FF9-46CC-89B2-0794808C6319}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{DDBD40D6-24E5-4A3A-BDB9-A424BA0801CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDBD40D6-24E5-4A3A-BDB9-A424BA0801CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDBD40D6-24E5-4A3A-BDB9-A424BA0801CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B046DB43-7371-482A-8EA7-E86C4A49B27F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B046DB43-7371-482A-8EA7-E86C4A49B27F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B046DB43-7371-482A-8EA7-E86C4A49B27F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B046DB43-7371-482A-8EA7-E86C4A49B27F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A9C157-9FF9-46CC-89B2-0794808C6319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A9C157-9FF9-46CC-89B2-0794808C6319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A9C157-9FF9-46CC-89B2-0794808C6319}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A9C157-9FF9-46CC-89B2-0794808C6319}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
