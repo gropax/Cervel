@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Cervel.TimeParser
 {
-    public interface ITimeSpanGenerator
+    public interface ITimeIntervalGenerator
     {
-        IEnumerable<TimeSpan> Generate(DateTime fromDate);
-        IEnumerable<TimeSpan> Generate(DateTime fromDate, DateTime toDate)
+        IEnumerable<TimeInterval> Generate(DateTime fromDate);
+        IEnumerable<TimeInterval> Generate(DateTime fromDate, DateTime toDate)
         {
             var enumerator = Generate(fromDate).GetEnumerator();
             while (enumerator.MoveNext())
@@ -15,7 +15,7 @@ namespace Cervel.TimeParser
                     yield return enumerator.Current;
                 else
                 {
-                    yield return new TimeSpan(enumerator.Current.Start, toDate);
+                    yield return new TimeInterval(enumerator.Current.Start, toDate);
                     yield break;
                 }
             }

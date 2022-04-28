@@ -6,8 +6,8 @@ namespace Cervel.TimeParser.Tests
     public class TimeParserTests
     {
         private TimeParser _timeParser = new TimeParser();
-        private DateTime _fromDate = new DateTime(2000, 1, 1);
-        private DateTime _toDate = new DateTime(2010, 1, 1);
+        private DateTime _fromDate = new DateTime(2022, 1, 1);
+        private DateTime _toDate = new DateTime(2032, 1, 1);
 
 
         [Theory]
@@ -21,27 +21,54 @@ namespace Cervel.TimeParser.Tests
                 result.Value.Generate(_fromDate, _toDate));
         }
 
+
+
         [Theory]
         [InlineData("toujours")]
         [InlineData("tjrs")]
-        public void Test_ParseTimeSpans_Always(string input)
+        public void Test_ParseTimeIntervals_Always(string input)
         {
-            var result = _timeParser.ParseTimeSpans(input);
+            var result = _timeParser.ParseTimeIntervals(input);
             Assert.True(result.IsSuccess);
             Assert.Equal(
-                new[] { new TimeSpan(_fromDate, _toDate) },
+                new[] { new TimeInterval(_fromDate, _toDate) },
                 result.Value.Generate(_fromDate, _toDate));
         }
 
         [Theory]
         [InlineData("jamais")]
         [InlineData("jam")]
-        public void Test_ParseTimeSpans_Never(string input)
+        public void Test_ParseTimeIntervals_Never(string input)
         {
-            var result = _timeParser.ParseTimeSpans(input);
+            var result = _timeParser.ParseTimeIntervals(input);
             Assert.True(result.IsSuccess);
-            Assert.Equal(new TimeSpan[0],
+            Assert.Equal(new TimeInterval[0],
                 result.Value.Generate(_fromDate, _toDate));
+        }
+
+        //[Theory]
+        //[InlineData("lundi")]
+        //[InlineData("lun")]
+        //[InlineData("lundi prochain")]
+        //[InlineData("lun prochain")]
+        //[InlineData("lundi pro")]
+        //public void Test_ParseTimeIntervals_NextMonday(string input)
+        //{
+        //    var result = _timeParser.ParseTimeIntervals(input);
+        //    Assert.True(result.IsSuccess);
+        //    Assert.Equal(
+        //        Intervals(DayInterval(2022, 1, 3)),
+        //        result.Value.Generate(_fromDate, _toDate));
+        //}
+
+
+        private TimeInterval[] Intervals(params TimeInterval[] timeSpans) => timeSpans;
+        private TimeInterval DayInterval(int year, int month, int day)
+        {
+            var start = new DateTime(year, month, day);
+            return new TimeInterval(
+                start: start,
+                end: start + TimeSpan.FromDays(1));
         }
     }
 }

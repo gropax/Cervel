@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TimeSpan.g4">
+    <None Update="TimeExpression.g4">
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>

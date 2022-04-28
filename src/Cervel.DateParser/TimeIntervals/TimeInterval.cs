@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
 {
-    public struct TimeSpan
+    public struct TimeInterval
     {
         public DateTime Start { get; }
         public DateTime End { get; }
-        public TimeSpan(DateTime start, DateTime end)
+        public TimeInterval(DateTime start, DateTime end)
         {
             Start = start;
             End = end;

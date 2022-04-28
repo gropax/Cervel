@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervel.TimeParser.TimeSpans
+namespace Cervel.TimeParser.TimeIntervals
 {
-    public class NeverGenerator : ITimeSpanGenerator
+    public class NeverGenerator : ITimeIntervalGenerator
     {
-        public IEnumerable<TimeSpan> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             yield break;
         }

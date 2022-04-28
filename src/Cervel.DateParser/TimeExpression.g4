@@ -1,6 +1,6 @@
-﻿grammar TimeSpan;
+﻿grammar TimeExpression;
 
-timeSpans
+timeIntervals
 	: always
 	| never
 	;
@@ -11,6 +11,7 @@ dateTimes
 
 always : ALWAYS ;
 never : NEVER ;
+test : 'test' ;
 
 ALWAYS : 'toujours' | 'tjrs' ;
 NEVER : 'jamais' | 'jam' ;

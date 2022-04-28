@@ -15,23 +15,23 @@ namespace Cervel.TimeParser
             return ParseSymbol(input, true, (p) => p.dateTimes(), (l) => l.DateTimeGenerator);
         }
 
-        public ParseResult<ITimeSpanGenerator> ParseTimeSpans(string input)
+        public ParseResult<ITimeIntervalGenerator> ParseTimeIntervals(string input)
         {
-            return ParseSymbol(input, false, (p) => p.timeSpans(), (l) => l.TimeSpanGenerator);
+            return ParseSymbol(input, false, (p) => p.timeIntervals(), (l) => l.TimeIntervalGenerator);
         }
 
         private ParseResult<TResult> ParseSymbol<TResult>(
             string input,
             bool parseDateTime,
-            Func<TimeSpanParser, ParserRuleContext> contextSelector,
-            Func<TimeSpanListener, TResult> resultSelector)
+            Func<TimeExpressionParser, ParserRuleContext> contextSelector,
+            Func<TimeExpressionListener, TResult> resultSelector)
         {
             var inputStream = new AntlrInputStream(input);
-            var lexer = new TimeSpanLexer(inputStream);
+            var lexer = new TimeExpressionLexer(inputStream);
             var commonTokenStream = new CommonTokenStream(lexer);
-            var parser = new TimeSpanParser(commonTokenStream);
+            var parser = new TimeExpressionParser(commonTokenStream);
 
-            var listener = new TimeSpanListener(parseDateTime);
+            var listener = new TimeExpressionListener(parseDateTime);
             var walker = new ParseTreeWalker();
             var context = contextSelector(parser);
             //var context = parser.timeSpans();
