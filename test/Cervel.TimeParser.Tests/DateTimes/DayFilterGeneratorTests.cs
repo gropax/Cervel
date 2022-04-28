@@ -12,7 +12,7 @@ namespace Cervel.TimeParser.DateTimes.Tests
         private DateTime _toDate = new DateTime(2022, 2, 1);
 
         [Fact]
-        public void Test_EveryDay()
+        public void TestGenerate_WithoutParams()
         {
             _generator = new DayFilterGenerator();
 

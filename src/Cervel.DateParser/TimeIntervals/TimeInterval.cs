@@ -10,8 +10,12 @@ namespace Cervel.TimeParser
     {
         public DateTime Start { get; }
         public DateTime End { get; }
+
         public TimeInterval(DateTime start, DateTime end)
         {
+            if (start > end)
+                throw new Exception($"Interval start must be <= to its end.");
+
             Start = start;
             End = end;
         }
