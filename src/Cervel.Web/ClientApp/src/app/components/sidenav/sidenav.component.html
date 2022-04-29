@@ -1,0 +1,27 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(appState.isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(appState.isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(appState.isHandset$ | async) === false">
+
+    <mat-toolbar>Cervel</mat-toolbar>
+
+    <mat-divider></mat-divider>
+
+    <mat-nav-list>
+      <div mat-subheader>Debug</div>
+
+      <mat-list-item routerLink="/time-parser" (click)="appState.closeSidenav()">
+        <mat-icon mat-list-icon>fact_check</mat-icon>
+        <div mat-line>Time Parser</div>
+      </mat-list-item>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
