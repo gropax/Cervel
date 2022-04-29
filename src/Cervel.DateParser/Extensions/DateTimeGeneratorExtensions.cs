@@ -10,6 +10,14 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class DateTimeGeneratorExtensions
     {
+        public static ITimeGenerator<DateTime> During(
+            this ITimeGenerator<DateTime> generator,
+            ITimeGenerator<DateTime> frequencyGenerator)
+        {
+            throw new NotImplementedException();
+            //return frequencyGenerator.Partition()
+        }
+
         public static ITimeGenerator<DateTime> Shift(this ITimeGenerator<DateTime> generator, TimeSpan timeSpan)
         {
             return new DateTimes.ShiftGenerator(generator, timeSpan);

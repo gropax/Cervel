@@ -9,21 +9,5 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public static class Generators
     {
-        public static ITimeGenerator<TimeInterval> Today()
-        {
-            return new DayFilterGenerator(TimeSpan.FromDays(1), take: 1);
-        }
-
-        public static ITimeGenerator<TimeInterval> NextWeekDays(IEnumerable<DayOfWeek> dows)
-        {
-            var hashset = new HashSet<DayOfWeek>(dows);
-            return new DayFilterGenerator(TimeSpan.FromDays(1), (d) => hashset.Contains(d.DayOfWeek), take: 1)
-                .Shift(TimeSpan.FromDays(1));
-        }
-
-        public static ITimeGenerator<TimeInterval> EveryDayOfWeek(DayOfWeek dow)
-        {
-            return new DayFilterGenerator(TimeSpan.FromDays(1), (d) => d.DayOfWeek == dow);
-        }
     }
 }

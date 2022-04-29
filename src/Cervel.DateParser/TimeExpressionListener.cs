@@ -46,18 +46,18 @@ namespace Cervel.TimeParser
         public override void ExitToday(TimeExpressionParser.TodayContext context)
         {
             if (_parseDateTime)
-                _dateTimeGenerator = DateTimes.Generators.Today();
+                _dateTimeGenerator = Time.Today();
             else
-                _timeIntervalGenerator = TimeIntervals.Generators.Today();
+                _timeIntervalGenerator = Time.TodayInterval();
         }
 
         private HashSet<DayOfWeek> _daysOfWeek = new HashSet<DayOfWeek>();
         public override void ExitNextDayOfWeek(TimeExpressionParser.NextDayOfWeekContext context)
         {
             if (_parseDateTime)
-                _dateTimeGenerator = DateTimes.Generators.NextWeekDays(_daysOfWeek);
+                _dateTimeGenerator = Time.NextWeekDays(_daysOfWeek);
             else
-                _timeIntervalGenerator = TimeIntervals.Generators.NextWeekDays(_daysOfWeek);
+                _timeIntervalGenerator = Time.NextWeekDaysInterval(_daysOfWeek);
 
             _daysOfWeek.Clear();
         }
@@ -66,9 +66,9 @@ namespace Cervel.TimeParser
         {
             var dow = _daysOfWeek.Single();
             if (_parseDateTime)
-                _dateTimeGenerator = DateTimes.Generators.EveryDayOfWeek(dow);
+                _dateTimeGenerator = Time.EveryDayOfWeek(dow);
             else
-                _timeIntervalGenerator = TimeIntervals.Generators.EveryDayOfWeek(dow);
+                _timeIntervalGenerator = Time.EveryDayOfWeekInterval(dow);
         }
 
         public override void ExitMonday(TimeExpressionParser.MondayContext context) => _daysOfWeek.Add(DayOfWeek.Monday);
