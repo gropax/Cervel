@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class OnceGenerator : IDateTimeGenerator
+    public class OnceGenerator : DateTimeGenerator
     {
         private DateTime _value;
         public OnceGenerator(DateTime value)
@@ -14,7 +14,7 @@ namespace Cervel.TimeParser.DateTimes
             _value = value;
         }
 
-        public IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
             yield return _value;
         }

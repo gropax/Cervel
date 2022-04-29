@@ -10,18 +10,18 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class DateTimeGeneratorExtensions
     {
-        public static IDateTimeGenerator Shift(this IDateTimeGenerator generator, TimeSpan timeSpan)
+        public static ITimeGenerator<DateTime> Shift(this ITimeGenerator<DateTime> generator, TimeSpan timeSpan)
         {
             return new DateTimes.ShiftGenerator(generator, timeSpan);
         }
 
-        public static ITimeGenerator<TimeInterval> Partition(this IDateTimeGenerator generator)
+        public static ITimeGenerator<TimeInterval> Partition(this ITimeGenerator<DateTime> generator)
         {
             return new PartitionGenerator(generator);
         }
 
-        public static IDateTimeGenerator Scope(
-            this IDateTimeGenerator generator,
+        public static ITimeGenerator<DateTime> Scope(
+            this ITimeGenerator<DateTime> generator,
             ITimeGenerator<TimeInterval> intervalGenerator)
         {
             return new ScopeGenerator(generator, intervalGenerator);

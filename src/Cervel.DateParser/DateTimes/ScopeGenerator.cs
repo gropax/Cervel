@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class ScopeGenerator : IDateTimeGenerator
+    public class ScopeGenerator : DateTimeGenerator
     {
-        private IDateTimeGenerator _dateGenerator;
+        private ITimeGenerator<DateTime> _dateGenerator;
         private ITimeGenerator<TimeInterval> _intervalGenerator;
 
-        public ScopeGenerator(IDateTimeGenerator dateGenerator, ITimeGenerator<TimeInterval> intervalGenerator)
+        public ScopeGenerator(ITimeGenerator<DateTime> dateGenerator, ITimeGenerator<TimeInterval> intervalGenerator)
         {
             _dateGenerator = dateGenerator;
             _intervalGenerator = intervalGenerator;
         }
 
-        public IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
             foreach (var interval in _intervalGenerator.Generate(fromDate))
                 foreach (var date in _dateGenerator.Generate(interval))

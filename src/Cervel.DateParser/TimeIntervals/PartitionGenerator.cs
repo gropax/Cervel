@@ -8,8 +8,8 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class PartitionGenerator : TimeIntervalGenerator
     {
-        private IDateTimeGenerator _generator;
-        public PartitionGenerator(IDateTimeGenerator generator)
+        private ITimeGenerator<DateTime> _generator;
+        public PartitionGenerator(ITimeGenerator<DateTime> generator)
         {
             _generator = generator;
         }

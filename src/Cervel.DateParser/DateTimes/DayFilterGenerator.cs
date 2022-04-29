@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class DayFilterGenerator : IDateTimeGenerator
+    public class DayFilterGenerator : DateTimeGenerator
     {
         private Func<DateTime, bool> _dateTimeSelector;
         private Func<int, bool> _indexSelector;
@@ -25,7 +25,7 @@ namespace Cervel.TimeParser.DateTimes
             _take = take;
         }
 
-        public IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
             var dates = DateTimesFrom(fromDate);
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class NextDayOfWeekGenerator : ITimeIntervalGenerator
+    public class NextDayOfWeekGenerator : TimeIntervalGenerator
     {
         private DayOfWeek _dayOfWeek;
         public NextDayOfWeekGenerator(DayOfWeek dayOfWeek)
@@ -14,7 +14,7 @@ namespace Cervel.TimeParser.TimeIntervals
             _dayOfWeek = dayOfWeek;
         }
 
-        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             //var currentDow = fromDate.DayOfWeek;
             //int refDow = _dayOfWeek > currentDow ? (int)_dayOfWeek : (int)_dayOfWeek + 7;

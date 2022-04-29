@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public abstract class FrequencyGenerator : IFrequency
+    public abstract class FrequencyGenerator : DateTimeGenerator
     {
-        public IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
             var date = fromDate;
 
