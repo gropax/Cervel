@@ -65,9 +65,12 @@ namespace Cervel.TimeParser
 
         public override void ExitShiftedDate(TimeExpressionParser.ShiftedDateContext context)
         {
-            var shift = ConsumeDateShifts().FirstOrDefault();
-            if (shift != null)
-                _dateGenerators.Add(shift(ConsumeSingleDateGenerator()));
+            var dateGenerator = ConsumeSingleDateGenerator();
+
+            foreach (var shift in ConsumeDateShifts().Reverse())
+                dateGenerator = shift(dateGenerator);
+
+            _dateGenerators.Add(dateGenerator);
         }
 
 
@@ -83,19 +86,6 @@ namespace Cervel.TimeParser
             _dateShifts.Add(Time.DayShift(2));
         public override void ExitNDaysAfter(TimeExpressionParser.NDaysAfterContext context) =>
             _dateShifts.Add(Time.DayShift(ConsumeSingleNumber()));
-
-        //public override void ExitNDaysBefore(TimeExpressionParser.NDaysBeforeContext context) =>
-        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(-ConsumeSingleNumber()));
-        //public override void ExitTwoDaysBefore(TimeExpressionParser.TwoDaysBeforeContext context) =>
-        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(-2));
-        //public override void ExitTheDayBefore(TimeExpressionParser.TheDayBeforeContext context) =>
-        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(-1));
-        //public override void ExitTheDayAfter(TimeExpressionParser.TheDayAfterContext context) =>
-        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(1));
-        //public override void ExitTwoDaysAfter(TimeExpressionParser.TwoDaysAfterContext context) =>
-        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(2));
-        //public override void ExitNDaysAfter(TimeExpressionParser.NDaysAfterContext context) =>
-        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(ConsumeSingleNumber()));
 
 
         public override void ExitNextDayOfWeek(TimeExpressionParser.NextDayOfWeekContext context) =>

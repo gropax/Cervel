@@ -16,8 +16,9 @@ dateTimes
 	| shiftedDate
 	;
 
-shiftedDate
-	: shiftOperator shiftedDate
+shiftedDate : shiftedDateIter ;
+shiftedDateIter
+	: shiftOperator shiftedDateIter
 	| simpleDate
 	;
 

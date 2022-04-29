@@ -315,6 +315,7 @@ namespace Cervel.TimeParser.Tests
         #endregion
 
         #region Dates relatives
+
         #region DateTimes "il y a N jours"
         [Theory]
         [InlineData("3 jours avant chaque lundi")]
@@ -437,6 +438,20 @@ namespace Cervel.TimeParser.Tests
                     Day(2022, 1, 13),
                     Day(2022, 1, 20),
                     Day(2022, 1, 27)),
+                result.Value.Generate(_fromDate, _febFst));
+        }
+        #endregion
+
+        #region Séquence de plusieurs shifts
+        [Theory]
+        [InlineData("3 jours avant le surlendemain de la veille de 2 jours après demain")]
+        public void Test_ParseDateTimes_ShiftSequence(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(Day(2022, 1, 2)),
                 result.Value.Generate(_fromDate, _febFst));
         }
         #endregion
