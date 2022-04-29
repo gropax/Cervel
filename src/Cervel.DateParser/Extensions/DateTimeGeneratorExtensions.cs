@@ -76,6 +76,11 @@ namespace Cervel.TimeParser.Extensions
             return Scope(new DailyGenerator(), generator.FirstToInfinity());
         }
 
+        public static ITimeGenerator<DateTime> Weekly(this ITimeGenerator<DateTime> generator)
+        {
+            return Scope(new DailyGenerator(TimeSpan.FromDays(7)), generator.FirstToInfinity());
+        }
+
         public static ITimeGenerator<TimeInterval> AllDay(this ITimeGenerator<DateTime> generator)
         {
             return generator.Date().ToIntervals(TimeSpan.FromDays(1));

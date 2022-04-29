@@ -61,17 +61,14 @@ namespace Cervel.TimeParser
         private HashSet<DayOfWeek> _daysOfWeek = new HashSet<DayOfWeek>();
         public override void ExitNextDayOfWeek(TimeExpressionParser.NextDayOfWeekContext context)
         {
-            HandleDay(Time.NextDayOfWeek(_daysOfWeek.Single()));
+            HandleDay(Time.Next(_daysOfWeek.Single()));
             _daysOfWeek.Clear();
         }
 
         public override void ExitEveryDayOfWeek(TimeExpressionParser.EveryDayOfWeekContext context)
         {
-            var dow = _daysOfWeek.Single();
-            if (_parseDateTime)
-                _dateTimeGenerator = Time.EveryDayOfWeek(dow);
-            else
-                _timeIntervalGenerator = Time.EveryDayOfWeekInterval(dow);
+            HandleDay(Time.Each(_daysOfWeek.Single()));
+            _daysOfWeek.Clear();
         }
 
         public override void ExitMonday(TimeExpressionParser.MondayContext context) => _daysOfWeek.Add(DayOfWeek.Monday);
