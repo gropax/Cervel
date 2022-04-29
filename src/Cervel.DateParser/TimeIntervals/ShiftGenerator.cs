@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class ShiftGenerator : ITimeIntervalGenerator
+    public class ShiftGenerator : TimeIntervalGenerator
     {
-        private ITimeIntervalGenerator _generator;
+        private ITimeGenerator<TimeInterval> _generator;
         private TimeSpan _timeSpan;
 
-        public ShiftGenerator(ITimeIntervalGenerator generator, TimeSpan timeSpan)
+        public ShiftGenerator(ITimeGenerator<TimeInterval> generator, TimeSpan timeSpan)
         {
             _generator = generator;
             _timeSpan = timeSpan;
         }
 
-        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             return _generator.Generate(fromDate + _timeSpan);
         }

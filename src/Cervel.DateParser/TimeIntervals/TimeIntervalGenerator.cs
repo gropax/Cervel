@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Cervel.TimeParser
+namespace Cervel.TimeParser.TimeIntervals
 {
-    public interface ITimeIntervalGenerator
+    public abstract class TimeIntervalGenerator : ITimeGenerator<TimeInterval>
     {
-        IEnumerable<TimeInterval> Generate(DateTime fromDate);
-        IEnumerable<TimeInterval> Generate(DateTime fromDate, DateTime toDate)
+        public abstract IEnumerable<TimeInterval> Generate(DateTime fromDate);
+
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate, DateTime toDate)
         {
             var enumerator = Generate(fromDate).GetEnumerator();
             while (enumerator.MoveNext())

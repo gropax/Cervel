@@ -15,9 +15,16 @@ namespace Cervel.TimeParser.Extensions
             return new DateTimes.ShiftGenerator(generator, timeSpan);
         }
 
-        public static ITimeIntervalGenerator Partition(this IDateTimeGenerator generator)
+        public static ITimeGenerator<TimeInterval> Partition(this IDateTimeGenerator generator)
         {
             return new PartitionGenerator(generator);
+        }
+
+        public static IDateTimeGenerator Scope(
+            this IDateTimeGenerator generator,
+            ITimeGenerator<TimeInterval> intervalGenerator)
+        {
+            return new ScopeGenerator(generator, intervalGenerator);
         }
     }
 }

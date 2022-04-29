@@ -14,10 +14,10 @@ namespace Cervel.TimeParser
             _parseDateTime = parseDateTime;
         }
 
-        public ITimeIntervalGenerator TimeIntervalGenerator { get; set; }
+        public ITimeGenerator<TimeInterval> TimeIntervalGenerator { get; set; }
         public IDateTimeGenerator DateTimeGenerator { get; set; }
         
-        private ITimeIntervalGenerator _timeIntervalGenerator;
+        private ITimeGenerator<TimeInterval> _timeIntervalGenerator;
         private IDateTimeGenerator _dateTimeGenerator;
 
         public override void ExitDateTimes(TimeExpressionParser.DateTimesContext context)

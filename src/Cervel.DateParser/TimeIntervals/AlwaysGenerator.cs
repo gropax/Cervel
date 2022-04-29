@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class AlwaysGenerator : ITimeIntervalGenerator
+    public class AlwaysGenerator : TimeIntervalGenerator
     {
-        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             yield return new TimeInterval(fromDate, DateTime.MaxValue);
         }

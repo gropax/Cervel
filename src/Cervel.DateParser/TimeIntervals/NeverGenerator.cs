@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class NeverGenerator : ITimeIntervalGenerator
+    public class NeverGenerator : TimeIntervalGenerator
     {
-        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             yield break;
         }

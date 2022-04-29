@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class DayFilterGenerator : ITimeIntervalGenerator
+    public class DayFilterGenerator : TimeIntervalGenerator
     {
         private TimeSpan _timeSpan;
         private DateTimes.DayFilterGenerator _dateGenerator;
@@ -22,7 +22,7 @@ namespace Cervel.TimeParser.TimeIntervals
             _dateGenerator = new DateTimes.DayFilterGenerator(dateTimeSelector, indexSelector, skip, take);
         }
 
-        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             return _dateGenerator
                 .Generate(fromDate)
