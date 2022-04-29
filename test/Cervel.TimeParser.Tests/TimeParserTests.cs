@@ -6,11 +6,13 @@ namespace Cervel.TimeParser.Tests
     public class TimeParserTests : TestBase
     {
         private TimeParser _timeParser = new TimeParser();
-        private DateTime _fromDate = new DateTime(2022, 1, 1);
-        //private DateTime _fromDate = new DateTime(2022, 1, 1, 10, 30, 0);
+        //private DateTime _fromDate = new DateTime(2022, 1, 1);
+        private DateTime _fromDate = new DateTime(2022, 1, 1, 10, 30, 0);
         private DateTime _toDate = new DateTime(2032, 1, 1);
 
+        #region Dates
 
+        #region Dates spéciales
         #region DateTimes "jamais"
         [Theory]
         [InlineData("jamais")]
@@ -34,11 +36,14 @@ namespace Cervel.TimeParser.Tests
 
             Assert.True(result.IsSuccess);
             Assert.Equal(
-                Dates(Day(2022, 1, 1, 0, 0, 0)),
+                Dates(Day(2022, 1, 1, 10, 30, 0)),
                 result.Value.Generate(_fromDate, _toDate));
         }
         #endregion
 
+        #endregion
+
+        #region Dates relatives à aujourd'hui
         #region DateTimes "il y a N jours"
         [Theory]
         [InlineData("il y a 3 jour")]
@@ -150,7 +155,9 @@ namespace Cervel.TimeParser.Tests
                 result.Value.Generate(_fromDate, _toDate));
         }
         #endregion
+        #endregion
 
+        #region Prochain jour de la semaine
         #region DateTimes "lundi prochain"
         [Theory]
         [InlineData("lundi")]
@@ -271,7 +278,9 @@ namespace Cervel.TimeParser.Tests
                 result.Value.Generate(_fromDate, _toDate));
         }
         #endregion
+        #endregion
 
+        #region Chaque jour de la semaine
         #region DateTimes "chaque lundi"
         [Theory]
         [InlineData("le lundi")]
@@ -300,7 +309,11 @@ namespace Cervel.TimeParser.Tests
                 result.Value.Generate(_fromDate, new DateTime(2022, 2, 1)));
         }
         #endregion
+        #endregion
 
+        #endregion
+
+        #region Intervalles
 
         #region TimeIntervals "toujours"
         [Theory]
@@ -493,6 +506,8 @@ namespace Cervel.TimeParser.Tests
                     DayInterval(2022, 1, 31)),
                 result.Value.Generate(_fromDate, new DateTime(2022, 2, 1)));
         }
+        #endregion
+
         #endregion
     }
 }
