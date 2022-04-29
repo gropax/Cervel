@@ -25,5 +25,14 @@ namespace Cervel.TimeParser.DateTimes
         {
             return new DayFilterGenerator((d) => d.DayOfWeek == dow);
         }
+
+
+        public static IDateTimeGenerator Once(DateTime d) => new OnceGenerator(d);
+
+        public static IDateTimeGenerator Yearly(int n) => new YearlyGenerator(n);
+        public static IDateTimeGenerator Monthly(int n) => new MonthlyGenerator(n);
+        public static IDateTimeGenerator Weekly(int n) => new DailyGenerator(TimeSpan.FromDays(n * 7));
+        public static IDateTimeGenerator Daily(int n) => new DailyGenerator(TimeSpan.FromDays(n));
+        public static IDateTimeGenerator Hourly(int n) => new DailyGenerator(TimeSpan.FromHours(n));
     }
 }
