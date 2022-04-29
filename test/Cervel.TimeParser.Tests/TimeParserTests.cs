@@ -39,18 +39,36 @@ namespace Cervel.TimeParser.Tests
         }
         #endregion
 
-        #region DateTimes "aujourd'hui"
+        #region DateTimes "il y a N jours"
         [Theory]
-        [InlineData("aujourd'hui")]
-        [InlineData("aujourd hui")]
-        [InlineData("ajd")]
-        public void Test_ParseDateTimes_Today(string input)
+        [InlineData("il y a 3 jour")]
+        [InlineData("il y a 3 jours")]
+        [InlineData("ya 3 jours")]
+        [InlineData("ya 3 j")]
+        public void Test_ParseDateTimes_NDaysAgo(string input)
         {
             var result = _timeParser.ParseDateTimes(input);
 
             Assert.True(result.IsSuccess);
             Assert.Equal(
-                Dates(Day(2022, 1, 1)),
+                Dates(Day(2021, 12, 29)),
+                result.Value.Generate(_fromDate, _toDate));
+        }
+        #endregion
+
+        #region DateTimes "avant-hier"
+        [Theory]
+        [InlineData("avant-hier")]
+        [InlineData("avant hier")]
+        [InlineData("avt hier")]
+        [InlineData("av hier")]
+        public void Test_ParseDateTimes_DayBeforeYesterday(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(Day(2021, 12, 30)),
                 result.Value.Generate(_fromDate, _toDate));
         }
         #endregion
@@ -69,6 +87,22 @@ namespace Cervel.TimeParser.Tests
         }
         #endregion
 
+        #region DateTimes "aujourd'hui"
+        [Theory]
+        [InlineData("aujourd'hui")]
+        [InlineData("aujourd hui")]
+        [InlineData("ajd")]
+        public void Test_ParseDateTimes_Today(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(Day(2022, 1, 1)),
+                result.Value.Generate(_fromDate, _toDate));
+        }
+        #endregion
+
         #region DateTimes "demain"
         [Theory]
         [InlineData("demain")]
@@ -80,6 +114,39 @@ namespace Cervel.TimeParser.Tests
             Assert.True(result.IsSuccess);
             Assert.Equal(
                 Dates(Day(2022, 1, 2)),
+                result.Value.Generate(_fromDate, _toDate));
+        }
+        #endregion
+
+        #region DateTimes "après-demain"
+        [Theory]
+        [InlineData("après-demain")]
+        [InlineData("après demain")]
+        [InlineData("aprés demain")]
+        [InlineData("ap dem")]
+        public void Test_ParseDateTimes_DayAfterTomorrow(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(Day(2022, 1, 3)),
+                result.Value.Generate(_fromDate, _toDate));
+        }
+        #endregion
+
+        #region DateTimes "dans N jours"
+        [Theory]
+        [InlineData("dans 3 jour")]
+        [InlineData("dans 3 jours")]
+        [InlineData("ds 3 j")]
+        public void Test_ParseDateTimes_InNDays(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(Day(2022, 1, 4)),
                 result.Value.Generate(_fromDate, _toDate));
         }
         #endregion

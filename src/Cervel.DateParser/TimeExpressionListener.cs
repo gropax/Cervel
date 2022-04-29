@@ -45,9 +45,14 @@ namespace Cervel.TimeParser
         }
 
         public override void ExitNow(TimeExpressionParser.NowContext context) => _dateTimeGenerator = Time.Now();
+
+        public override void ExitNDaysAgo(TimeExpressionParser.NDaysAgoContext context) => HandleDay(Time.Today().ShiftDay(- ConsumeSingleNumber()));
+        public override void ExitDayBeforeYesterday(TimeExpressionParser.DayBeforeYesterdayContext context) => HandleDay(Time.Today().ShiftDay(-2));
+        public override void ExitYesterday(TimeExpressionParser.YesterdayContext context) => HandleDay(Time.Yesterday());
         public override void ExitToday(TimeExpressionParser.TodayContext context) => HandleDay(Time.Today());
         public override void ExitTomorrow(TimeExpressionParser.TomorrowContext context) => HandleDay(Time.Tomorrow());
-        public override void ExitYesterday(TimeExpressionParser.YesterdayContext context) => HandleDay(Time.Yesterday());
+        public override void ExitDayAfterTomorrow(TimeExpressionParser.DayAfterTomorrowContext context) => HandleDay(Time.Today().ShiftDay(2));
+        public override void ExitNDaysFromNow(TimeExpressionParser.NDaysFromNowContext context) => HandleDay(Time.Today().ShiftDay(ConsumeSingleNumber()));
 
         private void HandleDay(ITimeGenerator<DateTime> generator)
         {
@@ -80,6 +85,22 @@ namespace Cervel.TimeParser
         public override void ExitSunday(TimeExpressionParser.SundayContext context) => _daysOfWeek.Add(DayOfWeek.Sunday);
 
         
+
+        private List<int> _numbers = new List<int>();
+        public override void ExitNumber(TimeExpressionParser.NumberContext context)
+        {
+            int number = int.Parse(context.children[0].GetText());
+            _numbers.Add(number);
+        }
+
+        private int ConsumeSingleNumber()
+        {
+            int number = _numbers.Single();
+            _numbers.Clear();
+            return number;
+        }
+
+
         private void EnsureSuccess(ParserRuleContext context)
         {
             if (context.exception != null)

@@ -3,7 +3,7 @@
 timeIntervals
 	: always
 	| never
-	| today
+	| relativeToNow
 	| nextDayOfWeek
 	| everyDayOfWeek
 	;
@@ -11,17 +11,41 @@ timeIntervals
 dateTimes
 	: never
 	| now
-	| today
-	| yesterday
-	| tomorrow
+	| relativeToNow
 	| nextDayOfWeek
 	| everyDayOfWeek
 	;
 
+relativeToNow
+	: nDaysAgo
+	| dayBeforeYesterday
+	| yesterday
+	| today
+	| tomorrow
+	| dayAfterTomorrow
+	| nDaysFromNow
+	;
+
 now : 'maintenant' | 'mnt' ;
+
+nDaysAgo : IL_Y_A number JOUR ;
+dayBeforeYesterday : AVANT '-'? HIER ;
+yesterday : HIER ;
 today : 'aujourd\'hui' | 'aujourd hui' | 'ajd' ;
-yesterday : 'hier' ;
-tomorrow : 'demain' | 'dem' ;
+tomorrow : DEMAIN ;
+dayAfterTomorrow : APRES '-'? DEMAIN ;
+nDaysFromNow : DANS number JOUR ;
+
+number : NUMBER ;
+
+IL_Y_A : 'il y a' | 'ya' ;
+JOUR : 'jours' | 'jour' | 'j' ;
+AVANT : 'avant' | 'av' ;
+APRES : 'après' | 'aprés' | 'apres' | 'ap' ;
+HIER : 'hier' ;
+DEMAIN : 'demain' | 'dem' ;
+DANS : 'dans' | 'ds' ;
+
 
 nextDayOfWeek : dayOfWeek NEXT? ;
 
@@ -53,3 +77,5 @@ always : 'toujours' | 'tjrs' | 'tj' ;
 never : 'jamais' | 'jam' | 'ja' ;
 
 NEXT : 'prochain' | 'proc' | 'pro' ;
+
+NUMBER : [0-9]+ ;

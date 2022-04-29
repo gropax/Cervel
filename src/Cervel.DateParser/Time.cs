@@ -11,8 +11,9 @@ namespace Cervel.TimeParser
     public static class Time
     {
         public static ITimeGenerator<DateTime> Now() => new OnceGenerator();
-        public static ITimeGenerator<DateTime> Today() => Now().Date();
+
         public static ITimeGenerator<DateTime> Yesterday() => Today().ShiftDay(-1);
+        public static ITimeGenerator<DateTime> Today() => Now().Date();
         public static ITimeGenerator<DateTime> Tomorrow() => Today().ShiftDay(1);
 
         public static ITimeGenerator<DateTime> Next(DayOfWeek dow) => Tomorrow().Next(dow);
