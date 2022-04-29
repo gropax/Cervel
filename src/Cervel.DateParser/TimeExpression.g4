@@ -12,12 +12,16 @@ dateTimes
 	: never
 	| now
 	| today
+	| yesterday
+	| tomorrow
 	| nextDayOfWeek
 	| everyDayOfWeek
 	;
 
 now : 'maintenant' | 'mnt' ;
 today : 'aujourd\'hui' | 'aujourd hui' | 'ajd' ;
+yesterday : 'hier' ;
+tomorrow : 'demain' | 'dem' ;
 
 nextDayOfWeek : dayOfWeek NEXT? ;
 

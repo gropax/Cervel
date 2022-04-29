@@ -55,6 +55,35 @@ namespace Cervel.TimeParser.Tests
         }
         #endregion
 
+        #region DateTimes "hier"
+        [Theory]
+        [InlineData("hier")]
+        public void Test_ParseDateTimes_Yesterday(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(Day(2021, 12, 31)),
+                result.Value.Generate(_fromDate, _toDate));
+        }
+        #endregion
+
+        #region DateTimes "demain"
+        [Theory]
+        [InlineData("demain")]
+        [InlineData("dem")]
+        public void Test_ParseDateTimes_Tomorrow(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(Day(2022, 1, 2)),
+                result.Value.Generate(_fromDate, _toDate));
+        }
+        #endregion
+
         #region DateTimes "lundi prochain"
         [Theory]
         [InlineData("lundi")]

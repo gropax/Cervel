@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Cervel.TimeParser;
+using Cervel.TimeParser.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,18 +44,19 @@ namespace Cervel.TimeParser
                 _timeIntervalGenerator = new TimeIntervals.NeverGenerator();
         }
 
-        public override void ExitNow(TimeExpressionParser.NowContext context)
-        {
-            _dateTimeGenerator = Time.Now();
-        }
+        public override void ExitNow(TimeExpressionParser.NowContext context) => _dateTimeGenerator = Time.Now();
+        public override void ExitToday(TimeExpressionParser.TodayContext context) => HandleDay(Time.Today());
+        public override void ExitTomorrow(TimeExpressionParser.TomorrowContext context) => HandleDay(Time.Tomorrow());
+        public override void ExitYesterday(TimeExpressionParser.YesterdayContext context) => HandleDay(Time.Yesterday());
 
-        public override void ExitToday(TimeExpressionParser.TodayContext context)
+        private void HandleDay(ITimeGenerator<DateTime> generator)
         {
             if (_parseDateTime)
-                _dateTimeGenerator = Time.Today();
+                _dateTimeGenerator = generator;
             else
-                _timeIntervalGenerator = Time.TodayInterval();
+                _timeIntervalGenerator = generator.AllDay();
         }
+
 
         private HashSet<DayOfWeek> _daysOfWeek = new HashSet<DayOfWeek>();
         public override void ExitNextDayOfWeek(TimeExpressionParser.NextDayOfWeekContext context)
