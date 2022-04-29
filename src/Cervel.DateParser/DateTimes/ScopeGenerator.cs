@@ -8,18 +8,18 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class ScopeGenerator : DateTimeGenerator
     {
+        private ITimeGenerator<TimeInterval> _scopeGenerator;
         private ITimeGenerator<DateTime> _dateGenerator;
-        private ITimeGenerator<TimeInterval> _intervalGenerator;
 
-        public ScopeGenerator(ITimeGenerator<DateTime> dateGenerator, ITimeGenerator<TimeInterval> intervalGenerator)
+        public ScopeGenerator(ITimeGenerator<TimeInterval> scopeGenerator, ITimeGenerator<DateTime> dateGenerator)
         {
+            _scopeGenerator = scopeGenerator;
             _dateGenerator = dateGenerator;
-            _intervalGenerator = intervalGenerator;
         }
 
         public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
-            foreach (var interval in _intervalGenerator.Generate(fromDate))
+            foreach (var interval in _scopeGenerator.Generate(fromDate))
                 foreach (var date in _dateGenerator.Generate(interval))
                     yield return date;
         }

@@ -16,18 +16,19 @@ namespace Cervel.TimeParser.TimeIntervals
 
         public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
+            var start = fromDate;
+            var end = DateTime.MaxValue;
+
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
-            if (!enumerator.MoveNext())
-                yield break;
-
-            var start = enumerator.Current;
-
             while (enumerator.MoveNext())
             {
-                var end = enumerator.Current;
+                end = enumerator.Current;
                 yield return new TimeInterval(start, end);
                 start = end;
             }
+
+            if (start < DateTime.MaxValue)
+                yield return new TimeInterval(start, end);
         }
     }
 }

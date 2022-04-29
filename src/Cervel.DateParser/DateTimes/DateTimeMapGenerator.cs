@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class DateTimeStreamModifier : DateTimeGenerator
+    public class DateTimeMapGenerator : DateTimeGenerator
     {
         private ITimeGenerator<DateTime> _generator;
         private Func<IEnumerable<DateTime>, IEnumerable<DateTime>> _modifier;
 
-        public DateTimeStreamModifier(ITimeGenerator<DateTime> generator, Func<IEnumerable<DateTime>, IEnumerable<DateTime>> modifier)
+        public DateTimeMapGenerator(ITimeGenerator<DateTime> generator, Func<IEnumerable<DateTime>, IEnumerable<DateTime>> modifier)
         {
             _generator = generator;
             _modifier = modifier;

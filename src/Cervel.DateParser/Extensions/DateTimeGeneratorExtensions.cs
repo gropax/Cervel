@@ -10,32 +10,36 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class DateTimeGeneratorExtensions
     {
+        public static ITimeGenerator<DateTime> Map(
+            this ITimeGenerator<DateTime> generator,
+            Func<IEnumerable<DateTime>, IEnumerable<DateTime>> modifier)
+        {
+            return new DateTimeMapGenerator(generator, modifier);
+        }
+
         public static ITimeGenerator<DateTime> Date(this ITimeGenerator<DateTime> generator)
         {
-            return new DateTimeStreamModifier(generator, dx => dx.Select(d => d.Date));
+            return generator.Map(dx => dx.Select(d => d.Date));
         }
 
         public static ITimeGenerator<DateTime> Take(this ITimeGenerator<DateTime> generator, int n)
         {
-            return new DateTimeStreamModifier(generator, dx => dx.Take(n));
+            return generator.Map(dx => dx.Take(n));
         }
 
         public static ITimeGenerator<DateTime> Skip(this ITimeGenerator<DateTime> generator, int n)
         {
-            return new DateTimeStreamModifier(generator, dx => dx.Skip(n));
+            return generator.Map(dx => dx.Skip(n));
         }
 
         public static ITimeGenerator<DateTime> First(this ITimeGenerator<DateTime> generator)
         {
-            return new DateTimeStreamModifier(generator, dx => dx.Take(1));
+            return generator.Map(dx => dx.Take(1));
         }
 
-        public static ITimeGenerator<DateTime> During(
-            this ITimeGenerator<DateTime> generator,
-            ITimeGenerator<DateTime> frequencyGenerator)
+        public static ITimeGenerator<TimeInterval> FirstToInfinity(this ITimeGenerator<DateTime> generator)
         {
-            throw new NotImplementedException();
-            //return frequencyGenerator.Partition()
+            return new FirstToInfinityGenerator(generator);
         }
 
         /// <summary>
@@ -55,6 +59,21 @@ namespace Cervel.TimeParser.Extensions
         public static ITimeGenerator<DateTime> Shift(this ITimeGenerator<DateTime> generator, TimeSpan timeSpan)
         {
             return new DateTimes.ShiftGenerator(generator, timeSpan);
+        }
+
+        public static ITimeGenerator<DateTime> Next(this ITimeGenerator<DateTime> generator, DayOfWeek dow)
+        {
+            return generator.Daily().Where(dow).First();
+        }
+
+        public static ITimeGenerator<DateTime> Where(this ITimeGenerator<DateTime> generator, DayOfWeek dow)
+        {
+            return generator.Map(dx => dx.Where(d => d.DayOfWeek == dow));
+        }
+
+        public static ITimeGenerator<DateTime> Daily(this ITimeGenerator<DateTime> generator)
+        {
+            return Scope(new DailyGenerator(), generator.FirstToInfinity());
         }
 
         public static ITimeGenerator<TimeInterval> AllDay(this ITimeGenerator<DateTime> generator)
@@ -77,9 +96,9 @@ namespace Cervel.TimeParser.Extensions
 
         public static ITimeGenerator<DateTime> Scope(
             this ITimeGenerator<DateTime> generator,
-            ITimeGenerator<TimeInterval> intervalGenerator)
+            ITimeGenerator<TimeInterval> scopeGenerator)
         {
-            return new ScopeGenerator(generator, intervalGenerator);
+            return new ScopeGenerator(scopeGenerator, generator);
         }
     }
 }

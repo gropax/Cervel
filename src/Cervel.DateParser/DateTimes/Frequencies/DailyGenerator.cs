@@ -9,9 +9,9 @@ namespace Cervel.TimeParser.DateTimes
     public class DailyGenerator : FrequencyGenerator
     {
         private TimeSpan _timeSpan;
-        public DailyGenerator(TimeSpan timeSpan)
+        public DailyGenerator(TimeSpan? timeSpan = null)
         {
-            _timeSpan = timeSpan;
+            _timeSpan = timeSpan ?? TimeSpan.FromDays(1);
         }
 
         protected override DateTime GetNext(DateTime date) => date.Shift(_timeSpan);
