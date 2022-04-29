@@ -10,11 +10,13 @@ timeIntervals
 
 dateTimes
 	: never
+	| now
 	| today
 	| nextDayOfWeek
 	| everyDayOfWeek
 	;
 
+now : 'maintenant' | 'mnt' ;
 today : 'aujourd\'hui' | 'aujourd hui' | 'ajd' ;
 
 nextDayOfWeek : dayOfWeek NEXT? ;

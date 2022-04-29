@@ -7,6 +7,7 @@ namespace Cervel.TimeParser.Tests
     {
         private TimeParser _timeParser = new TimeParser();
         private DateTime _fromDate = new DateTime(2022, 1, 1);
+        //private DateTime _fromDate = new DateTime(2022, 1, 1, 10, 30, 0);
         private DateTime _toDate = new DateTime(2032, 1, 1);
 
 
@@ -19,6 +20,21 @@ namespace Cervel.TimeParser.Tests
             var result = _timeParser.ParseDateTimes(input);
             Assert.True(result.IsSuccess);
             Assert.Equal(new DateTime[0],
+                result.Value.Generate(_fromDate, _toDate));
+        }
+        #endregion
+
+        #region DateTimes "maintenant"
+        [Theory]
+        [InlineData("maintenant")]
+        [InlineData("mnt")]
+        public void Test_ParseDateTimes_Now(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(Day(2022, 1, 1, 0, 0, 0)),
                 result.Value.Generate(_fromDate, _toDate));
         }
         #endregion
@@ -160,7 +176,7 @@ namespace Cervel.TimeParser.Tests
         }
         #endregion
 
-        #region DateTimes "le lundi"
+        #region DateTimes "chaque lundi"
         [Theory]
         [InlineData("le lundi")]
         [InlineData("les lundis")]

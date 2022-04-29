@@ -10,6 +10,11 @@ namespace Cervel.TimeParser
 {
     public static class Time
     {
+        public static ITimeGenerator<DateTime> Now()
+        {
+            return new OnceGenerator();
+        }
+
         public static ITimeGenerator<DateTime> Today()
         {
             return new DayFilterGenerator(take: 1);

@@ -10,6 +10,7 @@ namespace Cervel.TimeParser.Tests
     {
         protected DateTime[] Dates(params DateTime[] dateTimes) => dateTimes;
         protected DateTime Day(int year, int month, int day) => new DateTime(year, month, day);
+        protected DateTime Day(int year, int month, int day, int hour, int minute, int second) => new DateTime(year, month, day, hour, minute, second);
 
         protected TimeInterval[] Intervals(params TimeInterval[] timeSpans) => timeSpans;
 

@@ -43,6 +43,11 @@ namespace Cervel.TimeParser
                 _timeIntervalGenerator = new TimeIntervals.NeverGenerator();
         }
 
+        public override void ExitNow(TimeExpressionParser.NowContext context)
+        {
+            _dateTimeGenerator = Time.Now();
+        }
+
         public override void ExitToday(TimeExpressionParser.TodayContext context)
         {
             if (_parseDateTime)
