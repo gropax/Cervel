@@ -9,6 +9,7 @@ namespace Cervel.TimeParser.Tests
         //private DateTime _fromDate = new DateTime(2022, 1, 1);
         private DateTime _fromDate = new DateTime(2022, 1, 1, 10, 30, 0);
         private DateTime _toDate = new DateTime(2032, 1, 1);
+        private DateTime _febFst = new DateTime(2022, 2, 1);
 
         #region Dates
 
@@ -281,6 +282,7 @@ namespace Cervel.TimeParser.Tests
         #endregion
 
         #region Chaque jour de la semaine
+
         #region DateTimes "chaque lundi"
         [Theory]
         [InlineData("le lundi")]
@@ -306,9 +308,139 @@ namespace Cervel.TimeParser.Tests
                     Day(2022, 1, 17),
                     Day(2022, 1, 24),
                     Day(2022, 1, 31)),
-                result.Value.Generate(_fromDate, new DateTime(2022, 2, 1)));
+                result.Value.Generate(_fromDate, _febFst));
         }
         #endregion
+
+        #endregion
+
+        #region Dates relatives
+        #region DateTimes "il y a N jours"
+        [Theory]
+        [InlineData("3 jours avant chaque lundi")]
+        [InlineData("3 jour avant chaque lundi")]
+        [InlineData("3 jour av chaque lundi")]
+        [InlineData("3 j av chaque lundi")]
+        public void Test_ParseDateTimes_NDaysBefore(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(
+                    Day(2021, 12, 31),
+                    Day(2022, 1, 7),
+                    Day(2022, 1, 14),
+                    Day(2022, 1, 21),
+                    Day(2022, 1, 28)),
+                result.Value.Generate(_fromDate, _febFst));
+        }
+        #endregion
+
+        #region DateTimes "l'avant-veille de"
+        [Theory]
+        [InlineData("l'avant-veille de chaque lundi")]
+        [InlineData("l av veil de ch lun")]
+        public void Test_ParseDateTimes_TwoDaysBefore(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 1),
+                    Day(2022, 1, 8),
+                    Day(2022, 1, 15),
+                    Day(2022, 1, 22),
+                    Day(2022, 1, 29)),
+                result.Value.Generate(_fromDate, _febFst));
+        }
+        #endregion
+
+        #region DateTimes "la veille de"
+        [Theory]
+        [InlineData("la veille de chaque lundi")]
+        [InlineData("la veil de ch lun")]
+        //[InlineData("le jour d'avant chaque lundi")]
+        //[InlineData("le j d av ch lun")]
+        public void Test_ParseDateTimes_TheDayBefore(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 2),
+                    Day(2022, 1, 9),
+                    Day(2022, 1, 16),
+                    Day(2022, 1, 23),
+                    Day(2022, 1, 30)),
+                result.Value.Generate(_fromDate, _febFst));
+        }
+        #endregion
+
+        #region DateTimes "le lendemain de"
+        [Theory]
+        [InlineData("le lendemain de chaque lundi")]
+        [InlineData("le lendem de ch lun")]
+        [InlineData("le lend de ch lun")]
+        //[InlineData("le jour d'après chaque lundi")]
+        //[InlineData("le j d ap ch lun")]
+        public void Test_ParseDateTimes_TheDayAfter(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 4),
+                    Day(2022, 1, 11),
+                    Day(2022, 1, 18),
+                    Day(2022, 1, 25),
+                    Day(2022, 2, 1)),
+                result.Value.Generate(_fromDate, _febFst));
+        }
+        #endregion
+
+        #region DateTimes "le surlendemain de"
+        [Theory]
+        [InlineData("le surlendemain de chaque lundi")]
+        [InlineData("le surlend de ch lundi")]
+        [InlineData("le surlendem de ch lundi")]
+        public void Test_ParseDateTimes_TwoDaysAfter(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 5),
+                    Day(2022, 1, 12),
+                    Day(2022, 1, 19),
+                    Day(2022, 1, 26)),
+                result.Value.Generate(_fromDate, _febFst));
+        }
+        #endregion
+
+        #region DateTimes "N jours après"
+        [Theory]
+        [InlineData("3 jours après chaque lundi")]
+        [InlineData("3 j ap ch lun")]
+        public void Test_ParseDateTimes_NDaysAfter(string input)
+        {
+            var result = _timeParser.ParseDateTimes(input);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 6),
+                    Day(2022, 1, 13),
+                    Day(2022, 1, 20),
+                    Day(2022, 1, 27)),
+                result.Value.Generate(_fromDate, _febFst));
+        }
+        #endregion
+
         #endregion
 
         #endregion

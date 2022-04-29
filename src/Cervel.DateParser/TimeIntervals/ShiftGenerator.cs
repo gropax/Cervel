@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cervel.TimeParser.Extensions;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
@@ -19,7 +20,7 @@ namespace Cervel.TimeParser.TimeIntervals
 
         public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
-            return _generator.Generate(fromDate + _timeSpan);
+            return _generator.Generate(fromDate).Select(i => i.Shift(_timeSpan));
         }
     }
 }

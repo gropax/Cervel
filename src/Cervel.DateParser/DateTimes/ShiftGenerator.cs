@@ -19,7 +19,7 @@ namespace Cervel.TimeParser.DateTimes
 
         public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
-            return _generator.Generate(fromDate + _timeSpan);
+            return _generator.Generate(fromDate).Select(d => d + _timeSpan);
         }
     }
 }

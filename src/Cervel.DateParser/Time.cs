@@ -23,5 +23,7 @@ namespace Cervel.TimeParser
         {
             return new TimeIntervals.DayFilterGenerator(TimeSpan.FromDays(1), (d) => d.DayOfWeek == dow);
         }
+
+        public static Func<ITimeGenerator<DateTime>, ITimeGenerator<DateTime>> DayShift(int n) => (g) => g.ShiftDay(n);
     }
 }

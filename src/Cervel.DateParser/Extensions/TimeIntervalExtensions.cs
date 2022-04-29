@@ -8,6 +8,13 @@ namespace Cervel.TimeParser
 {
     public static class TimeIntervalExtensions
     {
+        public static TimeInterval Shift(this TimeInterval dateTime, TimeSpan timeSpan)
+        {
+            var start = dateTime.Start.Shift(timeSpan);
+            var end = dateTime.End.Shift(timeSpan);
+            return new TimeInterval(start, end);
+        }
+
         public static IEnumerable<TimeInterval> Disjunction(this IEnumerable<TimeInterval> intervals)
         {
             var enumerator = intervals.GetEnumerator();

@@ -18,64 +18,121 @@ namespace Cervel.TimeParser
         public ITimeGenerator<TimeInterval> TimeIntervalGenerator { get; set; }
         public ITimeGenerator<DateTime> DateTimeGenerator { get; set; }
         
-        private ITimeGenerator<TimeInterval> _timeIntervalGenerator;
-        private ITimeGenerator<DateTime> _dateTimeGenerator;
+        private ITimeGenerator<TimeInterval> _intervals;
 
-        public override void ExitDateTimes(TimeExpressionParser.DateTimesContext context)
-        {
-            DateTimeGenerator = _dateTimeGenerator;
-        }
+        public override void ExitDateTimes(TimeExpressionParser.DateTimesContext context) =>
+            DateTimeGenerator = ConsumeSingleDateGenerator();
 
         public override void ExitTimeIntervals(TimeExpressionParser.TimeIntervalsContext context)
         {
-            TimeIntervalGenerator = _timeIntervalGenerator;
+            TimeIntervalGenerator = _intervals;
         }
+
+        public override void ExitDateIntervals(TimeExpressionParser.DateIntervalsContext context) =>
+            _intervals = ConsumeSingleDateGenerator().AllDay();
 
         public override void ExitAlways(TimeExpressionParser.AlwaysContext context)
         {
-            _timeIntervalGenerator = new TimeIntervals.AlwaysGenerator();
+            _intervals = new TimeIntervals.AlwaysGenerator();
         }
 
         public override void ExitNever(TimeExpressionParser.NeverContext context)
         {
             if (_parseDateTime)
-                _dateTimeGenerator = new DateTimes.NeverGenerator();
+                _dateGenerators.Add(new DateTimes.NeverGenerator());
             else
-                _timeIntervalGenerator = new TimeIntervals.NeverGenerator();
+                _intervals = new TimeIntervals.NeverGenerator();
         }
 
-        public override void ExitNow(TimeExpressionParser.NowContext context) => _dateTimeGenerator = Time.Now();
+        public override void ExitNow(TimeExpressionParser.NowContext context) =>
+            _dateGenerators.Add(Time.Now());
 
-        public override void ExitNDaysAgo(TimeExpressionParser.NDaysAgoContext context) => HandleDay(Time.Today().ShiftDay(- ConsumeSingleNumber()));
-        public override void ExitDayBeforeYesterday(TimeExpressionParser.DayBeforeYesterdayContext context) => HandleDay(Time.Today().ShiftDay(-2));
-        public override void ExitYesterday(TimeExpressionParser.YesterdayContext context) => HandleDay(Time.Yesterday());
-        public override void ExitToday(TimeExpressionParser.TodayContext context) => HandleDay(Time.Today());
-        public override void ExitTomorrow(TimeExpressionParser.TomorrowContext context) => HandleDay(Time.Tomorrow());
-        public override void ExitDayAfterTomorrow(TimeExpressionParser.DayAfterTomorrowContext context) => HandleDay(Time.Today().ShiftDay(2));
-        public override void ExitNDaysFromNow(TimeExpressionParser.NDaysFromNowContext context) => HandleDay(Time.Today().ShiftDay(ConsumeSingleNumber()));
+        public override void ExitNDaysAgo(TimeExpressionParser.NDaysAgoContext context) =>
+            _dateGenerators.Add(Time.Today().ShiftDay(-ConsumeSingleNumber()));
+        public override void ExitDayBeforeYesterday(TimeExpressionParser.DayBeforeYesterdayContext context) =>
+            _dateGenerators.Add(Time.Today().ShiftDay(-2));
+        public override void ExitYesterday(TimeExpressionParser.YesterdayContext context) =>
+            _dateGenerators.Add(Time.Yesterday());
+        public override void ExitToday(TimeExpressionParser.TodayContext context) =>
+            _dateGenerators.Add(Time.Today());
+        public override void ExitTomorrow(TimeExpressionParser.TomorrowContext context) =>
+            _dateGenerators.Add(Time.Tomorrow());
+        public override void ExitDayAfterTomorrow(TimeExpressionParser.DayAfterTomorrowContext context) =>
+            _dateGenerators.Add(Time.Today().ShiftDay(2));
+        public override void ExitNDaysFromNow(TimeExpressionParser.NDaysFromNowContext context) =>
+            _dateGenerators.Add(Time.Today().ShiftDay(ConsumeSingleNumber()));
 
-        private void HandleDay(ITimeGenerator<DateTime> generator)
+
+        public override void ExitShiftedDate(TimeExpressionParser.ShiftedDateContext context)
         {
-            if (_parseDateTime)
-                _dateTimeGenerator = generator;
-            else
-                _timeIntervalGenerator = generator.AllDay();
+            var shift = ConsumeDateShifts().FirstOrDefault();
+            if (shift != null)
+                _dateGenerators.Add(shift(ConsumeSingleDateGenerator()));
         }
 
 
+        public override void ExitNDaysBefore(TimeExpressionParser.NDaysBeforeContext context) =>
+            _dateShifts.Add(Time.DayShift(-ConsumeSingleNumber()));
+        public override void ExitTwoDaysBefore(TimeExpressionParser.TwoDaysBeforeContext context) =>
+            _dateShifts.Add(Time.DayShift(-2));
+        public override void ExitTheDayBefore(TimeExpressionParser.TheDayBeforeContext context) =>
+            _dateShifts.Add(Time.DayShift(-1));
+        public override void ExitTheDayAfter(TimeExpressionParser.TheDayAfterContext context) =>
+            _dateShifts.Add(Time.DayShift(1));
+        public override void ExitTwoDaysAfter(TimeExpressionParser.TwoDaysAfterContext context) =>
+            _dateShifts.Add(Time.DayShift(2));
+        public override void ExitNDaysAfter(TimeExpressionParser.NDaysAfterContext context) =>
+            _dateShifts.Add(Time.DayShift(ConsumeSingleNumber()));
+
+        //public override void ExitNDaysBefore(TimeExpressionParser.NDaysBeforeContext context) =>
+        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(-ConsumeSingleNumber()));
+        //public override void ExitTwoDaysBefore(TimeExpressionParser.TwoDaysBeforeContext context) =>
+        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(-2));
+        //public override void ExitTheDayBefore(TimeExpressionParser.TheDayBeforeContext context) =>
+        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(-1));
+        //public override void ExitTheDayAfter(TimeExpressionParser.TheDayAfterContext context) =>
+        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(1));
+        //public override void ExitTwoDaysAfter(TimeExpressionParser.TwoDaysAfterContext context) =>
+        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(2));
+        //public override void ExitNDaysAfter(TimeExpressionParser.NDaysAfterContext context) =>
+        //    _dateGenerators.Add(ConsumeSingleDateGenerator().ShiftDay(ConsumeSingleNumber()));
+
+
+        public override void ExitNextDayOfWeek(TimeExpressionParser.NextDayOfWeekContext context) =>
+            _dateGenerators.Add(Time.Next(ConsumeSingleDayOfWeek()));
+
+        public override void ExitEveryDayOfWeek(TimeExpressionParser.EveryDayOfWeekContext context) =>
+            _dateGenerators.Add(Time.Each(ConsumeSingleDayOfWeek()));
+
+
+        #region DateGenerator
+
+        private List<ITimeGenerator<DateTime>> _dateGenerators = new List<ITimeGenerator<DateTime>>();
+        private ITimeGenerator<DateTime> ConsumeSingleDateGenerator()
+        {
+            var gen = _dateGenerators.Single();
+            _dateGenerators.Clear();
+            return gen;
+        }
+
+        #endregion
+
+        #region Date shift
+
+        private List<Func<ITimeGenerator<DateTime>, ITimeGenerator<DateTime>>> _dateShifts =
+            new List<Func<ITimeGenerator<DateTime>, ITimeGenerator<DateTime>>>();
+            
+        private IEnumerable<Func<ITimeGenerator<DateTime>, ITimeGenerator<DateTime>>> ConsumeDateShifts()
+        {
+            var shifts = _dateShifts.ToArray();
+            _dateShifts.Clear();
+            return shifts;
+        }
+
+        #endregion
+
+        #region DayOfWeek
         private HashSet<DayOfWeek> _daysOfWeek = new HashSet<DayOfWeek>();
-        public override void ExitNextDayOfWeek(TimeExpressionParser.NextDayOfWeekContext context)
-        {
-            HandleDay(Time.Next(_daysOfWeek.Single()));
-            _daysOfWeek.Clear();
-        }
-
-        public override void ExitEveryDayOfWeek(TimeExpressionParser.EveryDayOfWeekContext context)
-        {
-            HandleDay(Time.Each(_daysOfWeek.Single()));
-            _daysOfWeek.Clear();
-        }
-
         public override void ExitMonday(TimeExpressionParser.MondayContext context) => _daysOfWeek.Add(DayOfWeek.Monday);
         public override void ExitTuesday(TimeExpressionParser.TuesdayContext context) => _daysOfWeek.Add(DayOfWeek.Tuesday);
         public override void ExitWednesday(TimeExpressionParser.WednesdayContext context) => _daysOfWeek.Add(DayOfWeek.Wednesday);
@@ -84,7 +141,15 @@ namespace Cervel.TimeParser
         public override void ExitSaturday(TimeExpressionParser.SaturdayContext context) => _daysOfWeek.Add(DayOfWeek.Saturday);
         public override void ExitSunday(TimeExpressionParser.SundayContext context) => _daysOfWeek.Add(DayOfWeek.Sunday);
 
-        
+        private DayOfWeek ConsumeSingleDayOfWeek()
+        {
+            var dow = _daysOfWeek.Single();
+            _daysOfWeek.Clear();
+            return dow;
+        }
+
+        #endregion
+
 
         private List<int> _numbers = new List<int>();
         public override void ExitNumber(TimeExpressionParser.NumberContext context)
