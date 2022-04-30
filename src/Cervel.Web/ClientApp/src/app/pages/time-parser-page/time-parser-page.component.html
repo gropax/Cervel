@@ -1,1 +1,8 @@
-<p>time-parser-page works!</p>
+<form [formGroup]="form" novalidate class="form">
+  <mat-card class="box">
+    <mat-form-field appearance="standard" style="width: 100%; margin: 0px;">
+      <textarea matInput placeholder="Time expression" formControlName="timeExpr"></textarea>
+    </mat-form-field>
+  </mat-card>
+</form>
+
