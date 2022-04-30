@@ -3,9 +3,9 @@ import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BehaviorSubject, debounce, debounceTime, filter, map, mergeMap } from 'rxjs';
+import { BehaviorSubject, catchError, debounce, debounceTime, EMPTY, empty, filter, map, mergeMap, switchMap } from 'rxjs';
 import { Notification, NotificationService } from '../../services/notification.service';
-import { MonthHighlights, TimeParserService, YearHighlights } from '../../services/time-parser.service';
+import { MonthHighlights, ParseResult, TimeParserService, YearHighlights } from '../../services/time-parser.service';
 import { MainActionType, MenuAction, ToolbarMode, ToolbarService } from '../../services/toolbar.service';
 
 
@@ -47,12 +47,19 @@ export class TimeParserPageComponent implements OnInit {
       .pipe(
         debounceTime(500),
         filter(e => !!e),
-        mergeMap(e => this.timeParserService.parseIntervals(e))
+        switchMap(e =>
+          this.timeParserService.parseIntervals(e)
+            .pipe(catchError(err => {
+              this.highlights = {};
+              return EMPTY;
+            })))
       )
       .subscribe(res => {
         console.log(res.timeExpr);
         if (res.isSuccess)
           this.highlights = res.highlights[2022];
+      }, (error) => {
+        this.highlights = {};
       });
   }
 
