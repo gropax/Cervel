@@ -10,6 +10,7 @@ namespace Cervel.TimeParser
 {
     public static class Time
     {
+        public static ITimeGenerator<DateTime> Start() => new OnceGenerator();
         public static ITimeGenerator<DateTime> Now() => new OnceGenerator();
 
         public static ITimeGenerator<DateTime> Yesterday() => Today().ShiftDay(-1);
