@@ -1,5 +1,6 @@
 import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { Highlight } from '../../models/highlights';
 
 @Component({
   selector: 'app-day-view',
@@ -11,6 +12,7 @@ export class DayViewComponent implements OnInit {
   @Input() year!: number;
   @Input() month!: number;
   @Input() day!: number;
+  @Input() highlights: Highlight[] = [];
 
   constructor() { }
 

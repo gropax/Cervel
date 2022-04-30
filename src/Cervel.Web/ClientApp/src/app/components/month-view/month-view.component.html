@@ -6,6 +6,7 @@
       [year]="day.year"
       [month]="day.month"
       [day]="day.day"
+      [highlights]="highlights[day.day] || []"
       [style.grid-column]="day.dayOfWeek"
       [style.grid-row]="day.weekNumber">
     </app-day-view>

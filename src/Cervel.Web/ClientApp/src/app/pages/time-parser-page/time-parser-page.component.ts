@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject, debounce, debounceTime, filter, map, mergeMap } from 'rxjs';
 import { Notification, NotificationService } from '../../services/notification.service';
-import { TimeParserService } from '../../services/time-parser.service';
+import { MonthHighlights, TimeParserService, YearHighlights } from '../../services/time-parser.service';
 import { MainActionType, MenuAction, ToolbarMode, ToolbarService } from '../../services/toolbar.service';
 
 
@@ -22,6 +22,9 @@ export class TimeParserPageComponent implements OnInit {
   public timeExpr: string = "";
   private timeExprSubject = new BehaviorSubject(this.timeExpr);
   private timeExpr$ = this.timeExprSubject.asObservable();
+
+  public monthRange = new Array(12);
+  public highlights: MonthHighlights = {};
 
   constructor(
     private router: Router,
@@ -48,6 +51,8 @@ export class TimeParserPageComponent implements OnInit {
       )
       .subscribe(res => {
         console.log(res.timeExpr);
+        if (res.isSuccess)
+          this.highlights = res.highlights[2022];
       });
   }
 

@@ -16,12 +16,16 @@ export class TimeParserService {
 
 }
 
+export type YearHighlights = { [year: number]: MonthHighlights };
+export type MonthHighlights = { [month: number]: DayHighlights };
+export type DayHighlights = { [day: number]: Highlight[] };
+
 export class ParseResult {
   constructor(
     public timeExpr: string,
     public isSuccess: boolean,
     public intervals: TimeInterval[],
-    public dayHighlights: { [year: number]: { [month: number]: { [day: number]: Highlight[] }}}) {
+    public highlights: YearHighlights) {
   }
 }
 

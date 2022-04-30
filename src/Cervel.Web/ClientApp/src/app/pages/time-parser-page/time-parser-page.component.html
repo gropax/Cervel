@@ -13,17 +13,11 @@
 </form>
 
 <div class="month-grid">
-  <app-month-view [year]="2022" [month]="1"></app-month-view>
-  <app-month-view [year]="2022" [month]="2"></app-month-view>
-  <app-month-view [year]="2022" [month]="3"></app-month-view>
-  <app-month-view [year]="2022" [month]="4"></app-month-view>
-  <app-month-view [year]="2022" [month]="5"></app-month-view>
-  <app-month-view [year]="2022" [month]="6"></app-month-view>
-  <app-month-view [year]="2022" [month]="7"></app-month-view>
-  <app-month-view [year]="2022" [month]="8"></app-month-view>
-  <app-month-view [year]="2022" [month]="9"></app-month-view>
-  <app-month-view [year]="2022" [month]="10"></app-month-view>
-  <app-month-view [year]="2022" [month]="11"></app-month-view>
-  <app-month-view [year]="2022" [month]="12"></app-month-view>
+  <app-month-view
+    *ngFor="let x of monthRange; let i = index"
+    [year]="2022"
+    [month]="i+1"
+    [highlights]="highlights[i+1] || {}">
+  </app-month-view>
 </div>
 

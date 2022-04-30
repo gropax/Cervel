@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DayHighlights, MonthHighlights } from '../../services/time-parser.service';
 
 @Component({
   selector: 'app-month-view',
@@ -9,7 +10,7 @@ export class MonthViewComponent implements OnInit {
 
   @Input() year!: number;
   @Input() month!: number;
-  //@Input() dayHighlights: DayHighlight[] = [];
+  @Input() highlights: DayHighlights = {};
 
   public dayRange: DayInfo[] = [];
 
