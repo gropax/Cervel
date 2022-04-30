@@ -86,6 +86,12 @@ namespace Cervel.TimeParser.Extensions
             return generator.Date().ToIntervals(TimeSpan.FromDays(1));
         }
 
+        public static IGenerator<TimeInterval> ToScopes(
+            this IGenerator<DateTime> generator, TimeSpan timeSpan)
+        {
+            return new ToScopesGenerator(generator, timeSpan);
+        }
+
         public static IGenerator<TimeInterval> ToIntervals(
             this IGenerator<DateTime> generator, TimeSpan timeSpan)
         {

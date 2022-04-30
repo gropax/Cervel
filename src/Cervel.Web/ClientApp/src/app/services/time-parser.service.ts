@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DayHighlight } from '../models/highlights';
+import { Highlight } from '../models/highlights';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class ParseResult {
     public timeExpr: string,
     public isSuccess: boolean,
     public intervals: TimeInterval[],
-    public dayHighlights: DayHighlight[]) {
+    public dayHighlights: { [year: number]: { [month: number]: { [day: number]: Highlight[] }}}) {
   }
 }
 

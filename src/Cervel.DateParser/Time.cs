@@ -30,6 +30,8 @@ namespace Cervel.TimeParser
         public static IGenerator<DateTime> Next(DayOfWeek dow) => Tomorrow().Next(dow);
         public static IGenerator<DateTime> Each(DayOfWeek dow) => Today().Next(dow).Weekly();
 
+        public static IGenerator<TimeInterval> DayScopes() => new DailyGenerator().ToScopes(TimeSpan.FromDays(1));
+
         public static IGenerator<TimeInterval> EveryDayOfWeekInterval(DayOfWeek dow)
         {
             return new TimeIntervals.DayFilterGenerator(TimeSpan.FromDays(1), (d) => d.DayOfWeek == dow);

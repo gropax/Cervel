@@ -15,5 +15,25 @@ namespace Cervel.TimeParser
                 if (indexSelector(idx++))
                     yield return t;
         }
+
+        public static IEnumerable<U> SelectWithNext<T, U>(
+            this IEnumerable<T> ts,
+            Func<T, T, U> selector)
+        {
+            var enumerator = ts.GetEnumerator();
+            if (!enumerator.MoveNext())
+                yield break;
+
+            var t = enumerator.Current;
+
+            while (enumerator.MoveNext())
+            {
+                var next = enumerator.Current;
+                yield return selector(t, next);
+                t = next;
+            }
+
+            yield return selector(t, default);
+        }
     }
 }

@@ -12,10 +12,12 @@ namespace Cervel.TimeParser.TimeIntervals.Fuzzy
     {
         public DateTime Start { get; }
         public DateTime End { get; }
-        public decimal StartValue { get; }
-        public decimal EndValue { get; }
+        public double StartValue { get; }
+        public double EndValue { get; }
 
-        public FuzzyInterval(DateTime start, DateTime end, decimal startValue, decimal endValue)
+        public bool IsZero => StartValue == 0 && EndValue == 0;
+
+        public FuzzyInterval(DateTime start, DateTime end, double startValue, double endValue)
         {
             ValidateInterval(start, end);
             ValidateFuzzyValue(startValue);
@@ -32,7 +34,7 @@ namespace Cervel.TimeParser.TimeIntervals.Fuzzy
                 throw new Exception($"Interval start must be < to its end.");
         }
 
-        private static void ValidateFuzzyValue(decimal startValue)
+        private static void ValidateFuzzyValue(double startValue)
         {
             if (startValue < 0 || startValue > 1)
                 throw new Exception($"Fuzzy value must be in [0, 1] but was {startValue}.");
@@ -46,7 +48,7 @@ namespace Cervel.TimeParser.TimeIntervals.Fuzzy
         public FuzzyInterval LeftCut(DateTime cut)
         {
             DateTime end;
-            decimal endValue;
+            double endValue;
             if (cut < End)
             {
                 end = cut;
@@ -60,10 +62,10 @@ namespace Cervel.TimeParser.TimeIntervals.Fuzzy
             return new FuzzyInterval(Start, end, StartValue, endValue);
         }
 
-        public decimal ValueAt(DateTime date)
+        public double ValueAt(DateTime date)
         {
-            var fromStart = (date - Start).Ticks;
-            var toEnd = (End - date).Ticks;
+            var fromStart = (date - Start).TotalMilliseconds;
+            var toEnd = (End - date).TotalMilliseconds;
 
             if (fromStart * toEnd < 0)
                 throw new Exception("Date do not belong to interval");
