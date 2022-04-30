@@ -1,44 +1,16 @@
 <mat-card class="box">
   <h6>{{ monthName() }}</h6>
   <div class="day-grid">
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
+    <app-day-view
+      *ngFor="let day of dayRange()"
+      [year]="day.year"
+      [month]="day.month"
+      [day]="day.day"
+      [style.grid-column]="day.dayOfWeek"
+      [style.grid-row]="day.weekNumber">
+    </app-day-view>
 
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
-    <app-day-view [year]="year" [month]="month" [day]="1"></app-day-view>
+    <!-- Force a sixth row for every month -->
+    <div [style.grid-row]="6"></div>
   </div>
 </mat-card>
