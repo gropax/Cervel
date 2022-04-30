@@ -21,7 +21,13 @@ namespace Cervel.TimeParser
         }
 
         public static IGenerator<DateTime> Start() => new OnceGenerator();
-        public static IGenerator<DateTime> Now() => new OnceGenerator(DateTime.Now);
+
+
+        private static DateTime? _now;
+        public static void SetNow(DateTime date) => _now = date;
+        public static DateTime GetNow() => _now ?? DateTime.Now;
+
+        public static IGenerator<DateTime> Now() => new OnceGenerator(GetNow());
 
         public static IGenerator<DateTime> Yesterday() => Today().ShiftDay(-1);
         public static IGenerator<DateTime> Today() => Now().Date();

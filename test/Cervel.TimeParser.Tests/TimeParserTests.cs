@@ -7,9 +7,15 @@ namespace Cervel.TimeParser.Tests
     {
         private TimeParser _timeParser = new TimeParser();
         //private DateTime _fromDate = new DateTime(2022, 1, 1);
-        private DateTime _fromDate = new DateTime(2022, 1, 1, 10, 30, 0);
+        private DateTime _fromDate = new DateTime(2022, 1, 1);
+        private DateTime _now = new DateTime(2022, 1, 1, 10, 30, 0);
         private DateTime _toDate = new DateTime(2032, 1, 1);
         private DateTime _febFst = new DateTime(2022, 2, 1);
+
+        public TimeParserTests()
+        {
+            Time.SetNow(_now);
+        }
 
         #region Dates
 
