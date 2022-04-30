@@ -12,7 +12,7 @@ export class MonthViewComponent implements OnInit {
   @Input() month!: number;
   @Input() dayHighlights: DayHighlight[] = [];
 
-  public dayRange: DayInfo[];
+  public dayRange: DayInfo[] = [];
 
   private monthNames = [
     "Janvier",
@@ -53,9 +53,6 @@ export class MonthViewComponent implements OnInit {
       days.push(new DayInfo(this.year, this.month, i, dow, weekNb));
     }
 
-    console.log(`Month: ${this.month}`);
-    console.log(`DayNb: ${dayNb}`);
-    console.log(days);
     return days;
   }
 

@@ -19,7 +19,9 @@ namespace Cervel.TimeParser.TimeIntervals
                     yield return enumerator.Current;
                 else
                 {
-                    yield return new TimeInterval(enumerator.Current.Start, toDate);
+                    if (enumerator.Current.Start < toDate)
+                        yield return new TimeInterval(enumerator.Current.Start, toDate);
+
                     yield break;
                 }
             }
