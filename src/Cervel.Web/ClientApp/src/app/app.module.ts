@@ -26,6 +26,8 @@ import { PageContentComponent } from './components/page-content/page-content.com
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MonthViewComponent } from './components/month-view/month-view.component';
+import { DayViewComponent } from './components/day-view/day-view.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PageContentComponent,
     SidenavComponent,
     ToolbarComponent,
+    MonthViewComponent,
+    DayViewComponent,
   ],
   imports: [
     BrowserModule,
