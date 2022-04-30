@@ -1,7 +1,13 @@
 <form class="form">
   <mat-card class="box">
     <mat-form-field appearance="standard" style="width: 100%; margin: 0px;">
-      <textarea matInput placeholder="Time expression"></textarea>
+      <textarea
+        matInput
+        [(ngModel)]="timeExpr"
+        (ngModelChange)="updateTimeExpr($event)"
+        name="timeExpr"
+        placeholder="Time expression">
+      </textarea>
     </mat-form-field>
   </mat-card>
 </form>

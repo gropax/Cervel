@@ -1,7 +1,11 @@
+import { ElementRef } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BehaviorSubject, debounce, debounceTime, map, mergeMap } from 'rxjs';
 import { Notification, NotificationService } from '../../services/notification.service';
+import { TimeParserService } from '../../services/time-parser.service';
 import { MainActionType, MenuAction, ToolbarMode, ToolbarService } from '../../services/toolbar.service';
 
 
@@ -15,10 +19,16 @@ export class TimeParserPageComponent implements OnInit {
   private actions: MenuAction[];
   public loading: boolean = false;
 
+  public timeExpr: string = "";
+  private timeExprSubject = new BehaviorSubject(this.timeExpr);
+  private timeExpr$ = this.timeExprSubject.asObservable();
+
   constructor(
     private router: Router,
     private toolbarService: ToolbarService,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private timeParserService: TimeParserService
+  ) {
     this.actions = [
       //new MenuAction("Create", "done", () => { }),
     ];
@@ -29,6 +39,19 @@ export class TimeParserPageComponent implements OnInit {
     this.toolbarService.setMode(ToolbarMode.Navigation);
     this.toolbarService.setMainAction(MainActionType.Sidenav);
     //this.toolbarService.setActions(this.actions);
+
+    this.timeExpr$
+      .pipe(
+        debounceTime(500),
+        mergeMap(e => this.timeParserService.parseIntervals(e))
+      )
+      .subscribe(res => {
+        console.log(res.timeExpr);
+      });
+  }
+
+  public updateTimeExpr($event: string) {
+    this.timeExprSubject.next($event);
   }
 
 }
