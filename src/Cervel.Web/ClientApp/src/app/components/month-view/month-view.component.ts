@@ -12,6 +12,8 @@ export class MonthViewComponent implements OnInit {
   @Input() month!: number;
   @Input() dayHighlights: DayHighlight[] = [];
 
+  public dayRange: DayInfo[];
+
   private monthNames = [
     "Janvier",
     "Février",
@@ -30,12 +32,14 @@ export class MonthViewComponent implements OnInit {
     return this.monthNames[this.month - 1];
   }
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
   }
 
-  public dayRange() {
+  ngOnInit(): void {
+    this.dayRange = this.getDayRange();
+  }
+
+  public getDayRange() {
     var days = [];
     var dayNb = new Date(this.year, this.month, 0).getDate();
     var weekNb = 1;
