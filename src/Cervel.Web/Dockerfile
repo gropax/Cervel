@@ -11,10 +11,10 @@ COPY ["src/Cervel.DateParser/Cervel.TimeParser.csproj", "src/Cervel.DateParser/"
 RUN dotnet restore "src/Cervel.Web/Cervel.Web.csproj"
 COPY . .
 WORKDIR "/src/src/Cervel.Web"
-RUN dotnet build "Cervel.Web.csproj" -c Release -o /app/build -p:Version=`cat version`
+RUN dotnet build "Cervel.Web.csproj" -c Release -o /app/build # -p:Version=`cat version`
 
 FROM build AS publish
-RUN dotnet publish "Cervel.Web.csproj" -c Release -o /app/publish -p:Version=`cat version`
+RUN dotnet publish "Cervel.Web.csproj" -c Release -o /app/publish # -p:Version=`cat version`
 
 FROM base AS final
 WORKDIR /app
