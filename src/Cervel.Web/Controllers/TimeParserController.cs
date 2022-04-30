@@ -32,7 +32,9 @@ namespace Cervel.Web.Controllers
                 ? result.Value.Generate(_fromDate, _toDate).ToArray()
                 : new TimeInterval[0];
 
-            var dayHighlights = GetDayHighlights(result.Value);
+            var dayHighlights = result.IsSuccess
+                ? GetDayHighlights(result.Value)
+                : new Dictionary<int, Dictionary<int, Dictionary<int, HighlightDto[]>>>();
 
             return Ok(new ParseResultDto()
             {
