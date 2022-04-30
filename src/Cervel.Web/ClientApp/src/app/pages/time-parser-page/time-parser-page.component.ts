@@ -3,7 +3,7 @@ import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BehaviorSubject, debounce, debounceTime, map, mergeMap } from 'rxjs';
+import { BehaviorSubject, debounce, debounceTime, filter, map, mergeMap } from 'rxjs';
 import { Notification, NotificationService } from '../../services/notification.service';
 import { TimeParserService } from '../../services/time-parser.service';
 import { MainActionType, MenuAction, ToolbarMode, ToolbarService } from '../../services/toolbar.service';
@@ -43,6 +43,7 @@ export class TimeParserPageComponent implements OnInit {
     this.timeExpr$
       .pipe(
         debounceTime(500),
+        filter(e => !!e),
         mergeMap(e => this.timeParserService.parseIntervals(e))
       )
       .subscribe(res => {

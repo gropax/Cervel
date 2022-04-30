@@ -25,7 +25,10 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\app\pages\" />
-    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cervel.DateParser\Cervel.TimeParser.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
