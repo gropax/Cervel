@@ -9,7 +9,7 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class TimeIntervalGeneratorExtensions
     {
-        public static ITimeGenerator<TimeInterval> Shift(this ITimeGenerator<TimeInterval> generator, TimeSpan timeSpan)
+        public static IGenerator<TimeInterval> Shift(this IGenerator<TimeInterval> generator, TimeSpan timeSpan)
         {
             return new ShiftGenerator(generator, timeSpan);
         }

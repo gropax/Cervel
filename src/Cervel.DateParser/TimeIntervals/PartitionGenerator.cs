@@ -8,27 +8,71 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class PartitionGenerator : TimeIntervalGenerator
     {
-        private ITimeGenerator<DateTime> _generator;
-        public PartitionGenerator(ITimeGenerator<DateTime> generator)
+        private IGenerator<TimeInterval> _generator;
+        private IGenerator<DateTime> _cutGenerator;
+
+        public PartitionGenerator(
+            IGenerator<TimeInterval> generator,
+            IGenerator<DateTime> cutGenerator)
         {
             _generator = generator;
+            _cutGenerator = cutGenerator;
         }
 
         public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
-            var start = fromDate;
-            var end = DateTime.MaxValue;
-
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
+            var cutEnumerator = _cutGenerator.Generate(fromDate).GetEnumerator();
+
+            DateTime cut;
+            DateTime? pendingCut = null;
+
             while (enumerator.MoveNext())
             {
-                end = enumerator.Current;
-                yield return new TimeInterval(start, end);
-                start = end;
-            }
+                var interval = enumerator.Current;
+                var cuts = new List<DateTime>() { interval.Start };
 
-            if (start < DateTime.MaxValue)
-                yield return new TimeInterval(start, end);
+                while (true)
+                {
+                    if (pendingCut.HasValue)
+                    {
+                        cut = pendingCut.Value;
+                        pendingCut = null;
+                    }
+                    else if (cutEnumerator.MoveNext())
+                        cut = cutEnumerator.Current;
+                    else
+                        break;
+
+                    if (cut <= interval.Start)
+                        continue;
+                    else if (cut >= interval.End)
+                    {
+                        if (cut > interval.End)
+                            pendingCut = cut;
+                        break;
+                    }
+                    else
+                        cuts.Add(cut);
+                }
+
+                cuts.Add(interval.End);
+
+                for (int i = 0; i < cuts.Count - 1; i++)
+                    yield return new TimeInterval(cuts[i], cuts[i + 1]);
+
+                cuts.Clear();
+            }
+        }
+
+        private DateTime Max(DateTime fst, DateTime snd)
+        {
+            return fst >= snd ? fst : snd;
+        }
+
+        private DateTime Min(DateTime fst, DateTime snd)
+        {
+            return fst <= snd ? fst : snd;
         }
     }
 }

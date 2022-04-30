@@ -8,10 +8,10 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class ScopeGenerator : DateTimeGenerator
     {
-        private ITimeGenerator<TimeInterval> _scopeGenerator;
-        private ITimeGenerator<DateTime> _dateGenerator;
+        private IGenerator<TimeInterval> _scopeGenerator;
+        private IGenerator<DateTime> _dateGenerator;
 
-        public ScopeGenerator(ITimeGenerator<TimeInterval> scopeGenerator, ITimeGenerator<DateTime> dateGenerator)
+        public ScopeGenerator(IGenerator<TimeInterval> scopeGenerator, IGenerator<DateTime> dateGenerator)
         {
             _scopeGenerator = scopeGenerator;
             _dateGenerator = dateGenerator;

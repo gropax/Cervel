@@ -31,7 +31,7 @@ namespace Cervel.Web.Controllers
                 ? result.Value.Generate(_fromDate, _toDate).ToArray()
                 : new TimeInterval[0];
 
-            var dayHighlights = GetDayHighlights(intervals);
+            var dayHighlights = GetDayHighlights(result.Value);
 
             return Ok(new ParseResultDto()
             {
@@ -42,9 +42,17 @@ namespace Cervel.Web.Controllers
             });
         }
 
-        private DayHighlightsDto[] GetDayHighlights(TimeInterval[] intervals)
+        private DayHighlightsDto[] GetDayHighlights(IGenerator<TimeInterval> generator)
         {
-            Time.Start().Date().Daily().Partition();
+            var dayCutGenerator = generator.Partition(Time.Start().Date().Daily());
+            var dayCuts = dayCutGenerator.Generate(_fromDate, _toDate);
+            var dayHighlights = dayCuts.Select(i => GetDayHighlight(i)).ToArray();
+            return dayHighlights;
+        }
+
+        private DayHighlightsDto GetDayHighlight(TimeInterval i)
+        {
+            
             throw new NotImplementedException();
         }
     }

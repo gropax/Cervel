@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
 {
-    public interface ITimeGenerator<T>
+    public interface IGenerator<T>
     {
         IEnumerable<T> Generate(DateTime fromDate);
         IEnumerable<T> Generate(DateTime fromDate, DateTime toDate);

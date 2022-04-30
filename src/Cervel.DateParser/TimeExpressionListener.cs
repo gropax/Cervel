@@ -15,10 +15,10 @@ namespace Cervel.TimeParser
             _parseDateTime = parseDateTime;
         }
 
-        public ITimeGenerator<TimeInterval> TimeIntervalGenerator { get; set; }
-        public ITimeGenerator<DateTime> DateTimeGenerator { get; set; }
+        public IGenerator<TimeInterval> TimeIntervalGenerator { get; set; }
+        public IGenerator<DateTime> DateTimeGenerator { get; set; }
         
-        private ITimeGenerator<TimeInterval> _intervals;
+        private IGenerator<TimeInterval> _intervals;
 
         public override void ExitDateTimes(TimeExpressionParser.DateTimesContext context) =>
             DateTimeGenerator = ConsumeSingleDateGenerator();
@@ -97,8 +97,8 @@ namespace Cervel.TimeParser
 
         #region DateGenerator
 
-        private List<ITimeGenerator<DateTime>> _dateGenerators = new List<ITimeGenerator<DateTime>>();
-        private ITimeGenerator<DateTime> ConsumeSingleDateGenerator()
+        private List<IGenerator<DateTime>> _dateGenerators = new List<IGenerator<DateTime>>();
+        private IGenerator<DateTime> ConsumeSingleDateGenerator()
         {
             var gen = _dateGenerators.Single();
             _dateGenerators.Clear();
@@ -109,10 +109,10 @@ namespace Cervel.TimeParser
 
         #region Date shift
 
-        private List<Func<ITimeGenerator<DateTime>, ITimeGenerator<DateTime>>> _dateShifts =
-            new List<Func<ITimeGenerator<DateTime>, ITimeGenerator<DateTime>>>();
+        private List<Func<IGenerator<DateTime>, IGenerator<DateTime>>> _dateShifts =
+            new List<Func<IGenerator<DateTime>, IGenerator<DateTime>>>();
             
-        private IEnumerable<Func<ITimeGenerator<DateTime>, ITimeGenerator<DateTime>>> ConsumeDateShifts()
+        private IEnumerable<Func<IGenerator<DateTime>, IGenerator<DateTime>>> ConsumeDateShifts()
         {
             var shifts = _dateShifts.ToArray();
             _dateShifts.Clear();

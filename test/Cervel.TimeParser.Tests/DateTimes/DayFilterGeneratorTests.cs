@@ -7,7 +7,7 @@ namespace Cervel.TimeParser.DateTimes.Tests
 {
     public class DayFilterGeneratorTests : TestBase
     {
-        private ITimeGenerator<DateTime> _generator;
+        private IGenerator<DateTime> _generator;
         private DateTime _fromDate = new DateTime(2022, 1, 1);
         private DateTime _toDate = new DateTime(2022, 2, 1);
 

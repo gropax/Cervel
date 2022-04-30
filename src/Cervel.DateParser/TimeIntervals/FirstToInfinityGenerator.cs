@@ -8,8 +8,8 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class FirstToInfinityGenerator : TimeIntervalGenerator
     {
-        private ITimeGenerator<DateTime> _generator;
-        public FirstToInfinityGenerator(ITimeGenerator<DateTime> generator)
+        private IGenerator<DateTime> _generator;
+        public FirstToInfinityGenerator(IGenerator<DateTime> generator)
         {
             _generator = generator;
         }

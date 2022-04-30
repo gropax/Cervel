@@ -24,7 +24,9 @@ namespace Cervel.Web.Contracts
 
     public class Highlight
     {
-        public double Fraction { get; set; }
-        public double Value { get; set; }
+        public double StartFraction { get; set; }
+        public double StartValue { get; set; }
+        public double EndFraction { get; set; }
+        public double EndValue { get; set; }
     }
 }

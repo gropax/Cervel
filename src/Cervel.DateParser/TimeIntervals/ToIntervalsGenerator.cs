@@ -8,10 +8,10 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class ToIntervalsGenerator : TimeIntervalGenerator
     {
-        private ITimeGenerator<DateTime> _generator;
+        private IGenerator<DateTime> _generator;
         private TimeSpan _timeSpan;
 
-        public ToIntervalsGenerator(ITimeGenerator<DateTime> generator, TimeSpan timeSpan)
+        public ToIntervalsGenerator(IGenerator<DateTime> generator, TimeSpan timeSpan)
         {
             _generator = generator;
             _timeSpan = timeSpan;

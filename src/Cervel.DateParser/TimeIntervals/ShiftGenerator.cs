@@ -9,10 +9,10 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class ShiftGenerator : TimeIntervalGenerator
     {
-        private ITimeGenerator<TimeInterval> _generator;
+        private IGenerator<TimeInterval> _generator;
         private TimeSpan _timeSpan;
 
-        public ShiftGenerator(ITimeGenerator<TimeInterval> generator, TimeSpan timeSpan)
+        public ShiftGenerator(IGenerator<TimeInterval> generator, TimeSpan timeSpan)
         {
             _generator = generator;
             _timeSpan = timeSpan;

@@ -8,10 +8,10 @@ namespace Cervel.TimeParser.TimeIntervals.Filters
 {
     public class FilterGenerator : TimeIntervalGenerator
     {
-        public ITimeGenerator<TimeInterval> _generator;
+        public IGenerator<TimeInterval> _generator;
         public Func<TimeInterval, bool> _filter;
 
-        public FilterGenerator(ITimeGenerator<TimeInterval> generator, Func<TimeInterval, bool> filter)
+        public FilterGenerator(IGenerator<TimeInterval> generator, Func<TimeInterval, bool> filter)
         {
             _generator = generator;
             _filter = filter;

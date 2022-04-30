@@ -8,10 +8,10 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class ShiftGenerator : DateTimeGenerator
     {
-        private ITimeGenerator<DateTime> _generator;
+        private IGenerator<DateTime> _generator;
         private TimeSpan _timeSpan;
 
-        public ShiftGenerator(ITimeGenerator<DateTime> generator, TimeSpan timeSpan)
+        public ShiftGenerator(IGenerator<DateTime> generator, TimeSpan timeSpan)
         {
             _generator = generator;
             _timeSpan = timeSpan;

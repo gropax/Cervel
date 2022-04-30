@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervel.TimeParser.TimeIntervals
+namespace Cervel.TimeParser.TimeIntervals.Fuzzy
 {
-    public abstract class TimeIntervalGenerator : IGenerator<TimeInterval>
+    public abstract class FuzzyIntervalGenerator : IGenerator<FuzzyInterval>
     {
-        public abstract IEnumerable<TimeInterval> Generate(DateTime fromDate);
+        public abstract IEnumerable<FuzzyInterval> Generate(DateTime fromDate);
 
-        public IEnumerable<TimeInterval> Generate(DateTime fromDate, DateTime toDate)
+        public IEnumerable<FuzzyInterval> Generate(DateTime fromDate, DateTime toDate)
         {
             var enumerator = Generate(fromDate).GetEnumerator();
             while (enumerator.MoveNext())
@@ -20,7 +21,7 @@ namespace Cervel.TimeParser.TimeIntervals
                 else
                 {
                     if (enumerator.Current.Start < toDate)
-                        yield return new TimeInterval(enumerator.Current.Start, toDate);
+                        yield return enumerator.Current.LeftCut(toDate);
 
                     yield break;
                 }

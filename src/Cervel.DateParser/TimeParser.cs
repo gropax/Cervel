@@ -10,12 +10,12 @@ namespace Cervel.TimeParser
 {
     public class TimeParser
     {
-        public ParseResult<ITimeGenerator<DateTime>> ParseDateTimes(string input)
+        public ParseResult<IGenerator<DateTime>> ParseDateTimes(string input)
         {
             return ParseSymbol(input, true, (p) => p.dateTimes(), (l) => l.DateTimeGenerator);
         }
 
-        public ParseResult<ITimeGenerator<TimeInterval>> ParseTimeIntervals(string input)
+        public ParseResult<IGenerator<TimeInterval>> ParseTimeIntervals(string input)
         {
             return ParseSymbol(input, false, (p) => p.timeIntervals(), (l) => l.TimeIntervalGenerator);
         }

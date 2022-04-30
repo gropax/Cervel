@@ -10,21 +10,31 @@ namespace Cervel.TimeParser
 {
     public static class Time
     {
-        public static ITimeGenerator<DateTime> Start() => new OnceGenerator();
-        public static ITimeGenerator<DateTime> Now() => new OnceGenerator();
+        public static DateTime Min(DateTime dateTime, DateTime other)
+        {
+            return dateTime <= other ? dateTime : other;
+        }
 
-        public static ITimeGenerator<DateTime> Yesterday() => Today().ShiftDay(-1);
-        public static ITimeGenerator<DateTime> Today() => Now().Date();
-        public static ITimeGenerator<DateTime> Tomorrow() => Today().ShiftDay(1);
+        public static DateTime Max(DateTime dateTime, DateTime other)
+        {
+            return dateTime >= other ? dateTime : other;
+        }
 
-        public static ITimeGenerator<DateTime> Next(DayOfWeek dow) => Tomorrow().Next(dow);
-        public static ITimeGenerator<DateTime> Each(DayOfWeek dow) => Today().Next(dow).Weekly();
+        public static IGenerator<DateTime> Start() => new OnceGenerator();
+        public static IGenerator<DateTime> Now() => new OnceGenerator();
 
-        public static ITimeGenerator<TimeInterval> EveryDayOfWeekInterval(DayOfWeek dow)
+        public static IGenerator<DateTime> Yesterday() => Today().ShiftDay(-1);
+        public static IGenerator<DateTime> Today() => Now().Date();
+        public static IGenerator<DateTime> Tomorrow() => Today().ShiftDay(1);
+
+        public static IGenerator<DateTime> Next(DayOfWeek dow) => Tomorrow().Next(dow);
+        public static IGenerator<DateTime> Each(DayOfWeek dow) => Today().Next(dow).Weekly();
+
+        public static IGenerator<TimeInterval> EveryDayOfWeekInterval(DayOfWeek dow)
         {
             return new TimeIntervals.DayFilterGenerator(TimeSpan.FromDays(1), (d) => d.DayOfWeek == dow);
         }
 
-        public static Func<ITimeGenerator<DateTime>, ITimeGenerator<DateTime>> DayShift(int n) => (g) => g.ShiftDay(n);
+        public static Func<IGenerator<DateTime>, IGenerator<DateTime>> DayShift(int n) => (g) => g.ShiftDay(n);
     }
 }

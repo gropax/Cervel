@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Cervel.TimeParser
 {
-    public abstract class DateTimeGenerator : ITimeGenerator<DateTime>
+    public abstract class DateTimeGenerator : IGenerator<DateTime>
     {
         public abstract IEnumerable<DateTime> Generate(DateTime fromDate);
 
