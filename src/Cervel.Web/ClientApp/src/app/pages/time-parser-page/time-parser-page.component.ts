@@ -15,17 +15,8 @@ export class TimeParserPageComponent implements OnInit {
   private actions: MenuAction[];
   public loading: boolean = false;
 
-  public form = this.formBuilder.group({
-    name: new FormControl('', {
-      validators: [Validators.required, Validators.pattern(/[\S]/)],
-      asyncValidators: [],
-      updateOn: 'blur'
-    })
-  });
-
   constructor(
     private router: Router,
-    private formBuilder: FormBuilder,
     private toolbarService: ToolbarService,
     private notificationService: NotificationService) {
     this.actions = [
@@ -36,7 +27,7 @@ export class TimeParserPageComponent implements OnInit {
   ngOnInit() {
     this.toolbarService.setTitle("Time Parser");
     this.toolbarService.setMode(ToolbarMode.Navigation);
-    this.toolbarService.setMainAction(MainActionType.None);
+    this.toolbarService.setMainAction(MainActionType.Sidenav);
     //this.toolbarService.setActions(this.actions);
   }
 
