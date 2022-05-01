@@ -5,6 +5,12 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+# Setup NodeJs
+RUN apt-get update && \
+    apt-get install -y wget && \
+    apt-get install -y gnupg2 && \
+    wget -qO- https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y build-essential nodejs
 WORKDIR /src
 COPY ["src/Cervel.Web/Cervel.Web.csproj", "src/Cervel.Web/"]
 COPY ["src/Cervel.DateParser/Cervel.TimeParser.csproj", "src/Cervel.DateParser/"]
