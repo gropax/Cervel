@@ -9,7 +9,7 @@ namespace Cervel.TimeParser
     public interface IGenerator<T>
     {
         IEnumerable<T> Generate(DateTime fromDate);
-        IEnumerable<T> Generate(DateTime fromDate, DateTime toDate);
         IEnumerable<T> Generate(TimeInterval interval) => Generate(interval.Start, interval.End);
+        IEnumerable<T> Generate(DateTime fromDate, DateTime toDate);
     }
 }

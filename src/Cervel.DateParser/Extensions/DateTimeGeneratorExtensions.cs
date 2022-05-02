@@ -10,6 +10,13 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class DateTimeGeneratorExtensions
     {
+        public static IGenerator<DateTime> Until(
+            this IGenerator<DateTime> generator,
+            DateTime limit)
+        {
+            return new DateTimes.UntilGenerator(generator, limit);
+        }
+
         public static IGenerator<DateTime> Map(
             this IGenerator<DateTime> generator,
             Func<IEnumerable<DateTime>, IEnumerable<DateTime>> modifier)

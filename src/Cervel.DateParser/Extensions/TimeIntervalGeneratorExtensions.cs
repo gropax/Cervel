@@ -10,6 +10,13 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class TimeIntervalGeneratorExtensions
     {
+        public static IGenerator<TimeInterval> Until(
+            this IGenerator<TimeInterval> generator,
+            DateTime limit)
+        {
+            return new UntilGenerator(generator, limit);
+        }
+
         public static IGenerator<FuzzyInterval> ToFuzzy(this IGenerator<TimeInterval> generator)
         {
             return new CrispToFuzzyGenerator(generator);
