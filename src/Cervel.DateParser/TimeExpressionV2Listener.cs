@@ -31,6 +31,9 @@ namespace Cervel.TimeParser
         public override void ExitDateDist(TimeExpressionV2Parser.DateDistContext context) =>
             DateDistribution = ConsumeSingleDateGenerator();
 
+        public override void ExitEveryDay(TimeExpressionV2Parser.EveryDayContext context) =>
+            SetDateGenerator(Time.EveryDay());
+
         public override void ExitDayOfWeekUnion(TimeExpressionV2Parser.DayOfWeekUnionContext context) =>
             SetDateGenerator(
                 Time.Union(ConsumeDaysOfWeek()

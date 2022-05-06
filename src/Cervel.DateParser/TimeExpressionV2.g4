@@ -22,7 +22,13 @@ dayDateParen
 	;
 
 dayDateExpr
-	: dayOfWeekUnion
+	: everyDay
+	| dayOfWeekUnion
+	;
+
+everyDay
+	: CHAQUE? JOUR
+	| TOUT LE JOUR
 	;
 
 dayOfWeekUnion : dayOfWeekIter ;
@@ -53,3 +59,8 @@ sunday : 'dimanche' | 'dimanches' | 'dim' | 'di' ;
 
 LPAR : '(' ;
 RPAR : ')' ;
+
+CHAQUE : 'chaque' ;
+JOUR : 'jour' | 'jours' | 'j' ;
+TOUT : 'tout' | 'toute' | 'tous' | 'toutes' | 'tt' ;
+LE : 'le' | 'la' | 'les' | 'l' | 'l\'' ;

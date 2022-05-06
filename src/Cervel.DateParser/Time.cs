@@ -33,6 +33,8 @@ namespace Cervel.TimeParser
         public static IGenerator<DateTime> Today() => Now().Date();
         public static IGenerator<DateTime> Tomorrow() => Today().ShiftDay(1);
 
+        public static IGenerator<DateTime> EveryDay() => Start().Daily();
+
         public static IGenerator<DateTime> Next(DayOfWeek dow) => Tomorrow().Next(dow);
         public static IGenerator<DateTime> Each(DayOfWeek dow) => Start().Next(dow).Weekly();
         public static IGenerator<DateTime> Union(params IGenerator<DateTime>[] generators) => new UnionGenerator(generators);
