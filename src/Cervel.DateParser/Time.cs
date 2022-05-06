@@ -35,6 +35,7 @@ namespace Cervel.TimeParser
 
         public static IGenerator<DateTime> Next(DayOfWeek dow) => Tomorrow().Next(dow);
         public static IGenerator<DateTime> Each(DayOfWeek dow) => Start().Next(dow).Weekly();
+        public static IGenerator<DateTime> Union(params IGenerator<DateTime>[] generators) => new UnionGenerator(generators);
 
         public static IGenerator<TimeInterval> DayScopes() => new DailyGenerator().ToScopes(TimeSpan.FromDays(1));
 

@@ -403,8 +403,7 @@ namespace Cervel.TimeParser.Tests
                     Day(2022, 1, 4),
                     Day(2022, 1, 11),
                     Day(2022, 1, 18),
-                    Day(2022, 1, 25),
-                    Day(2022, 2, 1)),
+                    Day(2022, 1, 25)),
                 result.Value.Generate(_fromDate, _febFst));
         }
         #endregion

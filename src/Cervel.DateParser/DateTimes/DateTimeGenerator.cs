@@ -10,7 +10,7 @@ namespace Cervel.TimeParser
         public IEnumerable<DateTime> Generate(DateTime fromDate, DateTime toDate)
         {
             var enumerator = Generate(fromDate).GetEnumerator();
-            while (enumerator.MoveNext() && enumerator.Current <= toDate)
+            while (enumerator.MoveNext() && enumerator.Current < toDate)
                 yield return enumerator.Current;
         }
     }

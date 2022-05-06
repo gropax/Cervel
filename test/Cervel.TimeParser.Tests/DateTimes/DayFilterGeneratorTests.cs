@@ -17,7 +17,7 @@ namespace Cervel.TimeParser.DateTimes.Tests
             _generator = new DayFilterGenerator();
 
             var dates = _generator.Generate(_fromDate, _toDate).ToArray();
-            Assert.Equal(32, dates.Length);
+            Assert.Equal(31, dates.Length);
 
             Assert.Equal(
                 Dates(Day(2022, 1, 1), Day(2022, 1, 2), Day(2022, 1, 3), Day(2022, 1, 4), Day(2022, 1, 5)),

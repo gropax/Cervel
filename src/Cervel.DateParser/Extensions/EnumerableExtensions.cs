@@ -35,5 +35,48 @@ namespace Cervel.TimeParser
 
             yield return selector(t, default);
         }
+    
+        private static T[] ArgMinOrMax<T, U>(IEnumerable<T> ts, Func<T, U> selector, int cmpValue)
+            where U : IComparable<U>
+        {
+            var enumerator = ts.GetEnumerator();
+            if (!enumerator.MoveNext())
+                throw new ArgumentNullException("The collection is empty.");
+
+            List<T> argMax = new List<T>() { enumerator.Current };
+            U max = selector(enumerator.Current);
+
+            while (enumerator.MoveNext())
+            {
+                T t = enumerator.Current;
+                U val = selector(t);
+
+                if (val.CompareTo(max) == 0)
+                {
+                    argMax.Add(t);
+                }
+                else if (val.CompareTo(max) == cmpValue)
+                {
+                    max = val;
+                    argMax.Clear();
+                    argMax.Add(t);
+                }
+            }
+
+            return argMax.ToArray();
+        }
+
+        public static T[] ArgMin<T, U>(this IEnumerable<T> ts, Func<T, U> selector)
+            where U : IComparable<U>
+        {
+            return ArgMinOrMax(ts, selector, cmpValue: -1);
+        }
+
+        public static T[] ArgMax<T, U>(this IEnumerable<T> ts, Func<T, U> selector)
+            where U : IComparable<U>
+        {
+            return ArgMinOrMax(ts, selector, cmpValue: 1);
+        }
+
     }
 }

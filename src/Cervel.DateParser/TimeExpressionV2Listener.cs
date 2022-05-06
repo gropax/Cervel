@@ -31,13 +31,21 @@ namespace Cervel.TimeParser
         public override void ExitDateDist(TimeExpressionV2Parser.DateDistContext context) =>
             DateDistribution = ConsumeSingleDateGenerator();
 
-        public override void ExitDayOfWeek(TimeExpressionV2Parser.DayOfWeekContext context) =>
-            _dateGenerators.Add(Time.Each(ConsumeSingleDayOfWeek()));
+        public override void ExitDayOfWeekUnion(TimeExpressionV2Parser.DayOfWeekUnionContext context) =>
+            SetDateGenerator(
+                Time.Union(ConsumeDaysOfWeek()
+                    .Select(dow => Time.Each(dow)).ToArray()));
 
 
         #region DateGenerator
 
         private List<IGenerator<DateTime>> _dateGenerators = new List<IGenerator<DateTime>>();
+        private void SetDateGenerator(IGenerator<DateTime> generator)
+        {
+            _dateGenerators.Clear();
+            _dateGenerators.Add(generator);
+        }
+
         private IGenerator<DateTime> ConsumeSingleDateGenerator()
         {
             var gen = _dateGenerators.Single();
@@ -70,6 +78,13 @@ namespace Cervel.TimeParser
         public override void ExitFriday(TimeExpressionV2Parser.FridayContext context) => _daysOfWeek.Add(DayOfWeek.Friday);
         public override void ExitSaturday(TimeExpressionV2Parser.SaturdayContext context) => _daysOfWeek.Add(DayOfWeek.Saturday);
         public override void ExitSunday(TimeExpressionV2Parser.SundayContext context) => _daysOfWeek.Add(DayOfWeek.Sunday);
+
+        private DayOfWeek[] ConsumeDaysOfWeek()
+        {
+            var dows = _daysOfWeek.ToArray();
+            _daysOfWeek.Clear();
+            return dows;
+        }
 
         private DayOfWeek ConsumeSingleDayOfWeek()
         {

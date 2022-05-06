@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Xunit;
 
 namespace Cervel.TimeParser.Tests
@@ -55,6 +56,50 @@ namespace Cervel.TimeParser.Tests
                     DayInterval(2022, 1, 10),
                     DayInterval(2022, 1, 17),
                     DayInterval(2022, 1, 24),
+                    DayInterval(2022, 1, 31)),
+                intervals.Value.Generate(_jan1st2022, _feb1st2022));
+        }
+
+
+        [Theory]
+        [InlineData("lundi, mardi et vendredi")]
+        public void TestParse_MultipleDaysOfWeek(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
+            Assert.Equal(13, dates.Count());
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 3),
+                    Day(2022, 1, 4),
+                    Day(2022, 1, 7),
+                    Day(2022, 1, 10),
+                    Day(2022, 1, 11),
+                    Day(2022, 1, 14),
+                    Day(2022, 1, 17),
+                    Day(2022, 1, 18),
+                    Day(2022, 1, 21),
+                    Day(2022, 1, 24),
+                    Day(2022, 1, 25),
+                    Day(2022, 1, 28),
+                    Day(2022, 1, 31)),
+                dates);
+
+            var intervals = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+
+            Assert.True(intervals.IsSuccess);
+            Assert.Equal(
+                Intervals(
+                    DaysInterval(2022, 1, 3, dayNumber: 2),
+                    DayInterval(2022, 1, 7),
+                    DaysInterval(2022, 1, 10, dayNumber: 2),
+                    DayInterval(2022, 1, 14),
+                    DaysInterval(2022, 1, 17, dayNumber: 2),
+                    DayInterval(2022, 1, 21),
+                    DaysInterval(2022, 1, 24, dayNumber: 2),
+                    DayInterval(2022, 1, 28),
                     DayInterval(2022, 1, 31)),
                 intervals.Value.Generate(_jan1st2022, _feb1st2022));
         }

@@ -22,7 +22,13 @@ dayDateParen
 	;
 
 dayDateExpr
-	: dayOfWeek
+	: dayOfWeekUnion
+	;
+
+dayOfWeekUnion : dayOfWeekIter ;
+dayOfWeekIter
+	: dayOfWeek (COMMA | ET)? dayOfWeekIter
+	| dayOfWeek
 	;
 
 dayOfWeek
