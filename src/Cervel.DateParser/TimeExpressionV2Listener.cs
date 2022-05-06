@@ -31,11 +31,18 @@ namespace Cervel.TimeParser
         public override void ExitDateDist(TimeExpressionV2Parser.DateDistContext context) =>
             DateDistribution = ConsumeSingleDateGenerator();
 
+        public override void ExitDayDateSince(TimeExpressionV2Parser.DayDateSinceContext context)
+        {
+            var gens = _dateGenerators;
+            if (gens.Count == 2)
+                SetDateGenerator(Time.Since(gens[1], gens[0]));
+        }
+
         public override void ExitEveryDay(TimeExpressionV2Parser.EveryDayContext context) =>
-            SetDateGenerator(Time.EveryDay());
+            _dateGenerators.Add(Time.EveryDay());
 
         public override void ExitDayOfWeekUnion(TimeExpressionV2Parser.DayOfWeekUnionContext context) =>
-            SetDateGenerator(
+            _dateGenerators.Add(
                 Time.Union(ConsumeDaysOfWeek()
                     .Select(dow => Time.Each(dow)).ToArray()));
 
@@ -47,6 +54,13 @@ namespace Cervel.TimeParser
         {
             _dateGenerators.Clear();
             _dateGenerators.Add(generator);
+        }
+
+        private IGenerator<DateTime>[] ConsumeDateGenerators()
+        {
+            var gen = _dateGenerators.ToArray();
+            _dateGenerators.Clear();
+            return gen;
         }
 
         private IGenerator<DateTime> ConsumeSingleDateGenerator()

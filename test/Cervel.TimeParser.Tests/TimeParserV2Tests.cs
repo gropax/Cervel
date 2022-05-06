@@ -22,7 +22,7 @@ namespace Cervel.TimeParser.Tests
         [Theory]
         [InlineData("chaque jour")]
         [InlineData("tous les jours")]
-        [InlineData("((chaque jour))")]
+        //[InlineData("((chaque jour))")]
         public void TestParse_EveryDay(string input)
         {
             var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
@@ -51,7 +51,7 @@ namespace Cervel.TimeParser.Tests
 
         [Theory]
         [InlineData("lundi")]
-        [InlineData("(((lundi)))")]
+        //[InlineData("(((lundi)))")]
         //[InlineData("lun")]
         //[InlineData("le lundi")]
         //[InlineData("les lundis")]
@@ -96,7 +96,7 @@ namespace Cervel.TimeParser.Tests
 
         [Theory]
         [InlineData("lundi, mardi et vendredi")]
-        [InlineData("((lundi, mardi et vendredi))")]
+        //[InlineData("((lundi, mardi et vendredi))")]
         public void TestParse_MultipleDaysOfWeek(string input)
         {
             var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
@@ -141,7 +141,7 @@ namespace Cervel.TimeParser.Tests
 
         [Theory]
         [InlineData("chaque jour à partir de jeudi")]
-        [InlineData("(chaque jour (à partir de (jeudi)))")]
+        //[InlineData("(chaque jour (à partir de (jeudi)))")]
         public void TestParse_EveryDayFrom(string input)
         {
             var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);

@@ -13,13 +13,15 @@ dateDist
 	;
 
 dayDateDist
-	: dayDateParen
+	: dayDateSince
 	;
 
-dayDateParen
-	: LPAR dayDateParen RPAR
+dayDateSince
+	: dayDateExpr since dayDateExpr
 	| dayDateExpr
 	;
+
+since : A PARTIR DE ;
 
 dayDateExpr
 	: everyDay
@@ -64,3 +66,8 @@ CHAQUE : 'chaque' ;
 JOUR : 'jour' | 'jours' | 'j' ;
 TOUT : 'tout' | 'toute' | 'tous' | 'toutes' | 'tt' ;
 LE : 'le' | 'la' | 'les' | 'l' | 'l\'' ;
+A : 'a' | 'à' ;
+DE : 'de' ;
+PARTIR : 'partir' ;
+COMPTER : 'compter' ;
+DEPUIS : 'depuis' ;
