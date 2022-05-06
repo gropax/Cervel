@@ -15,83 +15,23 @@ namespace Cervel.TimeParser
             _parseDateTime = parseDateTime;
         }
 
-        public IGenerator<TimeInterval> TimeIntervalGenerator { get; set; }
-        public IGenerator<DateTime> DateTimeGenerator { get; set; }
+        public IGenerator<TimeInterval> IntervalDistribution { get; set; }
+        public IGenerator<DateTime> DateDistribution { get; set; }
         
         private IGenerator<TimeInterval> _intervals;
 
-        public override void ExitDateTimes(TimeExpressionV2Parser.DateTimesContext context) =>
-            DateTimeGenerator = ConsumeSingleDateGenerator();
-
-        public override void ExitTimeIntervals(TimeExpressionV2Parser.TimeIntervalsContext context)
+        public override void ExitIntvDist(TimeExpressionV2Parser.IntvDistContext context)
         {
-            TimeIntervalGenerator = _intervals;
+            IntervalDistribution = _intervals;
         }
 
-        public override void ExitDateIntervals(TimeExpressionV2Parser.DateIntervalsContext context) =>
+        public override void ExitDayIntvDist(TimeExpressionV2Parser.DayIntvDistContext context) =>
             _intervals = ConsumeSingleDateGenerator().AllDay();
 
-        public override void ExitAlways(TimeExpressionV2Parser.AlwaysContext context)
-        {
-            _intervals = new TimeIntervals.AlwaysGenerator();
-        }
+        public override void ExitDateDist(TimeExpressionV2Parser.DateDistContext context) =>
+            DateDistribution = ConsumeSingleDateGenerator();
 
-        public override void ExitNever(TimeExpressionV2Parser.NeverContext context)
-        {
-            if (_parseDateTime)
-                _dateGenerators.Add(new DateTimes.NeverGenerator());
-            else
-                _intervals = new TimeIntervals.NeverGenerator();
-        }
-
-        public override void ExitNow(TimeExpressionV2Parser.NowContext context) =>
-            _dateGenerators.Add(Time.Now());
-
-        public override void ExitNDaysAgo(TimeExpressionV2Parser.NDaysAgoContext context) =>
-            _dateGenerators.Add(Time.Today().ShiftDay(-ConsumeSingleNumber()));
-        public override void ExitDayBeforeYesterday(TimeExpressionV2Parser.DayBeforeYesterdayContext context) =>
-            _dateGenerators.Add(Time.Today().ShiftDay(-2));
-        public override void ExitYesterday(TimeExpressionV2Parser.YesterdayContext context) =>
-            _dateGenerators.Add(Time.Yesterday());
-        public override void ExitToday(TimeExpressionV2Parser.TodayContext context) =>
-            _dateGenerators.Add(Time.Today());
-        public override void ExitTomorrow(TimeExpressionV2Parser.TomorrowContext context) =>
-            _dateGenerators.Add(Time.Tomorrow());
-        public override void ExitDayAfterTomorrow(TimeExpressionV2Parser.DayAfterTomorrowContext context) =>
-            _dateGenerators.Add(Time.Today().ShiftDay(2));
-        public override void ExitNDaysFromNow(TimeExpressionV2Parser.NDaysFromNowContext context) =>
-            _dateGenerators.Add(Time.Today().ShiftDay(ConsumeSingleNumber()));
-
-
-        public override void ExitShiftedDate(TimeExpressionV2Parser.ShiftedDateContext context)
-        {
-            var dateGenerator = ConsumeSingleDateGenerator();
-
-            foreach (var shift in ConsumeDateShifts().Reverse())
-                dateGenerator = shift(dateGenerator);
-
-            _dateGenerators.Add(dateGenerator);
-        }
-
-
-        public override void ExitNDaysBefore(TimeExpressionV2Parser.NDaysBeforeContext context) =>
-            _dateShifts.Add(Time.DayShift(-ConsumeSingleNumber()));
-        public override void ExitTwoDaysBefore(TimeExpressionV2Parser.TwoDaysBeforeContext context) =>
-            _dateShifts.Add(Time.DayShift(-2));
-        public override void ExitTheDayBefore(TimeExpressionV2Parser.TheDayBeforeContext context) =>
-            _dateShifts.Add(Time.DayShift(-1));
-        public override void ExitTheDayAfter(TimeExpressionV2Parser.TheDayAfterContext context) =>
-            _dateShifts.Add(Time.DayShift(1));
-        public override void ExitTwoDaysAfter(TimeExpressionV2Parser.TwoDaysAfterContext context) =>
-            _dateShifts.Add(Time.DayShift(2));
-        public override void ExitNDaysAfter(TimeExpressionV2Parser.NDaysAfterContext context) =>
-            _dateShifts.Add(Time.DayShift(ConsumeSingleNumber()));
-
-
-        public override void ExitNextDayOfWeek(TimeExpressionV2Parser.NextDayOfWeekContext context) =>
-            _dateGenerators.Add(Time.Next(ConsumeSingleDayOfWeek()));
-
-        public override void ExitEveryDayOfWeek(TimeExpressionV2Parser.EveryDayOfWeekContext context) =>
+        public override void ExitDayOfWeek(TimeExpressionV2Parser.DayOfWeekContext context) =>
             _dateGenerators.Add(Time.Each(ConsumeSingleDayOfWeek()));
 
 
@@ -139,21 +79,6 @@ namespace Cervel.TimeParser
         }
 
         #endregion
-
-
-        private List<int> _numbers = new List<int>();
-        public override void ExitNumber(TimeExpressionV2Parser.NumberContext context)
-        {
-            int number = int.Parse(context.children[0].GetText());
-            _numbers.Add(number);
-        }
-
-        private int ConsumeSingleNumber()
-        {
-            int number = _numbers.Single();
-            _numbers.Clear();
-            return number;
-        }
 
 
         private void EnsureSuccess(ParserRuleContext context)

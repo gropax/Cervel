@@ -15,7 +15,7 @@ namespace Cervel.TimeParser
             if (parserVersion == 1)
                 return ParseSymbol(input, true, (p) => p.dateTimes(), (l) => l.DateTimeGenerator);
             else if (parserVersion == 2)
-                return ParseSymbolV2(input, true, (p) => p.dateTimes(), (l) => l.DateTimeGenerator);
+                return ParseSymbolV2(input, true, (p) => p.dateDist(), (l) => l.DateDistribution);
             else
                 throw new NotImplementedException($"Unsupported parser version [{parserVersion}].");
         }
@@ -25,7 +25,7 @@ namespace Cervel.TimeParser
             if (parserVersion == 1)
                 return ParseSymbol(input, false, (p) => p.timeIntervals(), (l) => l.TimeIntervalGenerator);
             else if (parserVersion == 2)
-                return ParseSymbolV2(input, false, (p) => p.timeIntervals(), (l) => l.TimeIntervalGenerator);
+                return ParseSymbolV2(input, false, (p) => p.intvDist(), (l) => l.IntervalDistribution);
             else
                 throw new NotImplementedException($"Unsupported parser version [{parserVersion}].");
         }
@@ -33,15 +33,15 @@ namespace Cervel.TimeParser
         private ParseResult<TResult> ParseSymbolV2<TResult>(
             string input,
             bool parseDateTime,
-            Func<TimeExpressionParser, ParserRuleContext> contextSelector,
-            Func<TimeExpressionListener, TResult> resultSelector)
+            Func<TimeExpressionV2Parser, ParserRuleContext> contextSelector,
+            Func<TimeExpressionV2Listener, TResult> resultSelector)
         {
             var inputStream = new AntlrInputStream(input);
-            var lexer = new TimeExpressionLexer(inputStream);
+            var lexer = new TimeExpressionV2Lexer(inputStream);
             var commonTokenStream = new CommonTokenStream(lexer);
-            var parser = new TimeExpressionParser(commonTokenStream);
+            var parser = new TimeExpressionV2Parser(commonTokenStream);
 
-            var listener = new TimeExpressionListener(parseDateTime);
+            var listener = new TimeExpressionV2Listener(parseDateTime);
             var walker = new ParseTreeWalker();
             var context = contextSelector(parser);
             //var context = parser.timeSpans();
