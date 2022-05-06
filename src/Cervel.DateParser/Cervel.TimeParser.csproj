@@ -14,7 +14,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Antlr4 Update="TimeExpressionV2.g4">
+      <DefaultCustomToolNamespace>$([MSBuild]::ValueOrDefault('$(RootNamespace).%(DefaultCustomToolNamespace)', '').TrimEnd('.'))</DefaultCustomToolNamespace>
+      <CustomToolNamespace>$([MSBuild]::ValueOrDefault(%(CustomToolNamespace), %(DefaultCustomToolNamespace)))</CustomToolNamespace>
+    </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="TimeExpression.g4">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="TimeExpressionV2.g4">
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>
