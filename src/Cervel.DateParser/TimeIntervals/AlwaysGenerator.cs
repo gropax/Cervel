@@ -8,6 +8,8 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class AlwaysGenerator : TimeIntervalGenerator
     {
+        public AlwaysGenerator(string name = null) : base(name ?? $"Always<>") { }
+
         public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             yield return new TimeInterval(fromDate, DateTime.MaxValue);

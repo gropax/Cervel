@@ -9,7 +9,10 @@ namespace Cervel.TimeParser.TimeIntervals
     public class NextDayOfWeekGenerator : TimeIntervalGenerator
     {
         private DayOfWeek _dayOfWeek;
-        public NextDayOfWeekGenerator(DayOfWeek dayOfWeek)
+        public NextDayOfWeekGenerator(
+            DayOfWeek dayOfWeek,
+            string name = null)
+            : base(name ?? $"NextDOW<{dayOfWeek}>")
         {
             _dayOfWeek = dayOfWeek;
         }

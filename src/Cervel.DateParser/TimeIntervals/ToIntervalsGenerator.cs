@@ -11,7 +11,11 @@ namespace Cervel.TimeParser.TimeIntervals
         private IGenerator<DateTime> _generator;
         private TimeSpan _timeSpan;
 
-        public ToIntervalsGenerator(IGenerator<DateTime> generator, TimeSpan timeSpan)
+        public ToIntervalsGenerator(
+            IGenerator<DateTime> generator,
+            TimeSpan timeSpan,
+            string name = null)
+            : base(name ?? $"ToInterval<{timeSpan}, {generator.Name}>")
         {
             _generator = generator;
             _timeSpan = timeSpan;

@@ -41,7 +41,7 @@ namespace Cervel.TimeParser
             var commonTokenStream = new CommonTokenStream(lexer);
             var parser = new TimeExpressionV2Parser(commonTokenStream);
 
-            var listener = new TimeExpressionV2Listener(parseDateTime);
+            var listener = new TimeExpressionV2Listener();
             var walker = new ParseTreeWalker();
             var context = contextSelector(parser);
             //var context = parser.timeSpans();

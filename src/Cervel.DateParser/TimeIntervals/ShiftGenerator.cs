@@ -12,7 +12,11 @@ namespace Cervel.TimeParser.TimeIntervals
         private IGenerator<TimeInterval> _generator;
         private TimeSpan _timeSpan;
 
-        public ShiftGenerator(IGenerator<TimeInterval> generator, TimeSpan timeSpan)
+        public ShiftGenerator(
+            IGenerator<TimeInterval> generator,
+            TimeSpan timeSpan,
+            string name = null)
+            : base(name ?? $"Shift<{timeSpan}, {generator.Name}>")
         {
             _generator = generator;
             _timeSpan = timeSpan;

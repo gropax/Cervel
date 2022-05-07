@@ -8,10 +8,14 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class DateTimeMapGenerator : DateTimeGenerator
     {
-        private IGenerator<DateTime> _generator;
-        private Func<IEnumerable<DateTime>, IEnumerable<DateTime>> _modifier;
+        private readonly IGenerator<DateTime> _generator;
+        private readonly Func<IEnumerable<DateTime>, IEnumerable<DateTime>> _modifier;
 
-        public DateTimeMapGenerator(IGenerator<DateTime> generator, Func<IEnumerable<DateTime>, IEnumerable<DateTime>> modifier)
+        public DateTimeMapGenerator(
+            IGenerator<DateTime> generator,
+            Func<IEnumerable<DateTime>, IEnumerable<DateTime>> modifier,
+            string name = null)
+            : base(name ?? $"DateTimeMap<{generator.Name}>")
         {
             _generator = generator;
             _modifier = modifier;

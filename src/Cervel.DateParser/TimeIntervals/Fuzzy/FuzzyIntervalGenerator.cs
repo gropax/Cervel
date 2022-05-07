@@ -9,6 +9,9 @@ namespace Cervel.TimeParser.TimeIntervals.Fuzzy
 {
     public abstract class FuzzyIntervalGenerator : IGenerator<FuzzyInterval>
     {
+        protected string _name;
+        public string Name => _name;
+
         public abstract IEnumerable<FuzzyInterval> Generate(DateTime fromDate);
 
         public IEnumerable<FuzzyInterval> Generate(DateTime fromDate, DateTime toDate)

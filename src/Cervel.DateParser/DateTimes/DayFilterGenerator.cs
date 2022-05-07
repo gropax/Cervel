@@ -8,16 +8,18 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class DayFilterGenerator : DateTimeGenerator
     {
-        private Func<DateTime, bool> _dateTimeSelector;
-        private Func<int, bool> _indexSelector;
-        private int? _skip;
-        private int? _take;
+        private readonly Func<DateTime, bool> _dateTimeSelector;
+        private readonly Func<int, bool> _indexSelector;
+        private readonly int? _skip;
+        private readonly int? _take;
 
         public DayFilterGenerator(
             Func<DateTime, bool> dateTimeSelector = null,
             Func<int, bool> indexSelector = null,
             int? skip = null,
-            int? take = null)
+            int? take = null,
+            string name = null)
+            : base(name ?? $"DayFilter<>")
         {
             _dateTimeSelector = dateTimeSelector;
             _indexSelector = indexSelector;

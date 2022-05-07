@@ -8,10 +8,14 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class UntilGenerator : DateTimeGenerator
     {
-        private IGenerator<DateTime> _scope;
-        private IGenerator<DateTime> _generator;
+        private readonly IGenerator<DateTime> _scope;
+        private readonly IGenerator<DateTime> _generator;
 
-        public UntilGenerator(IGenerator<DateTime> scope, IGenerator<DateTime> generator)
+        public UntilGenerator(
+            IGenerator<DateTime> scope,
+            IGenerator<DateTime> generator,
+            string name = null)
+            : base(name ?? $"Until<{scope.Name}, {generator.Name}>")
         {
             _scope = scope;
             _generator = generator;

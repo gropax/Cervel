@@ -8,6 +8,8 @@ namespace Cervel.TimeParser.DateTimes
 {
     public abstract class FrequencyGenerator : DateTimeGenerator
     {
+        protected FrequencyGenerator(string name) : base(name) { }
+
         public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
             var date = fromDate;

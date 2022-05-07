@@ -8,6 +8,8 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class NeverGenerator : DateTimeGenerator
     {
+        public NeverGenerator(string name = null) : base(name ?? "Never") { }
+
         public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
             yield break;

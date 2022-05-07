@@ -11,7 +11,11 @@ namespace Cervel.TimeParser.DateTimes
         private IGenerator<DateTime> _scope;
         private IGenerator<DateTime> _generator;
 
-        public SinceGenerator(IGenerator<DateTime> scope, IGenerator<DateTime> generator)
+        public SinceGenerator(
+            IGenerator<DateTime> scope,
+            IGenerator<DateTime> generator,
+            string name = null)
+            : base(name ?? $"Since<{scope.Name}, {generator.Name}>")
         {
             _scope = scope;
             _generator = generator;

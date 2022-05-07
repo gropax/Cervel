@@ -9,7 +9,10 @@ namespace Cervel.TimeParser.DateTimes
     public class YearlyGenerator : FrequencyGenerator
     {
         private int _factor;
-        public YearlyGenerator(int factor)
+        public YearlyGenerator(
+            int factor,
+            string name = null)
+            : base(name ?? $"Yearly<{factor}>")
         {
             _factor = factor;
         }

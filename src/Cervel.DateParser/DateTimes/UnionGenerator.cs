@@ -9,7 +9,10 @@ namespace Cervel.TimeParser.DateTimes
     public class UnionGenerator : DateTimeGenerator
     {
         private IGenerator<DateTime>[] _generators;
-        public UnionGenerator(params IGenerator<DateTime>[] generators)
+        public UnionGenerator(
+            IGenerator<DateTime>[] generators,
+            string name = null)
+            : base(name ?? $"Union<{string.Join(", ", generators.Select(g => g.Name))}>")
         {
             _generators = generators;
         }

@@ -9,12 +9,6 @@ namespace Cervel.TimeParser
 {
     public class TimeExpressionV2Listener : TimeExpressionV2BaseListener
     {
-        private bool _parseDateTime;
-        public TimeExpressionV2Listener(bool parseDateTime)
-        {
-            _parseDateTime = parseDateTime;
-        }
-
         public IGenerator<TimeInterval> IntervalDistribution { get; set; }
         public IGenerator<DateTime> DateDistribution { get; set; }
         
@@ -66,7 +60,7 @@ namespace Cervel.TimeParser
 
         #region DateGenerator
 
-        private List<IGenerator<DateTime>> _dateGenerators = new List<IGenerator<DateTime>>();
+        private readonly List<IGenerator<DateTime>> _dateGenerators = new();
         private void SetDateGenerator(IGenerator<DateTime> generator)
         {
             _dateGenerators.Clear();
@@ -89,22 +83,8 @@ namespace Cervel.TimeParser
 
         #endregion
 
-        #region Date shift
-
-        private List<Func<IGenerator<DateTime>, IGenerator<DateTime>>> _dateShifts =
-            new List<Func<IGenerator<DateTime>, IGenerator<DateTime>>>();
-            
-        private IEnumerable<Func<IGenerator<DateTime>, IGenerator<DateTime>>> ConsumeDateShifts()
-        {
-            var shifts = _dateShifts.ToArray();
-            _dateShifts.Clear();
-            return shifts;
-        }
-
-        #endregion
-
         #region DayOfWeek
-        private HashSet<DayOfWeek> _daysOfWeek = new HashSet<DayOfWeek>();
+        private readonly HashSet<DayOfWeek> _daysOfWeek = new();
         public override void ExitMonday(TimeExpressionV2Parser.MondayContext context) => _daysOfWeek.Add(DayOfWeek.Monday);
         public override void ExitTuesday(TimeExpressionV2Parser.TuesdayContext context) => _daysOfWeek.Add(DayOfWeek.Tuesday);
         public override void ExitWednesday(TimeExpressionV2Parser.WednesdayContext context) => _daysOfWeek.Add(DayOfWeek.Wednesday);
@@ -130,7 +110,7 @@ namespace Cervel.TimeParser
         #endregion
 
 
-        private void EnsureSuccess(ParserRuleContext context)
+        private static void EnsureSuccess(ParserRuleContext context)
         {
             if (context.exception != null)
                 throw new ParseError($"Could not parse context [{context.GetType()}].", context.exception);

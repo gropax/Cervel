@@ -11,7 +11,11 @@ namespace Cervel.TimeParser.TimeIntervals.Filters
         public IGenerator<TimeInterval> _generator;
         public Func<TimeInterval, bool> _filter;
 
-        public FilterGenerator(IGenerator<TimeInterval> generator, Func<TimeInterval, bool> filter)
+        public FilterGenerator(
+            IGenerator<TimeInterval> generator,
+            Func<TimeInterval, bool> filter,
+            string name = null)
+            : base(name ?? $"Filter<{generator.Name}>")
         {
             _generator = generator;
             _filter = filter;

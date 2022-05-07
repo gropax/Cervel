@@ -16,7 +16,9 @@ namespace Cervel.TimeParser.TimeIntervals
             Func<DateTime, bool> dateTimeSelector = null,
             Func<int, bool> indexSelector = null,
             int? skip = null,
-            int? take = null)
+            int? take = null,
+            string name = null)
+            : base(name ?? $"DayFilter<>")
         {
             _timeSpan = timeSpan;
             _dateGenerator = new DateTimes.DayFilterGenerator(dateTimeSelector, indexSelector, skip, take);

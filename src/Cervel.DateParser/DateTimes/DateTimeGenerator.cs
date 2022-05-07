@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser
 {
+    [DebuggerDisplay("{Name}")]
     public abstract class DateTimeGenerator : IGenerator<DateTime>
     {
+        public string Name { get; }
+        protected DateTimeGenerator(string name)
+        {
+            Name = name;
+        }
+
         public abstract IEnumerable<DateTime> Generate(DateTime fromDate);
 
         public IEnumerable<DateTime> Generate(DateTime fromDate, DateTime toDate)

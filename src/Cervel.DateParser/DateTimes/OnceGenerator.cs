@@ -9,7 +9,10 @@ namespace Cervel.TimeParser.DateTimes
     public class OnceGenerator : DateTimeGenerator
     {
         private DateTime? _value;
-        public OnceGenerator(DateTime? value = null)
+        public OnceGenerator(
+            DateTime? value = null,
+            string name = null)
+            : base(name ?? $"Once<{value}>")
         {
             _value = value;
         }

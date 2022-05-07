@@ -9,7 +9,10 @@ namespace Cervel.TimeParser.DateTimes
     public class DailyGenerator : FrequencyGenerator
     {
         private TimeSpan _timeSpan;
-        public DailyGenerator(TimeSpan? timeSpan = null)
+        public DailyGenerator(
+            TimeSpan? timeSpan = null,
+            string name = null)
+            : base(name ?? $"Daily<{timeSpan}>")
         {
             _timeSpan = timeSpan ?? TimeSpan.FromDays(1);
         }

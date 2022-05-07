@@ -13,7 +13,9 @@ namespace Cervel.TimeParser.TimeIntervals
 
         public PartitionGenerator(
             IGenerator<TimeInterval> generator,
-            IGenerator<DateTime> cutGenerator)
+            IGenerator<DateTime> cutGenerator,
+            string name = null)
+            : base(name ?? $"Partition<{cutGenerator.Name}, {generator.Name}>")
         {
             _generator = generator;
             _cutGenerator = cutGenerator;

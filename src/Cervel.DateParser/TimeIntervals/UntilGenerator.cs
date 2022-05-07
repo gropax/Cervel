@@ -11,7 +11,11 @@ namespace Cervel.TimeParser.TimeIntervals
         private IGenerator<TimeInterval> _generator;
         private DateTime _limit;
 
-        public UntilGenerator(IGenerator<TimeInterval> generator, DateTime limit)
+        public UntilGenerator(
+            IGenerator<TimeInterval> generator,
+            DateTime limit,
+            string name = null)
+            : base(name ?? $"Until<{limit}, {generator.Name}>")
         {
             _generator = generator;
             _limit = limit;

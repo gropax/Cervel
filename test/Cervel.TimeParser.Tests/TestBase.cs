@@ -9,6 +9,7 @@ namespace Cervel.TimeParser.Tests
 {
     public class TestBase
     {
+        protected IGenerator<DateTime>[] DateGenerators(params IGenerator<DateTime>[] generators) => generators;
         protected IGenerator<DateTime> DateGenerator(params DateTime[] dateTimes) =>
             ListGenerator.Create(dateTimes);
 

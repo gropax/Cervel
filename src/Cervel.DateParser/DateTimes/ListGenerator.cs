@@ -15,7 +15,10 @@ namespace Cervel.TimeParser.DateTimes
         }
 
         private DateTime[] _values;
-        public ListGenerator(DateTime[] values)
+        public ListGenerator(
+            DateTime[] values,
+            string name = null)
+            : base(name ?? $"List<[{values.Length}]>")
         {
             _values = values;
         }

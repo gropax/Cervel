@@ -8,8 +8,11 @@ namespace Cervel.TimeParser.TimeIntervals.Fuzzy
 {
     public class SplitGenerator : IGenerator<IEnumerable<FuzzyInterval>>
     {
-        private IGenerator<FuzzyInterval> _generator;
-        private IGenerator<TimeInterval> _scopeGenerator;
+        protected string _name;
+        public string Name => _name;
+
+        private readonly IGenerator<FuzzyInterval> _generator;
+        private readonly IGenerator<TimeInterval> _scopeGenerator;
 
         public SplitGenerator(IGenerator<FuzzyInterval> generator, IGenerator<TimeInterval> scopeGenerator)
         {

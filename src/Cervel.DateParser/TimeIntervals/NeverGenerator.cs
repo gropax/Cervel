@@ -8,6 +8,8 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class NeverGenerator : TimeIntervalGenerator
     {
+        public NeverGenerator(string name = null) : base(name ?? $"Never<>") { }
+
         public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             yield break;

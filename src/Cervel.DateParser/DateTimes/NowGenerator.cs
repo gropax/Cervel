@@ -8,6 +8,8 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class NowGenerator : DateTimeGenerator
     {
+        public NowGenerator(string name = null) : base(name ?? "Now") { }
+
         public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
             yield return fromDate;

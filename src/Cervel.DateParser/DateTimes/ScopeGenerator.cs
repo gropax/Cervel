@@ -11,7 +11,11 @@ namespace Cervel.TimeParser.DateTimes
         private IGenerator<TimeInterval> _scopeGenerator;
         private IGenerator<DateTime> _dateGenerator;
 
-        public ScopeGenerator(IGenerator<TimeInterval> scopeGenerator, IGenerator<DateTime> dateGenerator)
+        public ScopeGenerator(
+            IGenerator<TimeInterval> scopeGenerator,
+            IGenerator<DateTime> dateGenerator,
+            string name = null)
+            : base(name ?? $"Scope<{scopeGenerator.Name}, {dateGenerator.Name}>")
         {
             _scopeGenerator = scopeGenerator;
             _dateGenerator = dateGenerator;

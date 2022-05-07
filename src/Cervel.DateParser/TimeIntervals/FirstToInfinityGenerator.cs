@@ -9,7 +9,10 @@ namespace Cervel.TimeParser.TimeIntervals
     public class FirstToInfinityGenerator : TimeIntervalGenerator
     {
         private IGenerator<DateTime> _generator;
-        public FirstToInfinityGenerator(IGenerator<DateTime> generator)
+        public FirstToInfinityGenerator(
+            IGenerator<DateTime> generator,
+            string name = null)
+            : base(name ?? $"FirstToInfinity<{generator.Name}>")
         {
             _generator = generator;
         }
