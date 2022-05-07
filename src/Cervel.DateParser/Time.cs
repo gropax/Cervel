@@ -30,7 +30,7 @@ namespace Cervel.TimeParser
         public static IGenerator<DateTime> Now() => new OnceGenerator(GetNow());
 
         public static IGenerator<DateTime> Yesterday() => Today().ShiftDay(-1);
-        public static IGenerator<DateTime> Today() => Now().Date();
+        public static IGenerator<DateTime> Today() => Now().StartOfDay();
         public static IGenerator<DateTime> Tomorrow() => Today().ShiftDay(1);
 
         public static IGenerator<DateTime> EveryDay() => Start().Daily();
