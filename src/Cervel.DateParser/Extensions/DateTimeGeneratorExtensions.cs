@@ -31,6 +31,11 @@ namespace Cervel.TimeParser.Extensions
             return generator.Map(Maps.StartOfDay());
         }
 
+        public static IGenerator<DateTime> StartOfMonth(this IGenerator<DateTime> generator)
+        {
+            return generator.Map(Maps.StartOfMonth());
+        }
+
         public static IGenerator<DateTime> Take(this IGenerator<DateTime> generator, int n)
         {
             return generator.Map(Maps.Take<DateTime>(n), $"Take<{n}, {generator.Name}>");
@@ -41,9 +46,11 @@ namespace Cervel.TimeParser.Extensions
             return generator.Map(Maps.Skip<DateTime>(n), $"Skip<{n}, {generator.Name}>");
         }
 
-        public static IGenerator<DateTime> First(this IGenerator<DateTime> generator)
+        public static IGenerator<DateTime> First(
+            this IGenerator<DateTime> generator,
+            string name = null)
         {
-            return generator.Map(Maps.Take<DateTime>(1), $"First<{generator.Name}>");
+            return generator.Map(Maps.Take<DateTime>(1), name ?? $"First<{generator.Name}>");
         }
 
         public static IGenerator<TimeInterval> FirstToInfinity(this IGenerator<DateTime> generator)
@@ -100,9 +107,12 @@ namespace Cervel.TimeParser.Extensions
             return Scope(new DailyGenerator(TimeSpan.FromDays(7)), generator.FirstToInfinity());
         }
 
-        public static IGenerator<DateTime> Yearly(this IGenerator<DateTime> generator)
+        public static IGenerator<DateTime> YearlySince(
+            this IGenerator<DateTime> generator,
+            string name = null)
         {
-            return Scope(new YearlyGenerator(), generator.FirstToInfinity());
+            //return new YearlyGenerator().Scope(generator.FirstToInfinity());
+            return new YearlyGenerator().Since(generator, name ?? $"YearlySince<{generator.Name}>");
         }
 
         public static IGenerator<DateTime> Monthly(this IGenerator<DateTime> generator)
@@ -144,9 +154,10 @@ namespace Cervel.TimeParser.Extensions
 
         public static IGenerator<DateTime> Since(
             this IGenerator<DateTime> generator,
-            IGenerator<DateTime> scopeGenerator)
+            IGenerator<DateTime> scopeGenerator,
+            string name = null)
         {
-            return new SinceGenerator(scopeGenerator, generator);
+            return new SinceGenerator(scopeGenerator, generator, name);
         }
 
         public static IGenerator<DateTime> Scope(

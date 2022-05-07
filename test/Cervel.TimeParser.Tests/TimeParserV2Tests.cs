@@ -9,7 +9,7 @@ namespace Cervel.TimeParser.Tests
         private TimeParser _timeParser = new TimeParser();
         //private DateTime _fromDate = new DateTime(2022, 1, 1);
         private DateTime _jan1st2022 = new DateTime(2022, 1, 1);
-        private DateTime _jan1st2023 = new DateTime(2022, 1, 1);
+        private DateTime _jan1st2023 = new DateTime(2023, 1, 1);
         private DateTime _feb1st2022 = new DateTime(2022, 2, 1);
         private DateTime _now = new DateTime(2022, 1, 1, 10, 30, 0);
 
@@ -207,15 +207,10 @@ namespace Cervel.TimeParser.Tests
             Assert.True(dateParseResult.IsSuccess);
 
             var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
-            Assert.Equal(31, dates.Length);
             Assert.Equal(
                 Dates(
-                    Day(2022, 3, 1),
-                    Day(2022, 3, 2),
-                    Day(2022, 3, 3),
-                    Day(2022, 3, 4),
-                    Day(2022, 3, 5)),
-                dates.Take(5));
+                    Day(2022, 3, 1)),
+                dates);
 
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
