@@ -34,17 +34,34 @@ namespace Cervel.TimeParser
         public override void ExitDayDateSince(TimeExpressionV2Parser.DayDateSinceContext context)
         {
             var gens = _dateGenerators;
-            if (gens.Count == 2)
+            if (context.children.Count > 1)
                 SetDateGenerator(Time.Since(gens[1], gens[0]));
         }
 
-        public override void ExitEveryDay(TimeExpressionV2Parser.EveryDayContext context) =>
-            _dateGenerators.Add(Time.EveryDay());
+        public override void ExitDayDateUntil(TimeExpressionV2Parser.DayDateUntilContext context)
+        {
+            var gens = _dateGenerators;
+            if (context.children.Count > 1)
+                SetDateGenerator(Time.Until(gens[1], gens[0]));
+        }
 
-        public override void ExitDayOfWeekUnion(TimeExpressionV2Parser.DayOfWeekUnionContext context) =>
-            _dateGenerators.Add(
-                Time.Union(ConsumeDaysOfWeek()
-                    .Select(dow => Time.Each(dow)).ToArray()));
+        public override void ExitUntil(TimeExpressionV2Parser.UntilContext context)
+        {
+        }
+
+        public override void ExitEveryDay(TimeExpressionV2Parser.EveryDayContext context)
+        {
+            _dateGenerators.Add(Time.EveryDay());
+        }
+
+        public override void ExitDayOfWeekUnion(TimeExpressionV2Parser.DayOfWeekUnionContext context)
+        {
+            var dowGens = ConsumeDaysOfWeek().Select(dow => Time.Each(dow)).ToArray();
+            if (dowGens.Length > 1)
+                _dateGenerators.Add(Time.Union(dowGens));
+            else
+                _dateGenerators.Add(dowGens.Single());
+        }
 
 
         #region DateGenerator

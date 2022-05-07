@@ -167,5 +167,34 @@ namespace Cervel.TimeParser.Tests
                     DaysInterval(2022, 1, 6, dayNumber: 26)),
                 intervals);
         }
+
+        [Theory]
+        [InlineData("chaque jour jusqu a vendredi")]
+        public void TestParse_EveryDayUntil(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
+            Assert.Equal(6, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 1),
+                    Day(2022, 1, 2),
+                    Day(2022, 1, 3),
+                    Day(2022, 1, 4),
+                    Day(2022, 1, 5),
+                    Day(2022, 1, 6)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022);
+            Assert.Equal(
+                Intervals(
+                    DaysInterval(2022, 1, 1, dayNumber: 6)),
+                intervals);
+        }
     }
 }

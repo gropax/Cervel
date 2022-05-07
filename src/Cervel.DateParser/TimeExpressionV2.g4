@@ -1,6 +1,7 @@
 ﻿grammar TimeExpressionV2;
 
-intvDist
+
+intvDist  // Point d'entrée du parsing des intervalles
 	: dayIntvDist
 	;
 
@@ -8,19 +9,27 @@ dayIntvDist
 	: dayDateDist
 	;
 
-dateDist
+
+dateDist  // Point d'entrée du parsing des dates
 	: dayDateDist
 	;
 
-dayDateDist
+
+dayDateDist  // Appelée par `dayIntvDist`
 	: dayDateSince
 	;
 
 dayDateSince
-	: dayDateExpr since dayDateExpr
+	: dayDateExpr since dayDateUntil
+	| dayDateUntil
+	;
+
+dayDateUntil
+	: dayDateExpr until dayDateExpr
 	| dayDateExpr
 	;
 
+until : JUSQUE A ;
 since : A PARTIR DE ;
 
 dayDateExpr
@@ -71,3 +80,4 @@ DE : 'de' ;
 PARTIR : 'partir' ;
 COMPTER : 'compter' ;
 DEPUIS : 'depuis' ;
+JUSQUE : 'jusque' | 'jusqu' | 'jusqu\'' ;

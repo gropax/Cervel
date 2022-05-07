@@ -10,13 +10,6 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class DateTimeGeneratorExtensions
     {
-        public static IGenerator<DateTime> Until(
-            this IGenerator<DateTime> generator,
-            DateTime limit)
-        {
-            return new DateTimes.UntilGenerator(generator, limit);
-        }
-
         public static IGenerator<DateTime> Map(
             this IGenerator<DateTime> generator,
             Func<IEnumerable<DateTime>, IEnumerable<DateTime>> modifier)
@@ -80,7 +73,7 @@ namespace Cervel.TimeParser.Extensions
 
         public static IGenerator<DateTime> Daily(this IGenerator<DateTime> generator)
         {
-            return Scope(new DailyGenerator(), generator.FirstToInfinity());
+            return Since(new DailyGenerator(), generator);
         }
 
         public static IGenerator<DateTime> Weekly(this IGenerator<DateTime> generator)
@@ -113,6 +106,13 @@ namespace Cervel.TimeParser.Extensions
             return new PartitionGenerator(generator, cutGenerator);
         }
 
+
+        public static IGenerator<DateTime> Since(
+            this IGenerator<DateTime> generator,
+            IGenerator<DateTime> scopeGenerator)
+        {
+            return new SinceGenerator(scopeGenerator, generator);
+        }
 
         public static IGenerator<DateTime> Scope(
             this IGenerator<DateTime> generator,
