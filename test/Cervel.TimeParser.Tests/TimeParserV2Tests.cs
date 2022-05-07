@@ -9,9 +9,9 @@ namespace Cervel.TimeParser.Tests
         private TimeParser _timeParser = new TimeParser();
         //private DateTime _fromDate = new DateTime(2022, 1, 1);
         private DateTime _jan1st2022 = new DateTime(2022, 1, 1);
+        private DateTime _jan1st2023 = new DateTime(2022, 1, 1);
         private DateTime _feb1st2022 = new DateTime(2022, 2, 1);
         private DateTime _now = new DateTime(2022, 1, 1, 10, 30, 0);
-        private DateTime _toDate = new DateTime(2032, 1, 1);
 
         public TimeParserV2Tests()
         {
@@ -194,6 +194,36 @@ namespace Cervel.TimeParser.Tests
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 1, 1, dayNumber: 6)),
+                intervals);
+        }
+
+
+
+        [Theory]
+        [InlineData("mars")]
+        public void TestParse_March(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(31, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 3, 1),
+                    Day(2022, 3, 2),
+                    Day(2022, 3, 3),
+                    Day(2022, 3, 4),
+                    Day(2022, 3, 5)),
+                dates.Take(5));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023);
+            Assert.Equal(
+                Intervals(
+                    DaysInterval(2022, 3, 1, dayNumber: 31)),
                 intervals);
         }
     }

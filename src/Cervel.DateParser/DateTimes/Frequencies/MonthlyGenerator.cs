@@ -10,7 +10,7 @@ namespace Cervel.TimeParser.DateTimes
     {
         private int _factor;
         public MonthlyGenerator(
-            int factor,
+            int factor = 1,
             string name = null)
             : base(name ?? $"Monthly<{factor}>")
         {

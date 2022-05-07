@@ -9,24 +9,30 @@ namespace Cervel.TimeParser.TimeIntervals
     public class ToIntervalsGenerator : TimeIntervalGenerator
     {
         private IGenerator<DateTime> _generator;
-        private TimeSpan _timeSpan;
+        private IGenerator<DateTime> _frequency;
 
         public ToIntervalsGenerator(
             IGenerator<DateTime> generator,
-            TimeSpan timeSpan,
+            IGenerator<DateTime> frequency,
             string name = null)
-            : base(name ?? $"ToInterval<{timeSpan}, {generator.Name}>")
+            : base(name ?? $"ToInterval<{frequency.Name}, {generator.Name}>")
         {
             _generator = generator;
-            _timeSpan = timeSpan;
+            _frequency = frequency;
         }
 
         public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             return _generator
                 .Generate(fromDate)
-                .Select(d => d.ToInterval(_timeSpan))
+                .Select(d => d.ToInterval(GetTimeSpan(d)))
                 .Disjunction();  // Necessary as generated intervals may overlapse
+        }
+
+        private TimeSpan GetTimeSpan(DateTime start)
+        {
+            var end = _frequency.Generate(start).First();
+            return end - start;
         }
     }
 }
