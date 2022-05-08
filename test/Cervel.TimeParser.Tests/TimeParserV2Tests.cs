@@ -500,5 +500,103 @@ namespace Cervel.TimeParser.Tests
                     DayInterval(2022, 3, 29)),
                 intervals);
         }
+
+        [Theory]
+        [InlineData("tous les mardis, jeudis et samedis de mars")]
+        public void TestParse_EveryMultipleDaysOfWeekInNamedMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 3, 1),
+                    Day(2022, 3, 3),
+                    Day(2022, 3, 5),
+                    Day(2022, 3, 8),
+                    Day(2022, 3, 10),
+                    Day(2022, 3, 12),
+                    Day(2022, 3, 15),
+                    Day(2022, 3, 17),
+                    Day(2022, 3, 19),
+                    Day(2022, 3, 22),
+                    Day(2022, 3, 24),
+                    Day(2022, 3, 26),
+                    Day(2022, 3, 29),
+                    Day(2022, 3, 31)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 3, 1),
+                    DayInterval(2022, 3, 3),
+                    DayInterval(2022, 3, 5),
+                    DayInterval(2022, 3, 8),
+                    DayInterval(2022, 3, 10),
+                    DayInterval(2022, 3, 12),
+                    DayInterval(2022, 3, 15),
+                    DayInterval(2022, 3, 17),
+                    DayInterval(2022, 3, 19),
+                    DayInterval(2022, 3, 22),
+                    DayInterval(2022, 3, 24),
+                    DayInterval(2022, 3, 26),
+                    DayInterval(2022, 3, 29),
+                    DayInterval(2022, 3, 31)),
+                intervals);
+        }
+
+        [Theory]
+        [InlineData("tous les mardis de mars, mai et juillet")]
+        public void TestParse_EveryDaysOfWeekInMultipleNamedMonthes(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 3, 1),
+                    Day(2022, 3, 8),
+                    Day(2022, 3, 15),
+                    Day(2022, 3, 22),
+                    Day(2022, 3, 29),
+                    Day(2022, 5, 3),
+                    Day(2022, 5, 10),
+                    Day(2022, 5, 17),
+                    Day(2022, 5, 24),
+                    Day(2022, 5, 31),
+                    Day(2022, 7, 5),
+                    Day(2022, 7, 12),
+                    Day(2022, 7, 19),
+                    Day(2022, 7, 26)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 3, 1),
+                    DayInterval(2022, 3, 8),
+                    DayInterval(2022, 3, 15),
+                    DayInterval(2022, 3, 22),
+                    DayInterval(2022, 3, 29),
+                    DayInterval(2022, 5, 3),
+                    DayInterval(2022, 5, 10),
+                    DayInterval(2022, 5, 17),
+                    DayInterval(2022, 5, 24),
+                    DayInterval(2022, 5, 31),
+                    DayInterval(2022, 7, 5),
+                    DayInterval(2022, 7, 12),
+                    DayInterval(2022, 7, 19),
+                    DayInterval(2022, 7, 26)),
+                intervals);
+        }
     }
 }
