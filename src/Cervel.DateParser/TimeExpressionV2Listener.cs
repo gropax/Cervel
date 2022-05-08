@@ -11,99 +11,156 @@ namespace Cervel.TimeParser
     {
         public IGenerator<TimeInterval> IntervalDistribution { get; set; }
         public IGenerator<DateTime> DateDistribution { get; set; }
-        
-        private IGenerator<TimeInterval> _intervals;
+
+        private Stack<VarScope> _varScopes = new();
+        private VarScope _scope;
+
+        public TimeExpressionV2Listener()
+        {
+            OpenScope();
+        }
+
+        private void CloseScope()
+        {
+            _varScopes.Pop();
+            _scope = _varScopes.Peek();
+        }
+
+        private void OpenScope()
+        {
+            _scope = new();
+            _varScopes.Push(_scope);
+        }
+
 
         public override void ExitIntvDist(TimeExpressionV2Parser.IntvDistContext context)
         {
-            IntervalDistribution = _intervals;
-        }
-
-        public override void ExitDayIntvDist(TimeExpressionV2Parser.DayIntvDistContext context)
-        {
-            _intervals = _dateGenerators.ConsumeSingle().AllDay();
-        }
-
-        public override void ExitMonthIntvDist(TimeExpressionV2Parser.MonthIntvDistContext context)
-        {
-            _intervals = _dateGenerators.ConsumeSingle().AllMonth();
+            IntervalDistribution = _scope.IntervalGenerators.ConsumeSingle();
         }
 
         public override void ExitDateDist(TimeExpressionV2Parser.DateDistContext context)
         {
-            DateDistribution = _dateGenerators.ConsumeSingle();
+            DateDistribution = _scope.DateGenerators.ConsumeSingle();
+        }
+
+
+        public override void EnterDayIntvDist(TimeExpressionV2Parser.DayIntvDistContext context)
+        {
+            OpenScope();
+        }
+
+        public override void ExitDayIntvDist(TimeExpressionV2Parser.DayIntvDistContext context)
+        {
+            var intervalGenerator = _scope.DateGenerators.ConsumeSingle().AllDay();
+            CloseScope();
+            _scope.IntervalGenerators.Set(intervalGenerator);
+        }
+
+        public override void EnterMonthIntvDist(TimeExpressionV2Parser.MonthIntvDistContext context)
+        {
+            OpenScope();
+        }
+
+        public override void ExitMonthIntvDist(TimeExpressionV2Parser.MonthIntvDistContext context)
+        {
+            var intervalGenerator = _scope.DateGenerators.ConsumeSingle().AllMonth();
+            CloseScope();
+            _scope.IntervalGenerators.Set(intervalGenerator);
+        }
+
+        public override void EnterDayDateDist(TimeExpressionV2Parser.DayDateDistContext context)
+        {
+            OpenScope();
+        }
+
+        public override void ExitDayDateDist(TimeExpressionV2Parser.DayDateDistContext context)
+        {
+            var dateGenerator = _scope.DateGenerators.ConsumeSingle();
+            CloseScope();
+            _scope.DateGenerators.Set(dateGenerator);
         }
 
         public override void ExitDayDateSince(TimeExpressionV2Parser.DayDateSinceContext context)
         {
-            var gens = _dateGenerators.Get();
+            var gens = _scope.DateGenerators.Get();
             if (context.children.Count > 1)
-                _dateGenerators.Set(Time.Since(gens[1], gens[0]));
+                _scope.DateGenerators.Set(Time.Since(gens[1], gens[0]));
         }
 
         public override void ExitDayDateUntil(TimeExpressionV2Parser.DayDateUntilContext context)
         {
-            var gens = _dateGenerators.Get();
+            var gens = _scope.DateGenerators.Get();
             if (context.children.Count > 1)
-                _dateGenerators.Set(Time.Until(gens[1], gens[0]));
+                _scope.DateGenerators.Set(Time.Until(gens[1], gens[0]));
+        }
+
+        public override void EnterDayDateScoped(TimeExpressionV2Parser.DayDateScopedContext context)
+        {
+        }
+
+        public override void ExitDayDateScoped(TimeExpressionV2Parser.DayDateScopedContext context)
+        {
+            if (context.children.Count > 1)
+            {
+                var dates = _scope.DateGenerators.ConsumeSingle();
+                var scope = _scope.IntervalGenerators.ConsumeSingle();
+                _scope.DateGenerators.Set(Time.Scope(scope, dates));
+            }
         }
 
         public override void ExitEveryDay(TimeExpressionV2Parser.EveryDayContext context)
         {
-            _dateGenerators.Add(Time.EveryDay());
+            _scope.DateGenerators.Add(Time.EveryDay());
         }
 
         public override void ExitDayOfWeekUnion(TimeExpressionV2Parser.DayOfWeekUnionContext context)
         {
-            var dowGens = _daysOfWeek.Consume().Distinct().Select(dow => Time.Each(dow)).ToArray();
+            var dowGens = _scope.DaysOfWeek.Consume().Distinct().Select(dow => Time.Each(dow)).ToArray();
             if (dowGens.Length > 1)
-                _dateGenerators.Add(Time.Union(dowGens));
+                _scope.DateGenerators.Add(Time.Union(dowGens));
             else
-                _dateGenerators.Add(dowGens.Single());
+                _scope.DateGenerators.Add(dowGens.Single());
         }
 
-        private readonly TmpVar<IGenerator<DateTime>> _dateGenerators = new();
-        private readonly TmpVar<DayOfWeek> _daysOfWeek = new();
-        private readonly TmpVar<Month> _monthNames = new();
 
-        public override void ExitMonday(TimeExpressionV2Parser.MondayContext context) => _daysOfWeek.Add(DayOfWeek.Monday);
-        public override void ExitTuesday(TimeExpressionV2Parser.TuesdayContext context) => _daysOfWeek.Add(DayOfWeek.Tuesday);
-        public override void ExitWednesday(TimeExpressionV2Parser.WednesdayContext context) => _daysOfWeek.Add(DayOfWeek.Wednesday);
-        public override void ExitThursday(TimeExpressionV2Parser.ThursdayContext context) => _daysOfWeek.Add(DayOfWeek.Thursday);
-        public override void ExitFriday(TimeExpressionV2Parser.FridayContext context) => _daysOfWeek.Add(DayOfWeek.Friday);
-        public override void ExitSaturday(TimeExpressionV2Parser.SaturdayContext context) => _daysOfWeek.Add(DayOfWeek.Saturday);
-        public override void ExitSunday(TimeExpressionV2Parser.SundayContext context) => _daysOfWeek.Add(DayOfWeek.Sunday);
+        public override void ExitMonday(TimeExpressionV2Parser.MondayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Monday);
+        public override void ExitTuesday(TimeExpressionV2Parser.TuesdayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Tuesday);
+        public override void ExitWednesday(TimeExpressionV2Parser.WednesdayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Wednesday);
+        public override void ExitThursday(TimeExpressionV2Parser.ThursdayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Thursday);
+        public override void ExitFriday(TimeExpressionV2Parser.FridayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Friday);
+        public override void ExitSaturday(TimeExpressionV2Parser.SaturdayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Saturday);
+        public override void ExitSunday(TimeExpressionV2Parser.SundayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Sunday);
 
 
 
         public override void ExitEveryMonth(TimeExpressionV2Parser.EveryMonthContext context)
         {
-            _dateGenerators.Add(Time.StartOfEveryMonth());
+            _scope.DateGenerators.Add(Time.StartOfEveryMonth());
         }
 
         public override void ExitMonthNameUnion(TimeExpressionV2Parser.MonthNameUnionContext context)
         {
-            var monthGens = _monthNames.Consume().Distinct()
+            var monthGens = _scope.MonthNames.Consume().Distinct()
                 .Select(month => Time.StartOfEvery(month)).ToArray();
 
             if (monthGens.Length > 1)
-                _dateGenerators.Add(Time.Union(monthGens));
+                _scope.DateGenerators.Add(Time.Union(monthGens));
             else
-                _dateGenerators.Add(monthGens.Single());
+                _scope.DateGenerators.Add(monthGens.Single());
         }
 
-        public override void ExitJanuary(TimeExpressionV2Parser.JanuaryContext context) => _monthNames.Add(Month.January);
-        public override void ExitFebruary(TimeExpressionV2Parser.FebruaryContext context) => _monthNames.Add(Month.February);
-        public override void ExitMarch(TimeExpressionV2Parser.MarchContext context) => _monthNames.Add(Month.March);
-        public override void ExitApril(TimeExpressionV2Parser.AprilContext context) => _monthNames.Add(Month.April);
-        public override void ExitMay(TimeExpressionV2Parser.MayContext context) => _monthNames.Add(Month.May);
-        public override void ExitJune(TimeExpressionV2Parser.JuneContext context) => _monthNames.Add(Month.June);
-        public override void ExitJuly(TimeExpressionV2Parser.JulyContext context) => _monthNames.Add(Month.July);
-        public override void ExitAugust(TimeExpressionV2Parser.AugustContext context) => _monthNames.Add(Month.August);
-        public override void ExitSeptember(TimeExpressionV2Parser.SeptemberContext context) => _monthNames.Add(Month.September);
-        public override void ExitOctober(TimeExpressionV2Parser.OctoberContext context) => _monthNames.Add(Month.October);
-        public override void ExitNovember(TimeExpressionV2Parser.NovemberContext context) => _monthNames.Add(Month.November);
-        public override void ExitDecember(TimeExpressionV2Parser.DecemberContext context) => _monthNames.Add(Month.December);
+        public override void ExitJanuary(TimeExpressionV2Parser.JanuaryContext context) => _scope.MonthNames.Add(Month.January);
+        public override void ExitFebruary(TimeExpressionV2Parser.FebruaryContext context) => _scope.MonthNames.Add(Month.February);
+        public override void ExitMarch(TimeExpressionV2Parser.MarchContext context) => _scope.MonthNames.Add(Month.March);
+        public override void ExitApril(TimeExpressionV2Parser.AprilContext context) => _scope.MonthNames.Add(Month.April);
+        public override void ExitMay(TimeExpressionV2Parser.MayContext context) => _scope.MonthNames.Add(Month.May);
+        public override void ExitJune(TimeExpressionV2Parser.JuneContext context) => _scope.MonthNames.Add(Month.June);
+        public override void ExitJuly(TimeExpressionV2Parser.JulyContext context) => _scope.MonthNames.Add(Month.July);
+        public override void ExitAugust(TimeExpressionV2Parser.AugustContext context) => _scope.MonthNames.Add(Month.August);
+        public override void ExitSeptember(TimeExpressionV2Parser.SeptemberContext context) => _scope.MonthNames.Add(Month.September);
+        public override void ExitOctober(TimeExpressionV2Parser.OctoberContext context) => _scope.MonthNames.Add(Month.October);
+        public override void ExitNovember(TimeExpressionV2Parser.NovemberContext context) => _scope.MonthNames.Add(Month.November);
+        public override void ExitDecember(TimeExpressionV2Parser.DecemberContext context) => _scope.MonthNames.Add(Month.December);
 
 
         private static void EnsureSuccess(ParserRuleContext context)
@@ -113,6 +170,14 @@ namespace Cervel.TimeParser
         }
     }
 
+
+    internal class VarScope
+    {
+        public TmpVar<IGenerator<DateTime>> DateGenerators = new();
+        public TmpVar<IGenerator<TimeInterval>> IntervalGenerators = new();
+        public TmpVar<DayOfWeek> DaysOfWeek = new();
+        public TmpVar<Month> MonthNames = new();
+    }
 
     internal class TmpVar<T>
     {

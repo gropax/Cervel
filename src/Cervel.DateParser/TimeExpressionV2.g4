@@ -35,7 +35,12 @@ dayDateSince
 	;
 
 dayDateUntil
-	: dayDateExpr until dayDateExpr
+	: dayDateScoped until dayDateExpr
+	| dayDateScoped
+	;
+
+dayDateScoped
+	: dayDateExpr DE monthIntvDist
 	| dayDateExpr
 	;
 
@@ -51,8 +56,13 @@ everyDay
 
 dayOfWeekUnion : dayOfWeekIter ;
 dayOfWeekIter
-	: dayOfWeek (COMMA | ET)? dayOfWeekIter
-	| dayOfWeek
+	: dayOfWeekExpr (COMMA | ET)? dayOfWeekIter
+	| dayOfWeekExpr
+	;
+
+dayOfWeekExpr
+	: CHAQUE? dayOfWeek
+	| TOUT LE dayOfWeek
 	;
 
 dayOfWeek
@@ -151,7 +161,7 @@ MOIS : 'mois' ;
 TOUT : 'tout' | 'toute' | 'tous' | 'toutes' | 'tt' ;
 LE : 'le' | 'la' | 'les' | 'l' | 'l\'' ;
 A : 'a' | 'à' ;
-DE : 'de' ;
+DE : 'de' | 'd\'' | 'd' ;
 PARTIR : 'partir' ;
 COMPTER : 'compter' ;
 DEPUIS : 'depuis' ;

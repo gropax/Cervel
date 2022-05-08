@@ -51,6 +51,10 @@ namespace Cervel.TimeParser
 
         public static Func<IGenerator<DateTime>, IGenerator<DateTime>> DayShift(int n) => (g) => g.ShiftDay(n);
 
+        public static IGenerator<DateTime> Scope(IGenerator<TimeInterval> scopes, IGenerator<DateTime> dates)
+        {
+            return new ScopeGenerator(scopes, dates);
+        }
 
         #region Interval related combinators
 

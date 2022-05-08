@@ -52,6 +52,8 @@ namespace Cervel.TimeParser.Tests
 
         [Theory]
         [InlineData("lundi")]
+        [InlineData("chaque lundi")]
+        [InlineData("tous les lundis")]
         public void TestParse_Monday(string input)
         {
             var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
@@ -464,6 +466,38 @@ namespace Cervel.TimeParser.Tests
                 Intervals(
                     DaysInterval(2022, 3, 1, dayNumber: 61),
                     DaysInterval(2022, 7, 1, dayNumber: 31)),
+                intervals);
+        }
+
+
+        [Theory]
+        [InlineData("tous les mardis de mars")]
+        public void TestParse_EveryDaysOfWeekInNamedMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 3, 1),
+                    Day(2022, 3, 8),
+                    Day(2022, 3, 15),
+                    Day(2022, 3, 22),
+                    Day(2022, 3, 29)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 3, 1),
+                    DayInterval(2022, 3, 8),
+                    DayInterval(2022, 3, 15),
+                    DayInterval(2022, 3, 22),
+                    DayInterval(2022, 3, 29)),
                 intervals);
         }
     }
