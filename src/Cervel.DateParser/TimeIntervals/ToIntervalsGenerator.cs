@@ -24,11 +24,6 @@ namespace Cervel.TimeParser.TimeIntervals
 
         public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
-            return GenerateIntervals(fromDate).Disjunction();  // Necessary as generated intervals may overlapse
-        }
-
-        public IEnumerable<TimeInterval> GenerateIntervals(DateTime fromDate)
-        {
             foreach (var date in _generator.Generate(fromDate))
                 if (TryGetTimeInterval(date, out var interval))
                     yield return interval;

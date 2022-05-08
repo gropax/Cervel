@@ -1,5 +1,6 @@
 ﻿using Cervel.TimeParser.DateTimes;
 using Cervel.TimeParser.Extensions;
+using Cervel.TimeParser.TimeIntervals;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace Cervel.TimeParser
         public static IGenerator<DateTime> Each(DayOfWeek dow) => Start().Next(dow).Weekly();
         public static IGenerator<DateTime> Union(params IGenerator<DateTime>[] generators) => new UnionGenerator(generators);
         public static IGenerator<DateTime> Since(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new SinceGenerator(scope, generator);
-        public static IGenerator<DateTime> Until(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new UntilGenerator(scope, generator);
+        public static IGenerator<DateTime> Until(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new DateTimes.UntilGenerator(scope, generator);
 
         public static IGenerator<TimeInterval> DayScopes() => new FrequencyGenerator(new DayMeasure()).ToScopes(TimeSpan.FromDays(1));
 
@@ -51,6 +52,12 @@ namespace Cervel.TimeParser
         public static Func<IGenerator<DateTime>, IGenerator<DateTime>> DayShift(int n) => (g) => g.ShiftDay(n);
 
 
+        #region Interval related combinators
+
+        public static IGenerator<TimeInterval> Coalesce(IGenerator<TimeInterval> g) => new CoalesceGenerator(g);
+
+        #endregion
+
 
         #region Month related methods
 
@@ -61,25 +68,50 @@ namespace Cervel.TimeParser
         public static IGenerator<DateTime> Monthly(int n = 1) => new FrequencyGenerator(new MonthMeasure(n), name: n == 1 ? "Monthly" : $"Monthly({n})");
 
         /// <summary>
-        /// Séquence de jour-dates espacés d'un mois
+        /// Le mois-date précédent (ou la date en cours)
         /// </summary>
-        //public static IGenerator<DateTime> MonthesLater(int n) => Monthly(n).Skip(1, name: $"MonthesLater({n})");
+        public static IGenerator<DateTime> StartOfCurrentMonth() => Start().StartOfMonth().First($"SOMonth");
 
-        // NextStartOfMonth() -> le mois-date suivant
-        public static IGenerator<DateTime> PrevStartOfMonth() => Start().StartOfMonth().First($"PrevSOMonth");
-        public static IGenerator<DateTime> NextStartOfMonth() => Start().StartOfMonth().ShiftMonth(1).First($"NextSOMonth");
+        /// <summary>
+        /// Le mois-date suivant
+        /// </summary>
+        public static IGenerator<DateTime> StartOfNextMonth() => Start().StartOfMonth().ShiftMonth(1).First($"NextSOMonth");
 
-        // EveryStartOfMonth() -> premier jour-date de chaque mois (mois-date)
-        // NextStartOf(Month) -> premier jour-date de chaque mois de <Month>
-        public static IGenerator<DateTime> Next(Month month) => Start().StartOfMonth().Monthly().Where(month).First($"Next<{month}>");
-        // EveryStartOf(Month) -> premier jour-date de chaque mois de <Month>
+        /// <summary>
+        /// Premier jour-date de chaque mois (mois-date)
+        /// </summary>
+        public static IGenerator<DateTime> StartOfEveryMonth() => StartOfCurrentMonth().Monthly($"EverySOMonth");
+
+        /// <summary>
+        /// Premier jour-date du mois spécifié (peut avoir lieu dans le passé)
+        /// </summary>
+        public static IGenerator<DateTime> StartOf(Month month) => Start().StartOfMonth().Monthly().Where(month).First($"SO<{month}>");
+
+        /// <summary>
+        /// Premier jour-date du prochain <Month> (après la fin du mois en cours)
+        /// </summary>
+        public static IGenerator<DateTime> StartOfNext(Month month) => Start().StartOfMonth().ShiftMonth(1).Monthly().Where(month).First($"NextSO<{month}>");
+
+        /// <summary>
+        /// </summary>
+        public static IGenerator<DateTime> StartOfEvery(Month month) => StartOf(month).Yearly($"EverySO<{month}>");
 
         // ThisStartOfMonth() -> premier jour de ce mois-ci
         // FromThisStartOfMonth(int) -> premier jour de ce mois-ci, +int mois
 
-        // EveryMonth() -> partition de mois-durée (scope)
-        // ThisMonth() -> le mois-durée en cours, du premier jour (possiblement passé) jusqu'au dernier
-        // NextMonth() -> le mois-durée suivant
+        /// <summary>
+        /// Partition de mois-durée (scope)
+        /// </summary>
+        public static IGenerator<TimeInterval> EveryMonth() => StartOfCurrentMonth().Monthly().DuringMonthes(1);
+
+        /// <summary>
+        /// Le mois-durée en cours, du premier jour (possiblement passé) jusqu'au dernier
+        /// </summary>
+        public static IGenerator<TimeInterval> CurrentMonth() => StartOfCurrentMonth().DuringMonthes(1);
+
+        /// <summary>
+        /// </summary>
+        public static IGenerator<TimeInterval> NextMonth() => StartOfNextMonth().DuringMonthes(1);
 
         /// <summary>
         /// Premier jour-date du mois de chaque date
@@ -99,16 +131,16 @@ namespace Cervel.TimeParser
         /// Allonge une séquence de dates en intervalles d'une durée d'un mois
         /// </summary>
         public static IGenerator<TimeInterval> DuringMonthes(IGenerator<DateTime> g, int n) =>
-            g.ToIntervals(new MonthMeasure(n));
+            g.ToIntervals(new MonthMeasure(n)).Coalesce();
 
         /// <summary>
         /// Return all month-intervals containing dates.
         /// </summary>
         public static IGenerator<TimeInterval> AllMonth(IGenerator<DateTime> g) =>
-            g.StartOfMonth().ToIntervals(new MonthMeasure(1));
+            g.StartOfMonth().DuringMonthes(1);
 
-        public static IGenerator<DateTime> EveryMonth() => Start().StartOfMonth().Monthly();
-        public static IGenerator<DateTime> Each(Month month) => Next(month).YearlySince();
+        //public static IGenerator<DateTime> EveryMonth() => Start().StartOfMonth().Monthly();
+        //public static IGenerator<DateTime> Each(Month month) => StartOfNext(month).YearlySince();
 
         #endregion
     }

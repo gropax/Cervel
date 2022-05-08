@@ -97,7 +97,7 @@ namespace Cervel.TimeParser.Extensions
 
         public static IGenerator<TimeInterval> AllDay(this IGenerator<DateTime> generator)
         {
-            return generator.StartOfDay().ToIntervals(new DayMeasure());
+            return generator.StartOfDay().ToIntervals(new DayMeasure()).Coalesce();
         }
 
         public static IGenerator<TimeInterval> ToScopes(
@@ -142,10 +142,17 @@ namespace Cervel.TimeParser.Extensions
         #region Month related methods
 
         public static IGenerator<DateTime> Monthly(
-            this IGenerator<DateTime> generator,
+            this IGenerator<DateTime> g,
             string name = null)
         {
-            return new FrequencyGenerator(new MonthMeasure()).Scope(generator.FirstToInfinity(), name ?? $"EveryMonth");
+            return new FrequencyGenerator(new MonthMeasure()).Scope(g.FirstToInfinity(), name ?? $"EveryMonth");
+        }
+
+        public static IGenerator<DateTime> Yearly(
+            this IGenerator<DateTime> g,
+            string name = null)
+        {
+            return new FrequencyGenerator(new YearMeasure()).Scope(g.FirstToInfinity(), name ?? $"EveryYear");
         }
 
         public static IGenerator<TimeInterval> AllMonth(this IGenerator<DateTime> g) => Time.AllMonth(g);
@@ -163,6 +170,8 @@ namespace Cervel.TimeParser.Extensions
         {
             return generator.Map(Maps.Filter<DateTime>(d => d.Month == (int)month));
         }
+
+        public static IGenerator<TimeInterval> DuringMonthes(this IGenerator<DateTime> g, int n) => Time.DuringMonthes(g, n);
 
         #endregion
     }

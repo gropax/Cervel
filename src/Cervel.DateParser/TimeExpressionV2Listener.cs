@@ -78,13 +78,13 @@ namespace Cervel.TimeParser
 
         public override void ExitEveryMonth(TimeExpressionV2Parser.EveryMonthContext context)
         {
-            _dateGenerators.Add(Time.EveryMonth());
+            _dateGenerators.Add(Time.StartOfEveryMonth());
         }
 
         public override void ExitMonthNameUnion(TimeExpressionV2Parser.MonthNameUnionContext context)
         {
             var monthGens = _monthNames.Consume().Distinct()
-                .Select(month => Time.Each(month)).ToArray();
+                .Select(month => Time.StartOfEvery(month)).ToArray();
 
             if (monthGens.Length > 1)
                 _dateGenerators.Add(Time.Union(monthGens));

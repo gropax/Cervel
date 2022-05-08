@@ -14,9 +14,9 @@ namespace Cervel.TimeParser.Tests
         private DateTime _feb1st2022 = new DateTime(2022, 2, 1);
 
         [Fact]
-        public void Test_EveryMonth()
+        public void Test_StartOfEveryMonth()
         {
-            var generator = Time.EveryMonth();
+            var generator = Time.StartOfEveryMonth();
             var dates = generator.Generate(_jan1st2022, _jan1st2023).ToArray();
             Assert.Equal(12, dates.Length);
             Assert.Equal(
@@ -30,9 +30,9 @@ namespace Cervel.TimeParser.Tests
         }
 
         [Fact]
-        public void Test_March()
+        public void Test_StartOfMarch()
         {
-            var generator = Time.Each(Month.March);
+            var generator = Time.StartOfEvery(Month.March);
             var dates = generator.Generate(_jan1st2022, _jan1st2027).ToArray();
             Assert.Equal(
                 Dates(
@@ -42,18 +42,6 @@ namespace Cervel.TimeParser.Tests
                     Day(2025, 3, 1),
                     Day(2026, 3, 1)),
                 dates);
-        }
-
-
-        [Fact]
-        public void Test_AllMonth()
-        {
-            var generator = Time.EveryMonth().AllMonth();
-            var intervals = generator.Generate(_jan1st2022, _jan1st2023).ToArray();
-            Assert.Equal(
-                Intervals(
-                    DaysInterval(Day(2022, 1, 1), Day(2023, 1, 1))),
-                intervals);
         }
     }
 }
