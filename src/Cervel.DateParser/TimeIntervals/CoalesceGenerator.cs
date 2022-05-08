@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class CoalesceGenerator : TimeIntervalGenerator
+    public class CoalesceGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
+
         private IGenerator<TimeInterval> _generator;
         public CoalesceGenerator(
             IGenerator<TimeInterval> generator,
             string name = null)
-            : base(name ?? $"Coalesce<{generator.Name}>")
         {
             _generator = generator;
+            Name = name ?? $"Coalesce<{generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate) => Generate(fromDate, DateTime.MaxValue);
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate, DateTime toDate)
         {
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
             if (!enumerator.MoveNext())
@@ -27,21 +30,49 @@ namespace Cervel.TimeParser.TimeIntervals
             var start = current.Start;
             var end = current.End;
 
+            if (start >= toDate)
+                yield break;
+            else if (end >= toDate)
+            {
+                yield return new TimeInterval(start, toDate);
+                yield break;
+            } 
+
             while (enumerator.MoveNext())
             {
                 current = enumerator.Current;
 
                 if (current.Start < start)
+                {
                     throw new Exception("TimeIntervals must be sorted by increasing Start.");
-
+                }
                 else if (current.Start > end)
                 {
                     yield return new TimeInterval(start, end);
-                    start = current.Start;
-                    end = current.End;
+
+                    if (current.Start >= toDate)
+                        yield break;
+                    else if (current.End >= toDate)
+                    {
+                        yield return new TimeInterval(current.Start, toDate);
+                        yield break;
+                    } 
+                    else
+                    {
+                        start = current.Start;
+                        end = current.End;
+                    }
                 }
                 else
-                    end = current.End > end ? current.End : end;  // max
+                {
+                    if (current.End >= toDate)
+                    {
+                        yield return new TimeInterval(start, toDate);
+                        yield break;
+                    } 
+                    else
+                        end = current.End > end ? current.End : end;  // max
+                }
             }
 
             yield return new TimeInterval(start, end);

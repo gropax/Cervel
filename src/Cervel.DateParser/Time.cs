@@ -80,7 +80,7 @@ namespace Cervel.TimeParser
         /// <summary>
         /// Premier jour-date de chaque mois (mois-date)
         /// </summary>
-        public static IGenerator<DateTime> StartOfEveryMonth() => StartOfCurrentMonth().Monthly($"EverySOMonth");
+        public static IGenerator<DateTime> StartOfEveryMonth() => StartOfCurrentMonth().Monthly($"StartOfEveryMonth");
 
         /// <summary>
         /// Premier jour-date du mois spécifié (peut avoir lieu dans le passé)
