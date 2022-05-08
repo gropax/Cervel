@@ -78,12 +78,12 @@ namespace Cervel.TimeParser.Extensions
 
         public static IGenerator<DateTime> Daily(this IGenerator<DateTime> generator)
         {
-            return new DailyGenerator().Since(generator);
+            return new FrequencyGenerator(new DayMeasure()).Since(generator);
         }
 
         public static IGenerator<DateTime> Weekly(this IGenerator<DateTime> generator)
         {
-            return Scope(new DailyGenerator(TimeSpan.FromDays(7)), generator.FirstToInfinity());
+            return Scope(new FrequencyGenerator(new DayMeasure(7)), generator.FirstToInfinity());
         }
 
         public static IGenerator<DateTime> YearlySince(
@@ -91,13 +91,13 @@ namespace Cervel.TimeParser.Extensions
             string name = null)
         {
             //return new YearlyGenerator().Scope(generator.FirstToInfinity());
-            return new YearlyGenerator().Since(generator, name ?? $"YearlySince<{generator.Name}>");
+            return new FrequencyGenerator(new YearMeasure()).Since(generator, name ?? $"YearlySince<{generator.Name}>");
         }
 
 
         public static IGenerator<TimeInterval> AllDay(this IGenerator<DateTime> generator)
         {
-            return generator.StartOfDay().ToIntervals(new DailyGenerator().Skip(1));
+            return generator.StartOfDay().ToIntervals(new FrequencyGenerator(new DayMeasure()).Skip(1));
         }
 
         public static IGenerator<TimeInterval> ToScopes(
@@ -144,7 +144,7 @@ namespace Cervel.TimeParser.Extensions
             this IGenerator<DateTime> generator,
             string name = null)
         {
-            return new MonthlyGenerator().Scope(generator.FirstToInfinity(), name ?? $"EveryMonth");
+            return new FrequencyGenerator(new MonthMeasure()).Scope(generator.FirstToInfinity(), name ?? $"EveryMonth");
         }
 
         public static IGenerator<TimeInterval> AllMonth(this IGenerator<DateTime> g) => Time.AllMonth(g);

@@ -41,7 +41,7 @@ namespace Cervel.TimeParser
         public static IGenerator<DateTime> Since(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new SinceGenerator(scope, generator);
         public static IGenerator<DateTime> Until(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new UntilGenerator(scope, generator);
 
-        public static IGenerator<TimeInterval> DayScopes() => new DailyGenerator().ToScopes(TimeSpan.FromDays(1));
+        public static IGenerator<TimeInterval> DayScopes() => new FrequencyGenerator(new DayMeasure()).ToScopes(TimeSpan.FromDays(1));
 
         public static IGenerator<TimeInterval> EveryDayOfWeekInterval(DayOfWeek dow)
         {
@@ -58,12 +58,12 @@ namespace Cervel.TimeParser
         /// Séquence de jour-dates espacés d'un mois
         /// </summary>
         /// <returns></returns>
-        public static IGenerator<DateTime> Monthly() => new MonthlyGenerator(name: "Monthly");
+        public static IGenerator<DateTime> Monthly() => new FrequencyGenerator(new MonthMeasure(), name: "Monthly");
 
         /// <summary>
         /// Séquence de jour-dates espacés d'un mois
         /// </summary>
-        public static IGenerator<DateTime> MonthesLater(int n) => new MonthlyGenerator().Skip(n, name: $"MonthesLater<{n}>");
+        public static IGenerator<DateTime> MonthesLater(int n) => Monthly().Skip(n, name: $"MonthesLater<{n}>");
 
         // NextStartOfMonth() -> le mois-date suivant
         public static IGenerator<DateTime> PrevStartOfMonth() => Start().StartOfMonth().First($"PrevSOMonth");

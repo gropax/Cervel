@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public abstract class FrequencyGenerator : DateTimeGenerator
+    public class FrequencyGenerator : DateTimeGenerator
     {
-        protected FrequencyGenerator(string name) : base(name) { }
+        private ITimeMeasure _timeMeasure;
+
+        public FrequencyGenerator(
+            ITimeMeasure timeMeasure,
+            string name = null)
+            : base(name ?? $"Freq<{timeMeasure.Name}>")
+        {
+            _timeMeasure = timeMeasure;
+        }
 
         public override IEnumerable<DateTime> Generate(DateTime fromDate)
         {
@@ -17,12 +25,10 @@ namespace Cervel.TimeParser.DateTimes
             while (date < DateTime.MaxValue)
             {
                 yield return date;
-                date = GetNext(date);
+                date = _timeMeasure.AddTo(date);
             }
 
             yield return DateTime.MaxValue;
         }
-
-        protected abstract DateTime GetNext(DateTime date);
     }
 }
