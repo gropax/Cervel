@@ -26,16 +26,21 @@ dateDist  // Point d'entrée du parsing des dates
 // ------------------------------------------------------------
 
 dayDateDist  // Appelée par `dayIntvDist`
-	: dayDateSince
-	;
-
-dayDateSince
-	: dayDateExpr since dayDateUntil
-	| dayDateUntil
+	: dayDateUntil
 	;
 
 dayDateUntil
-	: dayDateScoped until dayDateExpr
+	: dayDateSince until dayDateExpr
+	| dayDateSince
+	;
+
+dayDateSince
+	: dayDateExcept since dayDateExpr
+	| dayDateExcept
+	;
+
+dayDateExcept
+	: dayDateScoped SAUF dayIntvDist
 	| dayDateScoped
 	;
 
@@ -155,6 +160,7 @@ since : A PARTIR DE ;
 LPAR : '(' ;
 RPAR : ')' ;
 
+SAUF : 'sauf' | 'excepté' ;
 CHAQUE : 'chaque' ;
 JOUR : 'jour' | 'jours' | 'j' ;
 MOIS : 'mois' ;

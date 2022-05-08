@@ -94,8 +94,14 @@ namespace Cervel.TimeParser
                 _scope.DateGenerators.Set(Time.Until(gens[1], gens[0]));
         }
 
-        public override void EnterDayDateScoped(TimeExpressionV2Parser.DayDateScopedContext context)
+        public override void ExitDayDateExcept(TimeExpressionV2Parser.DayDateExceptContext context)
         {
+            if (context.children.Count > 1)
+            {
+                var dates = _scope.DateGenerators.ConsumeSingle();
+                var exception = _scope.IntervalGenerators.ConsumeSingle();
+                _scope.DateGenerators.Set(Time.Outside(exception, dates));
+            }
         }
 
         public override void ExitDayDateScoped(TimeExpressionV2Parser.DayDateScopedContext context)

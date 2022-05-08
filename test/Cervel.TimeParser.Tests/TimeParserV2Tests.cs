@@ -52,6 +52,7 @@ namespace Cervel.TimeParser.Tests
 
         [Theory]
         [InlineData("lundi")]
+        [InlineData("le lundi")]
         [InlineData("chaque lundi")]
         [InlineData("tous les lundis")]
         public void TestParse_Monday(string input)
@@ -362,6 +363,37 @@ namespace Cervel.TimeParser.Tests
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 1, 1, dayNumber: 6)),
+                intervals);
+        }
+
+
+        [Theory]
+        [InlineData("tous les jours sauf le mardi")]
+        public void TestParse_EveryDayExceptDayOfWeek(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
+            Assert.Equal(6, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 1),
+                    Day(2022, 1, 2),
+                    Day(2022, 1, 3),
+                    Day(2022, 1, 5),
+                    Day(2022, 1, 6),
+                    Day(2022, 1, 7)),
+                dates.Take(7));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DaysInterval(2022, 1, 1, dayNumber: 3),
+                    DaysInterval(2022, 1, 5, dayNumber: 3)),
                 intervals);
         }
 

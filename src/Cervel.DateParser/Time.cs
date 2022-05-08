@@ -42,6 +42,10 @@ namespace Cervel.TimeParser
         public static IGenerator<DateTime> Since(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new SinceGenerator(scope, generator);
         public static IGenerator<DateTime> Until(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new DateTimes.UntilGenerator(scope, generator);
 
+        public static IGenerator<TimeInterval> Complement(IGenerator<TimeInterval> g) => new ComplementGenerator(g);
+        public static IGenerator<DateTime> Inside(IGenerator<TimeInterval> scope, IGenerator<DateTime> generator) => new ScopeGenerator(scope, generator);
+        public static IGenerator<DateTime> Outside(IGenerator<TimeInterval> scope, IGenerator<DateTime> generator) => new ScopeGenerator(Complement(scope), generator);
+
         public static IGenerator<TimeInterval> DayScopes() => new FrequencyGenerator(new DayMeasure()).ToScopes(TimeSpan.FromDays(1));
 
         public static IGenerator<TimeInterval> EveryDayOfWeekInterval(DayOfWeek dow)

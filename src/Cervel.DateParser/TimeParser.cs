@@ -45,6 +45,7 @@ namespace Cervel.TimeParser
             var walker = new ParseTreeWalker();
             var context = contextSelector(parser);
             //var context = parser.timeSpans();
+            string tree = context.ToStringTree();
             walker.Walk(listener, context);
 
             if (context.exception != null)
@@ -53,7 +54,6 @@ namespace Cervel.TimeParser
             }
             else
             {
-                //string tree = context.ToStringTree();
                 var result = resultSelector(listener);
                 return new ParseResult<TResult>(input, true, result);
             }
