@@ -48,7 +48,7 @@ namespace Cervel.TimeParser
             string tree = context.ToStringTree();
             walker.Walk(listener, context);
 
-            if (context.exception != null)
+            if (context.exception != null || context.children.Count > 1)
             {
                 return new ParseResult<TResult>(input, false);
             }

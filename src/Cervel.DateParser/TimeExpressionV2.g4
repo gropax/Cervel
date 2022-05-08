@@ -67,7 +67,7 @@ dayOfWeekIter
 
 dayOfWeekExpr
 	: CHAQUE? dayOfWeek
-	| TOUT LE dayOfWeek
+	| TOUT? LE dayOfWeek
 	;
 
 dayOfWeek

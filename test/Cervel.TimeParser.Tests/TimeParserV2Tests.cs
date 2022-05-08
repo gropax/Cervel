@@ -375,7 +375,7 @@ namespace Cervel.TimeParser.Tests
             Assert.True(dateParseResult.IsSuccess);
 
             var dates = dateParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
-            Assert.Equal(6, dates.Length);
+            Assert.Equal(27, dates.Length);
             Assert.Equal(
                 Dates(
                     Day(2022, 1, 1),
@@ -384,7 +384,7 @@ namespace Cervel.TimeParser.Tests
                     Day(2022, 1, 5),
                     Day(2022, 1, 6),
                     Day(2022, 1, 7)),
-                dates.Take(7));
+                dates.Take(6));
 
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
@@ -393,7 +393,10 @@ namespace Cervel.TimeParser.Tests
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 1, 1, dayNumber: 3),
-                    DaysInterval(2022, 1, 5, dayNumber: 3)),
+                    DaysInterval(2022, 1, 5, dayNumber: 6),
+                    DaysInterval(2022, 1, 12, dayNumber: 6),
+                    DaysInterval(2022, 1, 19, dayNumber: 6),
+                    DaysInterval(2022, 1, 26, dayNumber: 6)),
                 intervals);
         }
 
