@@ -58,12 +58,12 @@ namespace Cervel.TimeParser
         /// Séquence de jour-dates espacés d'un mois
         /// </summary>
         /// <returns></returns>
-        public static IGenerator<DateTime> Monthly() => new FrequencyGenerator(new MonthMeasure(), name: "Monthly");
+        public static IGenerator<DateTime> Monthly(int n = 1) => new FrequencyGenerator(new MonthMeasure(n), name: n == 1 ? "Monthly" : $"Monthly({n})");
 
         /// <summary>
         /// Séquence de jour-dates espacés d'un mois
         /// </summary>
-        public static IGenerator<DateTime> MonthesLater(int n) => Monthly().Skip(n, name: $"MonthesLater<{n}>");
+        //public static IGenerator<DateTime> MonthesLater(int n) => Monthly(n).Skip(1, name: $"MonthesLater({n})");
 
         // NextStartOfMonth() -> le mois-date suivant
         public static IGenerator<DateTime> PrevStartOfMonth() => Start().StartOfMonth().First($"PrevSOMonth");
@@ -92,19 +92,20 @@ namespace Cervel.TimeParser
         ///     Attention ! Du fait de l'irrégularité des mois, un shift de mois peut générer des doublons
         ///     (e.g. le 30 et 31 janviers seront rapportés au 28 février). Il faut donc nettoyer le flux.
         /// </summary>
-        public static IGenerator<DateTime> ShiftMonth(IGenerator<DateTime> g, int shift) => throw new NotImplementedException();
+        public static IGenerator<DateTime> ShiftMonth(IGenerator<DateTime> g, int n) =>
+            g.Map(Maps.ShiftMonth(n), $"ShiftMonth({n})");
             
         /// <summary>
         /// Allonge une séquence de dates en intervalles d'une durée d'un mois
         /// </summary>
         public static IGenerator<TimeInterval> DuringMonthes(IGenerator<DateTime> g, int n) =>
-            g.ToIntervals(MonthesLater(n));
+            g.ToIntervals(new MonthMeasure(n));
 
         /// <summary>
         /// Return all month-intervals containing dates.
         /// </summary>
         public static IGenerator<TimeInterval> AllMonth(IGenerator<DateTime> g) =>
-            g.StartOfMonth().ToIntervals(MonthesLater(1));
+            g.StartOfMonth().ToIntervals(new MonthMeasure(1));
 
         public static IGenerator<DateTime> EveryMonth() => Start().StartOfMonth().Monthly();
         public static IGenerator<DateTime> Each(Month month) => Next(month).YearlySince();

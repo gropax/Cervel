@@ -97,7 +97,7 @@ namespace Cervel.TimeParser.Extensions
 
         public static IGenerator<TimeInterval> AllDay(this IGenerator<DateTime> generator)
         {
-            return generator.StartOfDay().ToIntervals(new FrequencyGenerator(new DayMeasure()).Skip(1));
+            return generator.StartOfDay().ToIntervals(new DayMeasure());
         }
 
         public static IGenerator<TimeInterval> ToScopes(
@@ -107,9 +107,10 @@ namespace Cervel.TimeParser.Extensions
         }
 
         public static IGenerator<TimeInterval> ToIntervals(
-            this IGenerator<DateTime> generator, IGenerator<DateTime> frequency)
+            this IGenerator<DateTime> generator,
+            ITimeMeasure timeMeasure)
         {
-            return new ToIntervalsGenerator(generator, frequency);
+            return new ToIntervalsGenerator(generator, timeMeasure);
         }
 
 

@@ -10,30 +10,45 @@ namespace Cervel.TimeParser.TimeIntervals
     public class ToIntervalsGenerator : TimeIntervalGenerator
     {
         private IGenerator<DateTime> _generator;
-        private IGenerator<DateTime> _frequency;
+        private ITimeMeasure _timeMeasure;
 
         public ToIntervalsGenerator(
             IGenerator<DateTime> generator,
-            IGenerator<DateTime> frequency,
+            ITimeMeasure timeMeasure,
             string name = null)
-            : base(name ?? $"ToInterval<{frequency.Name}, {generator.Name}>")
+            : base(name ?? $"ToInterval<{timeMeasure.Name}, {generator.Name}>")
         {
             _generator = generator;
-            _frequency = frequency;
+            _timeMeasure = timeMeasure;
         }
 
         public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
-            return _generator
-                .Generate(fromDate)
-                .Select(d => d.ToInterval(GetTimeSpan(d)))
-                .Disjunction();  // Necessary as generated intervals may overlapse
+            return GenerateIntervals(fromDate).Disjunction();  // Necessary as generated intervals may overlapse
         }
 
-        private TimeSpan GetTimeSpan(DateTime start)
+        public IEnumerable<TimeInterval> GenerateIntervals(DateTime fromDate)
         {
-            var end = _frequency.Generate(start).First();
-            return end - start;
+            foreach (var date in _generator.Generate(fromDate))
+                if (TryGetTimeInterval(date, out var interval))
+                    yield return interval;
+        }
+
+        public bool TryGetTimeInterval(DateTime date, out TimeInterval interval)
+        {
+            interval = default;
+            var translated = _timeMeasure.AddTo(date);
+
+            var cmp = date.CompareTo(translated);
+            if (cmp == 0)
+                return false;
+
+            if (cmp == -1)
+                interval = new TimeInterval(date, translated);
+            else if (cmp == 1)
+                interval = new TimeInterval(translated, date);
+
+            return true;
         }
     }
 }

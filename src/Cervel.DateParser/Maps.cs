@@ -20,6 +20,24 @@ namespace Cervel.TimeParser
 
         //public static StrictOrderPreservingMap<DateTime> ShiftDays<DateTime>(int n)
         //    => (ds) => ds.Select(d => d.Shift(TimeSpan.FromDays(n)));
+
+        public static StrictOrderPreservingMap<DateTime> ShiftDays(int n)
+        {
+            var timeMeasure = new DayMeasure(n);
+            return (ds) => ds.Select(d => timeMeasure.AddTo(d));
+        }
+
+        public static OrderPreservingMap<DateTime> ShiftMonth(int n)
+        {
+            var timeMeasure = new MonthMeasure(n);
+            return (ds) => ds.Select(d => timeMeasure.AddTo(d));
+        }
+
+        public static OrderPreservingMap<DateTime> ShiftYears(int n)
+        {
+            var timeMeasure = new YearMeasure(n);
+            return (ds) => ds.Select(d => timeMeasure.AddTo(d));
+        }
     }
 
 }
