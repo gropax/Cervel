@@ -147,6 +147,7 @@ RPAR : ')' ;
 
 CHAQUE : 'chaque' ;
 JOUR : 'jour' | 'jours' | 'j' ;
+MOIS : 'mois' ;
 TOUT : 'tout' | 'toute' | 'tous' | 'toutes' | 'tt' ;
 LE : 'le' | 'la' | 'les' | 'l' | 'l\'' ;
 A : 'a' | 'à' ;

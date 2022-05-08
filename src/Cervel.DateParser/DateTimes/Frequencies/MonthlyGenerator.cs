@@ -20,8 +20,8 @@ namespace Cervel.TimeParser.DateTimes
         protected override DateTime GetNext(DateTime date)
         {
             int virtMonth = date.Month + _factor;
-            int year = date.Year + virtMonth / 12;
-            int month = virtMonth % 12;
+            int year = date.Year + (virtMonth - 1) / 12;
+            int month = (virtMonth - 1) % 12 + 1;
             var daysInMonth = DateTime.DaysInMonth(year, month);
             return new DateTime(year, month, Math.Min(date.Day, daysInMonth));
         }

@@ -42,7 +42,7 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022);
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 1, 1, dayNumber: 31)),
@@ -82,7 +82,7 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022);
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
             Assert.Equal(
                 Intervals(
                     DayInterval(2022, 1, 3),
@@ -124,7 +124,7 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022);
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 1, 3, dayNumber: 2),
@@ -161,7 +161,7 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022);
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 1, 6, dayNumber: 26)),
@@ -190,7 +190,7 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022);
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 1, 1, dayNumber: 6)),
@@ -198,6 +198,36 @@ namespace Cervel.TimeParser.Tests
         }
 
 
+
+        [Theory]
+        [InlineData("chaque mois")]
+        [InlineData("tous les mois")]
+        //[InlineData("((chaque jour))")]
+        public void TestParse_EveryMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(12, dates.Count());
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 1),
+                    Day(2022, 2, 1),
+                    Day(2022, 3, 1),
+                    Day(2022, 4, 1),
+                    Day(2022, 5, 1)),
+                dates.Take(5));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Intervals(
+                    Interval(Day(2022, 1, 1), Day(2023, 1, 1))),
+                intervals);
+        }
 
         [Theory]
         [InlineData("mars")]
@@ -215,10 +245,36 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023);
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 3, 1, dayNumber: 31)),
+                intervals);
+        }
+
+        [Theory]
+        [InlineData("mars, avril et juillet")]
+        public void TestParse_MultipleMonthes(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 3, 1),
+                    Day(2022, 4, 1),
+                    Day(2022, 7, 1)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DaysInterval(2022, 3, 1, dayNumber: 61),
+                    DaysInterval(2022, 7, 1, dayNumber: 31)),
                 intervals);
         }
     }

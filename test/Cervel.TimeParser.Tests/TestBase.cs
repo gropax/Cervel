@@ -18,6 +18,7 @@ namespace Cervel.TimeParser.Tests
         protected DateTime Day(int year, int month, int day, int hour, int minute, int second) => new DateTime(year, month, day, hour, minute, second);
 
         protected TimeInterval[] Intervals(params TimeInterval[] timeSpans) => timeSpans;
+        protected TimeInterval Interval(DateTime start, DateTime end) => new TimeInterval(start, end);
 
         protected TimeInterval DayInterval(int year, int month, int day) => DaysInterval(year, month, day, 1);
 

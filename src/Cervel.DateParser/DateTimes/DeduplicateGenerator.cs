@@ -13,7 +13,7 @@ namespace Cervel.TimeParser.DateTimes
         public DeduplicateGenerator(
             IGenerator<DateTime> generator,
             string name = null)
-            : base(name ?? $"Dedup<>")
+            : base(name ?? $"Dedup<{generator.Name}>")
         {
             _generator = generator;
         }

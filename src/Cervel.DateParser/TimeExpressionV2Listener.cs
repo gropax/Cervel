@@ -74,6 +74,13 @@ namespace Cervel.TimeParser
         public override void ExitSaturday(TimeExpressionV2Parser.SaturdayContext context) => _daysOfWeek.Add(DayOfWeek.Saturday);
         public override void ExitSunday(TimeExpressionV2Parser.SundayContext context) => _daysOfWeek.Add(DayOfWeek.Sunday);
 
+
+
+        public override void ExitEveryMonth(TimeExpressionV2Parser.EveryMonthContext context)
+        {
+            _dateGenerators.Add(Time.EveryMonth());
+        }
+
         public override void ExitMonthNameUnion(TimeExpressionV2Parser.MonthNameUnionContext context)
         {
             var monthGens = _monthNames.Consume().Distinct()
