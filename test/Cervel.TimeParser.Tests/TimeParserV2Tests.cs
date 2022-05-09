@@ -338,6 +338,7 @@ namespace Cervel.TimeParser.Tests
         }
 
         [Theory]
+        [InlineData("chaque jour jusqu'à vendredi")]
         [InlineData("chaque jour jusqu a vendredi")]
         public void TestParse_EveryDayUntil(string input)
         {

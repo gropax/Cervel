@@ -26,7 +26,7 @@ namespace Cervel.Web.Controllers
         {
             var parser = new TimeParser.TimeParser();
 
-            var result = parser.ParseTimeIntervals(timeExpr);
+            var result = parser.ParseTimeIntervals(timeExpr, parserVersion: 2);
 
             var intervals = result.IsSuccess
                 ? result.Value.Generate(_fromDate, _toDate).ToArray()

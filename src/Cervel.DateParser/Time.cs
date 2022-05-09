@@ -63,9 +63,24 @@ namespace Cervel.TimeParser
         #region Interval related combinators
 
         public static IGenerator<TimeInterval> Coalesce(IGenerator<TimeInterval> g) => new CoalesceGenerator(g);
+        public static QuantizeGenerator Quantize(ITimeMeasure timeMeasure, IGenerator<TimeInterval> g) =>
+            new QuantizeGenerator(timeMeasure, g);
 
         #endregion
 
+        #region Day related methods
+
+        public static IGenerator<DateTime> Frequency(ITimeMeasure timeMeasure) => new FrequencyGenerator(timeMeasure);
+
+        /// <summary>
+        /// Séquence de jour-dates espacés d'un mois
+        /// </summary>
+        /// <returns></returns>
+        public static IGenerator<DateTime> Daily(int n = 1) => new FrequencyGenerator(new DayMeasure(n), name: n == 1 ? "Daily" : $"Daily({n})");
+
+        public static IGenerator<TimeInterval> ToPartition(IGenerator<DateTime> g) => new ToPartitionGenerator(g);
+
+        #endregion
 
         #region Month related methods
 

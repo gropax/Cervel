@@ -76,6 +76,8 @@ namespace Cervel.TimeParser.Extensions
             return generator.Map(Maps.Filter<DateTime>(d => d.DayOfWeek == dow));
         }
 
+        public static IGenerator<TimeInterval> ToPartition(this IGenerator<DateTime> g) => new ToPartitionGenerator(g);
+
         public static IGenerator<DateTime> Daily(this IGenerator<DateTime> generator)
         {
             return new FrequencyGenerator(new DayMeasure()).Since(generator);
