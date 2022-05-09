@@ -13,10 +13,10 @@ namespace Cervel.TimeParser.TimeIntervals.Tests
         public void TestGenerate()
         {
             var generator = Generator(
-                DaysInterval(2022, 3, 5, dayNumber: 5),
-                DaysInterval(2022, 3, 15, dayNumber: 5),
-                DaysInterval(2022, 3, 25, dayNumber: 10),
-                DaysInterval(2022, 4, 25, dayNumber: 40),
+                DaysInterval(2022, 3, 5, dayNumber: 5),
+                DaysInterval(2022, 3, 15, dayNumber: 5),
+                DaysInterval(2022, 3, 25, dayNumber: 10),
+                DaysInterval(2022, 4, 25, dayNumber: 40),
                 DaysInterval(2022, 6, 15, dayNumber: 5));
 
             var quantizeGen = new QuantizeGenerator(new MonthMeasure(), generator);
