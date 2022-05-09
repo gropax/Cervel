@@ -19,7 +19,7 @@ namespace Cervel.TimeParser.Tests
 
         #region Dates
 
-        #region Dates spéciales
+        #region Dates spÃ©ciales
         #region DateTimes "jamais"
         [Theory]
         [InlineData("jamais")]
@@ -50,7 +50,7 @@ namespace Cervel.TimeParser.Tests
 
         #endregion
 
-        #region Dates relatives à aujourd'hui
+        #region Dates relatives Ã  aujourd'hui
         #region DateTimes "il y a N jours"
         [Theory]
         [InlineData("il y a 3 jour")]
@@ -130,11 +130,11 @@ namespace Cervel.TimeParser.Tests
         }
         #endregion
 
-        #region DateTimes "après-demain"
+        #region DateTimes "aprÃ¨s-demain"
         [Theory]
-        [InlineData("après-demain")]
-        [InlineData("après demain")]
-        [InlineData("aprés demain")]
+        [InlineData("aprÃ¨s-demain")]
+        [InlineData("aprÃ¨s demain")]
+        [InlineData("aprÃ©s demain")]
         [InlineData("ap dem")]
         public void Test_ParseDateTimes_DayAfterTomorrow(string input)
         {
@@ -391,7 +391,7 @@ namespace Cervel.TimeParser.Tests
         [InlineData("le lendemain de chaque lundi")]
         [InlineData("le lendem de ch lun")]
         [InlineData("le lend de ch lun")]
-        //[InlineData("le jour d'après chaque lundi")]
+        //[InlineData("le jour d'aprÃ¨s chaque lundi")]
         //[InlineData("le j d ap ch lun")]
         public void Test_ParseDateTimes_TheDayAfter(string input)
         {
@@ -428,9 +428,9 @@ namespace Cervel.TimeParser.Tests
         }
         #endregion
 
-        #region DateTimes "N jours après"
+        #region DateTimes "N jours aprÃ¨s"
         [Theory]
-        [InlineData("3 jours après chaque lundi")]
+        [InlineData("3 jours aprÃ¨s chaque lundi")]
         [InlineData("3 j ap ch lun")]
         public void Test_ParseDateTimes_NDaysAfter(string input)
         {
@@ -447,9 +447,9 @@ namespace Cervel.TimeParser.Tests
         }
         #endregion
 
-        #region Séquence de plusieurs shifts
+        #region SÃ©quence de plusieurs shifts
         [Theory]
-        [InlineData("3 jours avant le surlendemain de la veille de 2 jours après demain")]
+        [InlineData("3 jours avant le surlendemain de la veille de 2 jours aprÃ¨s demain")]
         public void Test_ParseDateTimes_ShiftSequence(string input)
         {
             var result = _timeParser.ParseDateTimes(input);

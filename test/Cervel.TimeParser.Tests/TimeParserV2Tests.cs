@@ -309,8 +309,8 @@ namespace Cervel.TimeParser.Tests
         }
 
         [Theory]
-        [InlineData("chaque jour à partir de jeudi")]
-        //[InlineData("(chaque jour (à partir de (jeudi)))")]
+        [InlineData("chaque jour Ã  partir de jeudi")]
+        //[InlineData("(chaque jour (Ã  partir de (jeudi)))")]
         public void TestParse_EveryDayFrom(string input)
         {
             var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
@@ -338,7 +338,7 @@ namespace Cervel.TimeParser.Tests
         }
 
         [Theory]
-        [InlineData("chaque jour jusqu'à vendredi")]
+        [InlineData("chaque jour jusqu'Ã  vendredi")]
         [InlineData("chaque jour jusqu a vendredi")]
         public void TestParse_EveryDayUntil(string input)
         {
@@ -436,17 +436,17 @@ namespace Cervel.TimeParser.Tests
 
         [Theory]
         [InlineData("janvier", Month.January)]
-        [InlineData("février", Month.February)]
+        [InlineData("fÃ©vrier", Month.February)]
         [InlineData("mars", Month.March)]
         [InlineData("avril", Month.April)]
         [InlineData("mai", Month.May)]
         [InlineData("juin", Month.June)]
         [InlineData("juillet", Month.July)]
-        [InlineData("août", Month.August)]
+        [InlineData("aoÃ»t", Month.August)]
         [InlineData("septembre", Month.September)]
         [InlineData("octobre", Month.October)]
         [InlineData("novembre", Month.November)]
-        [InlineData("décembre", Month.December)]
+        [InlineData("dÃ©cembre", Month.December)]
         public void TestParse_MonthByName(string input, Month month)
         {
             int monthIdx = (int)month;
