@@ -63,7 +63,7 @@ namespace Cervel.TimeParser
         #region Interval related combinators
 
         public static IGenerator<TimeInterval> Coalesce(IGenerator<TimeInterval> g) => new CoalesceGenerator(g);
-        public static QuantizeGenerator Quantize(ITimeMeasure timeMeasure, IGenerator<TimeInterval> g) =>
+        public static IGenerator<TimeInterval<double>> Quantize(ITimeMeasure timeMeasure, IGenerator<TimeInterval> g) =>
             new QuantizeGenerator(timeMeasure, g);
 
         #endregion

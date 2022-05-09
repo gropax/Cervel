@@ -49,6 +49,8 @@ namespace Cervel.TimeParser
             Value = value;
         }
 
+        public TimeSpan Length => End - Start;
+
         public override string ToString()
         {
             return $"[{Start}, {End}, {Value}]";

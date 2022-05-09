@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class QuantizeGenerator
+    public class QuantizeGenerator : IGenerator<TimeInterval<double>>
     {
         public string Name { get; }
         private IGenerator<TimeInterval> _partition;
@@ -91,13 +91,29 @@ namespace Cervel.TimeParser.TimeIntervals
                 }
             }
 
-
             do
             {
                 quant = quantEnum.Current;
                 yield return new TimeInterval<double>(quant.Start, quant.End, intersection / quant.Length);
                 intersection = TimeSpan.Zero;
             } while (quantEnum.MoveNext());
+        }
+
+        public IEnumerable<TimeInterval<double>> Generate(DateTime fromDate, DateTime toDate)
+        {
+            var enumerator = Generate(fromDate).GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current.End < toDate)
+                    yield return enumerator.Current;
+                else
+                {
+                    if (enumerator.Current.Start < toDate)
+                        yield return new TimeInterval<double>(enumerator.Current.Start, toDate, enumerator.Current.Value);
+
+                    yield break;
+                }
+            }
         }
     }
 }

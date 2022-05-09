@@ -28,5 +28,8 @@ namespace Cervel.TimeParser.Extensions
         }
 
         public static IGenerator<TimeInterval> Coalesce(this IGenerator<TimeInterval> g) => Time.Coalesce(g);
+
+        public static IGenerator<TimeInterval<double>> Quantize(this IGenerator<TimeInterval> g, ITimeMeasure timeMeasure) =>
+            Time.Quantize(timeMeasure, g);
     }
 }

@@ -51,17 +51,47 @@ namespace Cervel.Web.Controllers
             var highlightDict = new Dictionary<int, Dictionary<int, Dictionary<int, HighlightDto[]>>>();
 
             var dayCuts = generator
-                .ToFuzzy()
-                .Split(Time.DayScopes())
+                .Quantize(new DayMeasure())
                 .Generate(_fromDate, _toDate)
                 .ToArray();
 
             foreach (var dayCut in dayCuts)
-            {
-                AddDayHighlight(highlightDict, dayCut.ToArray());
-            }
+                AddDayHighlight(highlightDict, dayCut);
 
             return highlightDict;
+        }
+
+        private void AddDayHighlight(
+            Dictionary<int, Dictionary<int, Dictionary<int, HighlightDto[]>>> highlightDict,
+            TimeInterval<double> i)
+        {
+            double value = i.Value > 0 ? 1 : 0;
+            if (value == 0)
+                return;
+
+            var highlights = new HighlightDto[]
+            {
+                new HighlightDto()
+                {
+                    Fraction = 1,
+                    StartValue = value,
+                    EndValue = value,
+                },
+            };
+
+            if (!highlightDict.TryGetValue(i.Start.Year, out var yearHighlights))
+            {
+                yearHighlights = new Dictionary<int, Dictionary<int, HighlightDto[]>>();
+                highlightDict[i.Start.Year] = yearHighlights;
+            }
+
+            if (!yearHighlights.TryGetValue(i.Start.Month, out var monthHighlights))
+            {
+                monthHighlights = new Dictionary<int, HighlightDto[]>();
+                yearHighlights[i.Start.Month] = monthHighlights;
+            }
+
+            monthHighlights[i.Start.Day] = highlights;
         }
 
         private void AddDayHighlight(
