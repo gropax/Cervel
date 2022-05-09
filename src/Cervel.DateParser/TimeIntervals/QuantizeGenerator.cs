@@ -23,10 +23,10 @@ namespace Cervel.TimeParser.TimeIntervals
             Name = name ?? $"Quantize({timeMeasure.Name})<{generator.Name}>";
         }
 
-        public IEnumerable<TimeInterval<double>> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval<double>> Generate(DateTime fromDate, DateTime toDate)
         {
-            var enumerator = _generator.Generate(fromDate).GetEnumerator();
-            var quantEnum = _partition.Generate(fromDate).GetEnumerator();
+            var enumerator = _generator.Generate(fromDate, toDate).GetEnumerator();
+            var quantEnum = _partition.Generate(fromDate, toDate).GetEnumerator();
 
             if (!quantEnum.MoveNext())
                 yield break;
@@ -99,21 +99,6 @@ namespace Cervel.TimeParser.TimeIntervals
             } while (quantEnum.MoveNext());
         }
 
-        public IEnumerable<TimeInterval<double>> Generate(DateTime fromDate, DateTime toDate)
-        {
-            var enumerator = Generate(fromDate).GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                if (enumerator.Current.End < toDate)
-                    yield return enumerator.Current;
-                else
-                {
-                    if (enumerator.Current.Start < toDate)
-                        yield return new TimeInterval<double>(enumerator.Current.Start, toDate, enumerator.Current.Value);
-
-                    yield break;
-                }
-            }
-        }
+        public IEnumerable<TimeInterval<double>> Generate(DateTime fromDate) => Generate(fromDate, DateTime.MaxValue);
     }
 }
