@@ -36,7 +36,9 @@ namespace Cervel.TimeParser
             Func<TimeExpressionV2Parser, ParserRuleContext> contextSelector,
             Func<TimeExpressionV2Listener, TResult> resultSelector)
         {
-            var inputStream = new AntlrInputStream(input);
+            var trimmedInput = input.Trim();
+
+            var inputStream = new AntlrInputStream(trimmedInput);
             var lexer = new TimeExpressionV2Lexer(inputStream);
             var commonTokenStream = new CommonTokenStream(lexer);
             var parser = new TimeExpressionV2Parser(commonTokenStream);
@@ -48,7 +50,8 @@ namespace Cervel.TimeParser
             string tree = context.ToStringTree();
             walker.Walk(listener, context);
 
-            if (context.exception != null || context.children.Count > 1)
+            bool completelyParsed = context.Start.StartIndex == 0 && context.Stop.StopIndex == trimmedInput.Length - 1;
+            if (context.exception != null || !completelyParsed)
             {
                 return new ParseResult<TResult>(input, false);
             }
