@@ -36,6 +36,7 @@ dayDateUntil
 
 dayDateSince
 	: dayDateExcept since dayDateExpr
+	| dayDateExcept since monthDateExpr
 	| dayDateExcept
 	;
 
