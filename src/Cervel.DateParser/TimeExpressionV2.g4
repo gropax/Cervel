@@ -59,8 +59,8 @@ dayDateScoped
 dayDateExpr
 	: everyDay
 	| dayOfWeekUnion
-	| dayOfMonthInMonth
-	| dayOfWeekOfMonthInMonth
+	| dayOfMonthUnion
+	| dayOfWeekOfMonthUnion
 	;
 
 everyDay
@@ -96,11 +96,6 @@ thursday : 'jeudi' | 'jeudis' | 'jeu' | 'je' ;
 friday : 'vendredi' | 'vendredis' | 'ven' | 've' ;
 saturday : 'samedi' | 'samedis' | 'sam' | 'sa' ;
 sunday : 'dimanche' | 'dimanches' | 'dim' | 'di' ;
-
-dayOfMonthInMonth
-	: dayOfMonthUnion DE? monthDateExpr
-	| dayOfMonthUnion
-	;
 
 dayOfMonthUnion : dayOfMonthIter ;
 dayOfMonthIter
@@ -153,11 +148,6 @@ number28 : '28' | 'vingt huit' ;
 number29 : '29' | 'vingt neuf' ;
 number30 : '30' | 'trente' ;
 number31 : '31' | 'trente et un' ;
-
-dayOfWeekOfMonthInMonth
-	: dayOfWeekOfMonthUnion DE? monthDateExpr
-	| dayOfWeekOfMonthUnion
-	;
 
 dayOfWeekOfMonthUnion : dayOfWeekOfMonthIter ;
 dayOfWeekOfMonthIter

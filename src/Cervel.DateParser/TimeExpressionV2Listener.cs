@@ -155,15 +155,6 @@ namespace Cervel.TimeParser
         public override void ExitSunday(TimeExpressionV2Parser.SundayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Sunday);
 
 
-        public override void ExitDayOfMonthInMonth(TimeExpressionV2Parser.DayOfMonthInMonthContext context)
-        {
-            var gens = _scope.DateGenerators.Consume();
-            if (gens.Length > 1)
-                _scope.DateGenerators.Add(Time.Scope(gens[1].ToIntervals(new MonthMeasure()), gens[0]));
-            else
-                _scope.DateGenerators.Add(gens.Single());
-        }
-
         public override void ExitDayOfMonthUnion(TimeExpressionV2Parser.DayOfMonthUnionContext context)
         {
             var domGens = _scope.DaysOfMonth.Consume().Distinct()
@@ -210,15 +201,6 @@ namespace Cervel.TimeParser
         public override void ExitNumber31(TimeExpressionV2Parser.Number31Context context) => _scope.DaysOfMonth.Add(31);
 
         #endregion
-
-        public override void ExitDayOfWeekOfMonthInMonth(TimeExpressionV2Parser.DayOfWeekOfMonthInMonthContext context)
-        {
-            var gens = _scope.DateGenerators.Consume();
-            if (gens.Length > 1)
-                _scope.DateGenerators.Add(Time.Scope(gens[1].ToIntervals(new MonthMeasure()), gens[0]));
-            else
-                _scope.DateGenerators.Add(gens.Single());
-        }
 
         public override void ExitDayOfWeekOfMonthUnion(TimeExpressionV2Parser.DayOfWeekOfMonthUnionContext context)
         {
