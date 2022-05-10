@@ -12,6 +12,7 @@ namespace Cervel.TimeParser.Tests
         private DateTime _jan1st2023 = new DateTime(2023, 1, 1);
         private DateTime _jan1st2027 = new DateTime(2027, 1, 1);
         private DateTime _feb1st2022 = new DateTime(2022, 2, 1);
+        private DateTime _mar1st2022 = new DateTime(2022, 3, 1);
         private DateTime _now = new DateTime(2022, 1, 1, 10, 30, 0);
 
         public TimeParserV2Tests()
@@ -266,6 +267,7 @@ namespace Cervel.TimeParser.Tests
 
         #endregion
 
+        #region Opérateur ET
 
         [Theory]
         [InlineData("lundi, mardi et vendredi")]
@@ -311,6 +313,41 @@ namespace Cervel.TimeParser.Tests
                     DayInterval(2022, 1, 31)),
                 intervals);
         }
+
+        [Theory]
+        [InlineData("le 5, le 11 et le 13")]
+        public void TestParse_MultipleDaysOfMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _mar1st2022).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 5),
+                    Day(2022, 1, 11),
+                    Day(2022, 1, 13),
+                    Day(2022, 2, 5),
+                    Day(2022, 2, 11),
+                    Day(2022, 2, 13)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _mar1st2022).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, 5),
+                    DayInterval(2022, 1, 11),
+                    DayInterval(2022, 1, 13),
+                    DayInterval(2022, 2, 5),
+                    DayInterval(2022, 2, 11),
+                    DayInterval(2022, 2, 13)),
+                intervals);
+        }
+
+        #endregion
 
         #region Jours dans le mois
 
