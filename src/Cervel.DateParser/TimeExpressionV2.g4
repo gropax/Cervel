@@ -98,10 +98,45 @@ dayOfMonthIter
 
 dayOfMonthExpr : LE? dayOfMonth ;
 dayOfMonth
-	: number1
-	;
+	: number1 | number2 | number3 | number4 | number5
+	| number6 | number7 | number8 | number9 | number10
+	| number11 | number12 | number13 | number14 | number15
+	| number16 | number17 | number18 | number19 | number20
+	| number20 | number21 | number22 | number23 | number24
+	| number25 | number26 | number27 | number28 | number29
+	| number30 | number31 ;
 
-number1 : '1' | '1er' | '1e' | 'premier' | 'prem' ;
+number1 : '1' | '1er' | '1e' | 'premier' ;
+number2 : '2' | 'deux' ;
+number3 : '3' | 'trois' ;
+number4 : '4' | 'quatre' ;
+number5 : '5' | 'cinq' ;
+number6 : '6' | 'six' ;
+number7 : '7' | 'sept' ;
+number8 : '8' | 'huit' ;
+number9 : '9' | 'neuf' ;
+number10 : '10' | 'dix' ;
+number11 : '11' | 'onze' ;
+number12 : '12' | 'douze' ;
+number13 : '13' | 'treize' ;
+number14 : '14' | 'quatorze' ;
+number15 : '15' | 'quinze' ;
+number16 : '16' | 'seize' ;
+number17 : '17' | 'dix sept' ;
+number18 : '18' | 'dix huit' ;
+number19 : '19' | 'dix neuf' ;
+number20 : '20' | 'vingt' ;
+number21 : '21' | 'vingt et un' ;
+number22 : '22' | 'vingt deux' ;
+number23 : '23' | 'vingt trois' ;
+number24 : '24' | 'vingt quatre' ;
+number25 : '25' | 'vingt cinq' ;
+number26 : '26' | 'vingt six' ;
+number27 : '27' | 'vingt sept' ;
+number28 : '28' | 'vingt huit' ;
+number29 : '29' | 'vingt neuf' ;
+number30 : '30' | 'trente' ;
+number31 : '31' | 'trente et un' ;
 
 
 // ------------------------------------------------------------
