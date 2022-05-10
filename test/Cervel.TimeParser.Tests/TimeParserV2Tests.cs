@@ -702,7 +702,32 @@ namespace Cervel.TimeParser.Tests
         }
 
         [Theory]
-        [InlineData("le vendredi 13 mai et le jeudi 3 novembre")]
+        [InlineData("le vendredi 13 et le dimanche 15 mai")]
+        public void TestParse_MultipleLevelOfDaysOfWeekOfMonthInMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 5, 13),
+                    Day(2022, 5, 15)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 5, 13),
+                    DayInterval(2022, 5, 15)),
+                intervals);
+        }
+
+        [Theory]
+        [InlineData("le vendredi 13 et le dimanche 15 mai et le jeudi 3 novembre")]
         public void TestParse_MultipleDaysOfWeekOfMonthInMonth(string input)
         {
             var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
@@ -712,6 +737,7 @@ namespace Cervel.TimeParser.Tests
             Assert.Equal(
                 Dates(
                     Day(2022, 5, 13),
+                    Day(2022, 5, 15),
                     Day(2022, 11, 3)),
                 dates);
 
@@ -722,6 +748,7 @@ namespace Cervel.TimeParser.Tests
             Assert.Equal(
                 Intervals(
                     DayInterval(2022, 5, 13),
+                    DayInterval(2022, 5, 15),
                     DayInterval(2022, 11, 3)),
                 intervals);
         }

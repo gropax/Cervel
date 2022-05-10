@@ -54,7 +54,7 @@ dayDateExpr
 	: everyDay
 	| dayOfWeekUnion
 	| dayOfMonthInMonth
-	| dayOfWeekOfMonthUnion
+	| dayOfWeekOfMonthInMonth
 	;
 
 everyDay
@@ -148,6 +148,10 @@ number29 : '29' | 'vingt neuf' ;
 number30 : '30' | 'trente' ;
 number31 : '31' | 'trente et un' ;
 
+dayOfWeekOfMonthInMonth
+	: dayOfWeekOfMonthUnion DE? monthDateExpr
+	| dayOfWeekOfMonthUnion
+	;
 
 dayOfWeekOfMonthUnion : dayOfWeekOfMonthIter ;
 dayOfWeekOfMonthIter

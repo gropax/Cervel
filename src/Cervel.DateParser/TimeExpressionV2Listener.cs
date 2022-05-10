@@ -195,6 +195,15 @@ namespace Cervel.TimeParser
 
         #endregion
 
+        public override void ExitDayOfWeekOfMonthInMonth(TimeExpressionV2Parser.DayOfWeekOfMonthInMonthContext context)
+        {
+            var gens = _scope.DateGenerators.Consume();
+            if (gens.Length > 1)
+                _scope.DateGenerators.Add(Time.Scope(gens[1].ToIntervals(new MonthMeasure()), gens[0]));
+            else
+                _scope.DateGenerators.Add(gens.Single());
+        }
+
         public override void ExitDayOfWeekOfMonthUnion(TimeExpressionV2Parser.DayOfWeekOfMonthUnionContext context)
         {
             var domGens = _scope.DateGenerators.Consume();
