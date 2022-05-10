@@ -414,6 +414,78 @@ namespace Cervel.TimeParser.Tests
                 intervals.Take(5));
         }
 
+        [Theory]
+        [InlineData("le 29", 29)]
+        [InlineData("le vingt-neuf", 29)]
+        [InlineData("le vingt neuf", 29)]
+        [InlineData("le 30", 30)]
+        [InlineData("le trente", 30)]
+        public void TestParse_Day29InMonth(string input, int day)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(11, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, day),
+                    Day(2022, 3, day),
+                    Day(2022, 4, day),
+                    Day(2022, 5, day),
+                    Day(2022, 6, day)),
+                dates.Take(5));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(11, dates.Length);
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, day),
+                    DayInterval(2022, 3, day),
+                    DayInterval(2022, 4, day),
+                    DayInterval(2022, 5, day),
+                    DayInterval(2022, 6, day)),
+                intervals.Take(5));
+        }
+
+        [Theory]
+        [InlineData("le 31")]
+        [InlineData("le trente-et-un")]
+        [InlineData("le trente et un")]
+        public void TestParse_Day31InMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(7, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 31),
+                    Day(2022, 3, 31),
+                    Day(2022, 5, 31),
+                    Day(2022, 7, 31),
+                    Day(2022, 8, 31)),
+                dates.Take(5));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(7, dates.Length);
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, 31),
+                    DayInterval(2022, 3, 31),
+                    DayInterval(2022, 5, 31),
+                    DayInterval(2022, 7, 31),
+                    DayInterval(2022, 8, 31)),
+                intervals.Take(5));
+        }
+
         #endregion
 
         #region jour à partir de
