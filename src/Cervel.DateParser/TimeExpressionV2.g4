@@ -53,7 +53,7 @@ dayDateScoped
 dayDateExpr
 	: everyDay
 	| dayOfWeekUnion
-	| dayOfMonthUnion
+	| dayOfMonthInMonth
 	| dayOfWeekOfMonthUnion
 	;
 
@@ -90,6 +90,11 @@ thursday : 'jeudi' | 'jeudis' | 'jeu' | 'je' ;
 friday : 'vendredi' | 'vendredis' | 'ven' | 've' ;
 saturday : 'samedi' | 'samedis' | 'sam' | 'sa' ;
 sunday : 'dimanche' | 'dimanches' | 'dim' | 'di' ;
+
+dayOfMonthInMonth
+	: dayOfMonthUnion DE? monthDateExpr
+	| dayOfMonthUnion
+	;
 
 dayOfMonthUnion : dayOfMonthIter ;
 dayOfMonthIter
