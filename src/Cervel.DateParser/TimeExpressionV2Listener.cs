@@ -186,6 +186,22 @@ namespace Cervel.TimeParser
 
         #endregion
 
+        public override void ExitDayOfWeekOfMonthUnion(TimeExpressionV2Parser.DayOfWeekOfMonthUnionContext context)
+        {
+            var domGens = _scope.DateGenerators.Consume();
+            if (domGens.Length > 1)
+                _scope.DateGenerators.Add(Time.Union(domGens));
+            else
+                _scope.DateGenerators.Add(domGens.Single());
+        }
+
+        public override void ExitDayOfWeekOfMonthExpr(TimeExpressionV2Parser.DayOfWeekOfMonthExprContext context)
+        {
+            var dayOfWeek = _scope.DaysOfWeek.ConsumeSingle();
+            var dayOfMonth = _scope.DaysOfMonth.ConsumeSingle();
+            _scope.DateGenerators.Add(Time.Each(dayOfMonth).Where(dayOfWeek));
+        }
+
 
         public override void ExitEveryMonth(TimeExpressionV2Parser.EveryMonthContext context)
         {

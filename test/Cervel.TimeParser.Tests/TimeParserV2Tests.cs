@@ -51,7 +51,7 @@ namespace Cervel.TimeParser.Tests
                 intervals);
         }
 
-        #region lundi, mardi…
+        #region DaysOfWeek (lundi, mardi…)
 
         [Theory]
         [InlineData("lundi")]
@@ -267,89 +267,7 @@ namespace Cervel.TimeParser.Tests
 
         #endregion
 
-        #region Opérateur ET
-
-        [Theory]
-        [InlineData("lundi, mardi et vendredi")]
-        //[InlineData("((lundi, mardi et vendredi))")]
-        public void TestParse_MultipleDaysOfWeek(string input)
-        {
-            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
-            Assert.True(dateParseResult.IsSuccess);
-
-            var dates = dateParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
-            Assert.Equal(13, dates.Count());
-            Assert.Equal(
-                Dates(
-                    Day(2022, 1, 3),
-                    Day(2022, 1, 4),
-                    Day(2022, 1, 7),
-                    Day(2022, 1, 10),
-                    Day(2022, 1, 11),
-                    Day(2022, 1, 14),
-                    Day(2022, 1, 17),
-                    Day(2022, 1, 18),
-                    Day(2022, 1, 21),
-                    Day(2022, 1, 24),
-                    Day(2022, 1, 25),
-                    Day(2022, 1, 28),
-                    Day(2022, 1, 31)),
-                dates);
-
-            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
-            Assert.True(intervalParseResult.IsSuccess);
-
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
-            Assert.Equal(
-                Intervals(
-                    DaysInterval(2022, 1, 3, dayNumber: 2),
-                    DayInterval(2022, 1, 7),
-                    DaysInterval(2022, 1, 10, dayNumber: 2),
-                    DayInterval(2022, 1, 14),
-                    DaysInterval(2022, 1, 17, dayNumber: 2),
-                    DayInterval(2022, 1, 21),
-                    DaysInterval(2022, 1, 24, dayNumber: 2),
-                    DayInterval(2022, 1, 28),
-                    DayInterval(2022, 1, 31)),
-                intervals);
-        }
-
-        [Theory]
-        [InlineData("le 5, le 11 et le 13")]
-        public void TestParse_MultipleDaysOfMonth(string input)
-        {
-            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
-            Assert.True(dateParseResult.IsSuccess);
-
-            var dates = dateParseResult.Value.Generate(_jan1st2022, _mar1st2022).ToArray();
-            Assert.Equal(
-                Dates(
-                    Day(2022, 1, 5),
-                    Day(2022, 1, 11),
-                    Day(2022, 1, 13),
-                    Day(2022, 2, 5),
-                    Day(2022, 2, 11),
-                    Day(2022, 2, 13)),
-                dates);
-
-            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
-            Assert.True(intervalParseResult.IsSuccess);
-
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _mar1st2022).ToArray();
-            Assert.Equal(
-                Intervals(
-                    DayInterval(2022, 1, 5),
-                    DayInterval(2022, 1, 11),
-                    DayInterval(2022, 1, 13),
-                    DayInterval(2022, 2, 5),
-                    DayInterval(2022, 2, 11),
-                    DayInterval(2022, 2, 13)),
-                intervals);
-        }
-
-        #endregion
-
-        #region Jours dans le mois
+        #region DaysOfMonth (le premier, le deux…)
 
         [Theory]
         [InlineData("le 1", 1)]
@@ -521,6 +439,158 @@ namespace Cervel.TimeParser.Tests
                     DayInterval(2022, 7, 31),
                     DayInterval(2022, 8, 31)),
                 intervals.Take(5));
+        }
+
+        #endregion
+
+        #region DaysOfWeekOfMonth
+
+        [Theory]
+        [InlineData("le vendredi 13")]
+        public void TestParse_FridayThe13th(string input)
+        {
+            var toDate = new DateTime(2025, 1, 1);
+
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, toDate).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 5, 13),
+                    Day(2023, 1, 13),
+                    Day(2023, 10, 13),
+                    Day(2024, 9, 13),
+                    Day(2024, 12, 13)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, toDate).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 5, 13),
+                    DayInterval(2023, 1, 13),
+                    DayInterval(2023, 10, 13),
+                    DayInterval(2024, 9, 13),
+                    DayInterval(2024, 12, 13)),
+                intervals);
+        }
+
+        #endregion
+
+        #region Opérateur ET
+
+        [Theory]
+        [InlineData("lundi, mardi et vendredi")]
+        //[InlineData("((lundi, mardi et vendredi))")]
+        public void TestParse_MultipleDaysOfWeek(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
+            Assert.Equal(13, dates.Count());
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 3),
+                    Day(2022, 1, 4),
+                    Day(2022, 1, 7),
+                    Day(2022, 1, 10),
+                    Day(2022, 1, 11),
+                    Day(2022, 1, 14),
+                    Day(2022, 1, 17),
+                    Day(2022, 1, 18),
+                    Day(2022, 1, 21),
+                    Day(2022, 1, 24),
+                    Day(2022, 1, 25),
+                    Day(2022, 1, 28),
+                    Day(2022, 1, 31)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _feb1st2022).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DaysInterval(2022, 1, 3, dayNumber: 2),
+                    DayInterval(2022, 1, 7),
+                    DaysInterval(2022, 1, 10, dayNumber: 2),
+                    DayInterval(2022, 1, 14),
+                    DaysInterval(2022, 1, 17, dayNumber: 2),
+                    DayInterval(2022, 1, 21),
+                    DaysInterval(2022, 1, 24, dayNumber: 2),
+                    DayInterval(2022, 1, 28),
+                    DayInterval(2022, 1, 31)),
+                intervals);
+        }
+
+        [Theory]
+        [InlineData("le 5, le 11 et le 13")]
+        public void TestParse_MultipleDaysOfMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _mar1st2022).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 5),
+                    Day(2022, 1, 11),
+                    Day(2022, 1, 13),
+                    Day(2022, 2, 5),
+                    Day(2022, 2, 11),
+                    Day(2022, 2, 13)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _mar1st2022).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, 5),
+                    DayInterval(2022, 1, 11),
+                    DayInterval(2022, 1, 13),
+                    DayInterval(2022, 2, 5),
+                    DayInterval(2022, 2, 11),
+                    DayInterval(2022, 2, 13)),
+                intervals);
+        }
+
+        [Theory]
+        [InlineData("le vendredi 13, le jeudi 3 et le lundi 18")]
+        public void TestParse_MultipleDaysOfWeekOfMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 2, 3),
+                    Day(2022, 3, 3),
+                    Day(2022, 4, 18),
+                    Day(2022, 5, 13),
+                    Day(2022, 7, 18),
+                    Day(2022, 11, 3)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 2, 3),
+                    DayInterval(2022, 3, 3),
+                    DayInterval(2022, 4, 18),
+                    DayInterval(2022, 5, 13),
+                    DayInterval(2022, 7, 18),
+                    DayInterval(2022, 11, 3)),
+                intervals);
         }
 
         #endregion

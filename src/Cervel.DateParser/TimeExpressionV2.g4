@@ -54,6 +54,7 @@ dayDateExpr
 	: everyDay
 	| dayOfWeekUnion
 	| dayOfMonthUnion
+	| dayOfWeekOfMonthUnion
 	;
 
 everyDay
@@ -96,7 +97,11 @@ dayOfMonthIter
 	| dayOfMonthExpr
 	;
 
-dayOfMonthExpr : LE? dayOfMonth ;
+dayOfMonthExpr
+	: CHAQUE? dayOfMonth
+	| TOUT? LE dayOfMonth
+	;
+
 dayOfMonth
 	: number1 | number2 | number3 | number4 | number5
 	| number6 | number7 | number8 | number9 | number10
@@ -137,6 +142,18 @@ number28 : '28' | 'vingt huit' ;
 number29 : '29' | 'vingt neuf' ;
 number30 : '30' | 'trente' ;
 number31 : '31' | 'trente et un' ;
+
+
+dayOfWeekOfMonthUnion : dayOfWeekOfMonthIter ;
+dayOfWeekOfMonthIter
+	: dayOfWeekOfMonthExpr (COMMA | ET)? dayOfWeekOfMonthIter
+	| dayOfWeekOfMonthExpr
+	;
+
+dayOfWeekOfMonthExpr
+	: CHAQUE? dayOfWeek dayOfMonth
+	| TOUT? LE dayOfWeek dayOfMonth
+	;
 
 
 // ------------------------------------------------------------
