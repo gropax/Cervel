@@ -41,12 +41,18 @@ dayDateSince
 	;
 
 dayDateExcept
-	: dayDateScoped SAUF dayIntvDist
-	| dayDateScoped
+	: dayDateScopedUnion SAUF dayIntvDist
+	| dayDateScopedUnion
+	;
+
+dayDateScopedUnion : dayDateScopedIter ;
+dayDateScopedIter   // l'ordre des règles est inverser pour privilégier une interprétation locale de ET
+	: dayDateScoped
+	| dayDateScoped (COMMA | ET)? dayDateScopedIter
 	;
 
 dayDateScoped
-	: dayDateExpr DE monthIntvDist
+	: dayDateExpr DE? monthIntvDist
 	| dayDateExpr
 	;
 

@@ -104,14 +104,30 @@ namespace Cervel.TimeParser
             }
         }
 
+        public override void ExitDayDateScopedUnion(TimeExpressionV2Parser.DayDateScopedUnionContext context)
+        {
+            var gens = _scope.DateGenerators.Consume();
+            if (gens.Length > 1)
+                _scope.DateGenerators.Add(Time.Union(gens));
+            else
+                _scope.DateGenerators.Add(gens.Single());
+        }
+
+        public override void EnterDayDateScoped(TimeExpressionV2Parser.DayDateScopedContext context)
+        {
+            OpenScope();
+        }
+
         public override void ExitDayDateScoped(TimeExpressionV2Parser.DayDateScopedContext context)
         {
-            if (context.children.Count > 1)
+            var dates = _scope.DateGenerators.ConsumeSingle();
+            if (_scope.IntervalGenerators.HasValues())
             {
-                var dates = _scope.DateGenerators.ConsumeSingle();
                 var scope = _scope.IntervalGenerators.ConsumeSingle();
-                _scope.DateGenerators.Set(Time.Scope(scope, dates));
+                dates = Time.Scope(scope, dates);
             }
+            CloseScope();
+            _scope.DateGenerators.Add(dates);
         }
 
         public override void ExitEveryDay(TimeExpressionV2Parser.EveryDayContext context)
@@ -281,6 +297,11 @@ namespace Cervel.TimeParser
         {
             _values.Clear();
             _values.Add(value);
+        }
+
+        public bool HasValues()
+        {
+            return _values.Count > 0;
         }
 
         public T[] Get()
