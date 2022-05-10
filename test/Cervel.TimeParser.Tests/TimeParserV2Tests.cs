@@ -753,6 +753,31 @@ namespace Cervel.TimeParser.Tests
                 intervals);
         }
 
+        [Theory]
+        [InlineData("le 13 avril et mai")]
+        public void TestParse_DayOfMonthInMultipleMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Dates(
+                    Day(2022, 4, 13),
+                    Day(2022, 5, 13)),
+                dates);
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 4, 13),
+                    DayInterval(2022, 5, 13)),
+                intervals);
+        }
+
         #endregion
 
         #region jour à partir de
