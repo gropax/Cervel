@@ -121,13 +121,14 @@ namespace Cervel.TimeParser
 
         public override void ExitDayOfWeekUnion(TimeExpressionV2Parser.DayOfWeekUnionContext context)
         {
-            var dowGens = _scope.DaysOfWeek.Consume().Distinct().Select(dow => Time.Each(dow)).ToArray();
+            var dowGens = _scope.DaysOfWeek.Consume().Distinct()
+                .Select(dow => Time.Each(dow)).ToArray();
+
             if (dowGens.Length > 1)
                 _scope.DateGenerators.Add(Time.Union(dowGens));
             else
                 _scope.DateGenerators.Add(dowGens.Single());
         }
-
 
         public override void ExitMonday(TimeExpressionV2Parser.MondayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Monday);
         public override void ExitTuesday(TimeExpressionV2Parser.TuesdayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Tuesday);
@@ -137,6 +138,19 @@ namespace Cervel.TimeParser
         public override void ExitSaturday(TimeExpressionV2Parser.SaturdayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Saturday);
         public override void ExitSunday(TimeExpressionV2Parser.SundayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Sunday);
 
+
+        public override void ExitDayOfMonthUnion(TimeExpressionV2Parser.DayOfMonthUnionContext context)
+        {
+            var domGens = _scope.DaysOfMonth.Consume().Distinct()
+                .Select(dayOfMonth => Time.Each(dayOfMonth)).ToArray();
+
+            if (domGens.Length > 1)
+                _scope.DateGenerators.Add(Time.Union(domGens));
+            else
+                _scope.DateGenerators.Add(domGens.Single());
+        }
+
+        public override void ExitNumber1(TimeExpressionV2Parser.Number1Context context) => _scope.DaysOfMonth.Add(1);
 
 
         public override void ExitEveryMonth(TimeExpressionV2Parser.EveryMonthContext context)
@@ -182,6 +196,7 @@ namespace Cervel.TimeParser
         public TmpVar<IGenerator<DateTime>> DateGenerators = new();
         public TmpVar<IGenerator<TimeInterval>> IntervalGenerators = new();
         public TmpVar<DayOfWeek> DaysOfWeek = new();
+        public TmpVar<int> DaysOfMonth = new();
         public TmpVar<Month> MonthNames = new();
     }
 

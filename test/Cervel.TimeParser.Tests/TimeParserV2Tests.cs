@@ -312,6 +312,70 @@ namespace Cervel.TimeParser.Tests
                 intervals);
         }
 
+        #region Jours désignés par leur numéro
+
+        [Theory]
+        [InlineData("le 1", 1)]
+        [InlineData("le 2", 2)]
+        [InlineData("le 3", 3)]
+        [InlineData("le 4", 4)]
+        [InlineData("le 5", 5)]
+        [InlineData("le 6", 6)]
+        [InlineData("le 7", 7)]
+        [InlineData("le 8", 8)]
+        [InlineData("le 9", 9)]
+        [InlineData("le 10", 10)]
+        [InlineData("le 11", 11)]
+        [InlineData("le 12", 12)]
+        [InlineData("le 13", 13)]
+        [InlineData("le 14", 14)]
+        [InlineData("le 15", 15)]
+        [InlineData("le 16", 16)]
+        [InlineData("le 17", 17)]
+        [InlineData("le 18", 18)]
+        [InlineData("le 19", 19)]
+        [InlineData("le 20", 20)]
+        [InlineData("le 21", 21)]
+        [InlineData("le 22", 22)]
+        [InlineData("le 23", 23)]
+        [InlineData("le 24", 24)]
+        [InlineData("le 25", 25)]
+        [InlineData("le 26", 26)]
+        [InlineData("le 27", 27)]
+        [InlineData("le 28", 28)]
+        public void TestParse_DayNumberInMonth(string input, int day)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(12, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, day),
+                    Day(2022, 2, day),
+                    Day(2022, 3, day),
+                    Day(2022, 4, day),
+                    Day(2022, 5, day)),
+                dates.Take(5));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(12, dates.Length);
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, day),
+                    DayInterval(2022, 2, day),
+                    DayInterval(2022, 3, day),
+                    DayInterval(2022, 4, day),
+                    DayInterval(2022, 5, day)),
+                intervals.Take(5));
+        }
+
+        #endregion
+
         #region jour à partir de
 
         [Theory]

@@ -38,6 +38,7 @@ namespace Cervel.TimeParser
 
         public static IGenerator<DateTime> Next(DayOfWeek dow) => Tomorrow().Next(dow);
         public static IGenerator<DateTime> Each(DayOfWeek dow) => Start().Next(dow).Weekly();
+        public static IGenerator<DateTime> Each(int dayOfMonth) => new DayOfMonthGenerator(dayOfMonth);
         public static IGenerator<DateTime> Union(params IGenerator<DateTime>[] generators) => new UnionGenerator(generators);
         public static IGenerator<DateTime> Since(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new SinceGenerator(scope, generator);
         public static IGenerator<DateTime> Until(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new DateTimes.UntilGenerator(scope, generator);
