@@ -44,6 +44,8 @@ namespace Cervel.TimeParser
         public static IGenerator<DateTime> Nth(int n, IGenerator<DateTime> g) =>
             g.Skip(n - 1).Take(1, name: $"Nth<{n}, {g.Name}>");
 
+        public static IGenerator<DateTime> NEveryM(int n, int m, IGenerator<DateTime> g) => g.NEveryM(n, m);
+
         public static IGenerator<DateTime> Union(params IGenerator<DateTime>[] generators) => new UnionGenerator(generators);
         public static IGenerator<DateTime> Since(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new SinceGenerator(scope, generator);
         public static IGenerator<DateTime> Until(IGenerator<DateTime> scope, IGenerator<DateTime> generator) => new DateTimes.UntilGenerator(scope, generator);

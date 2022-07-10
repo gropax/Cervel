@@ -540,6 +540,80 @@ namespace Cervel.TimeParser.Tests
         #region Opérateurs séquentiels 
 
         [Theory]
+        [InlineData("un jour sur deux")]
+        public void TestParse_OneEveryTwoDays(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(183, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 1),
+                    Day(2022, 1, 3),
+                    Day(2022, 1, 5),
+                    Day(2022, 1, 7),
+                    Day(2022, 1, 9)),
+                dates.Take(5));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value
+                .Coalesce()
+                .Generate(_jan1st2022, _jan1st2023)
+                .ToArray();
+
+            Assert.Equal(183, intervals.Length);
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, 1),
+                    DayInterval(2022, 1, 3),
+                    DayInterval(2022, 1, 5),
+                    DayInterval(2022, 1, 7),
+                    DayInterval(2022, 1, 9)),
+                intervals.Take(5));
+        }
+
+        [Theory]
+        [InlineData("deux mardis sur trois")]
+        public void TestParse_TwoEveryDays(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(35, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 4),
+                    Day(2022, 1, 11),
+                    Day(2022, 1, 25),
+                    Day(2022, 2, 1),
+                    Day(2022, 2, 15)),
+                dates.Take(5));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value
+                .Coalesce()
+                .Generate(_jan1st2022, _jan1st2023)
+                .ToArray();
+
+            Assert.Equal(35, intervals.Length);
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, 4),
+                    DayInterval(2022, 1, 11),
+                    DayInterval(2022, 1, 25),
+                    DayInterval(2022, 2, 1),
+                    DayInterval(2022, 2, 15)),
+                intervals.Take(5));
+        }
+
+        [Theory]
         [InlineData("le premier jeudi de chaque mois")]
         [InlineData("le premier jeudi du mois")]
         public void TestParse_FirstThursdayOfEachMonth(string input)

@@ -47,6 +47,15 @@ namespace Cervel.TimeParser.Extensions
             return generator.Map(Maps.Skip<DateTime>(n), name ?? $"Skip<{n}, {generator.Name}>");
         }
 
+        public static IGenerator<DateTime> NEveryM(
+            this IGenerator<DateTime> generator,
+            int n,
+            int m,
+            string name = null)
+        {
+            return generator.Map(Maps.NEveryM<DateTime>(n, m), name ?? $"NEveryM<{n}, {m}, {generator.Name}>");
+        }
+
         public static IGenerator<DateTime> First(
             this IGenerator<DateTime> generator,
             string name = null)

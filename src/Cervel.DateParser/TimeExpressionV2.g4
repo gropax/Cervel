@@ -3,6 +3,7 @@
 
 dates  // Point d'entrée du parsing des dates
 	: days
+	//| weeks
 	| monthes
 	//| years
 	;
@@ -49,9 +50,14 @@ daysScopedIter   // l'ordre des règles est inversé pour privilégier une inter
 	;
 
 daysScoped
-	: daysSeq DE? monthIntervals
-	| daysSeq
-	;
+    : daysNEveryM DE? monthIntervals
+    | daysNEveryM
+    ;
+
+daysNEveryM
+    : number daysSeq SUR number
+    | daysSeq
+    ;
 
 daysSeq
 	: nthDayUnion
@@ -129,13 +135,9 @@ dayOfMonthExpr
 	;
 
 dayOfMonth
-	: number1 | number2 | number3 | number4 | number5
-	| number6 | number7 | number8 | number9 | number10
-	| number11 | number12 | number13 | number14 | number15
-	| number16 | number17 | number18 | number19 | number20
-	| number20 | number21 | number22 | number23 | number24
-	| number25 | number26 | number27 | number28 | number29
-	| number30 | number31 ;
+	: ordinal1
+	| number
+	;
 
 ordinal1 : '1er' | '1e' | 'premier' ;
 ordinal2 : '2eme' | '2e' | 'deuxième' ;
@@ -143,37 +145,49 @@ ordinal3 : '3eme' | '3e' | 'troisième' ;
 ordinal4 : '4eme' | '4e' | 'quatrième' ;
 ordinal5 : '5eme' | '5e' | 'cinquième' ;
 
-number1 : '1' | '1er' | '1e' | 'premier' ;
-number2 : '2' | 'deux' ;
-number3 : '3' | 'trois' ;
-number4 : '4' | 'quatre' ;
-number5 : '5' | 'cinq' ;
-number6 : '6' | 'six' ;
-number7 : '7' | 'sept' ;
-number8 : '8' | 'huit' ;
-number9 : '9' | 'neuf' ;
-number10 : '10' | 'dix' ;
-number11 : '11' | 'onze' ;
-number12 : '12' | 'douze' ;
-number13 : '13' | 'treize' ;
-number14 : '14' | 'quatorze' ;
-number15 : '15' | 'quinze' ;
-number16 : '16' | 'seize' ;
-number17 : '17' | 'dix sept' ;
-number18 : '18' | 'dix huit' ;
-number19 : '19' | 'dix neuf' ;
-number20 : '20' | 'vingt' ;
-number21 : '21' | 'vingt et un' ;
-number22 : '22' | 'vingt deux' ;
-number23 : '23' | 'vingt trois' ;
-number24 : '24' | 'vingt quatre' ;
-number25 : '25' | 'vingt cinq' ;
-number26 : '26' | 'vingt six' ;
-number27 : '27' | 'vingt sept' ;
-number28 : '28' | 'vingt huit' ;
-number29 : '29' | 'vingt neuf' ;
-number30 : '30' | 'trente' ;
-number31 : '31' | 'trente et un' ;
+number
+	: numberInDigits
+	| number1 | number2 | number3 | number4 | number5
+	| number6 | number7 | number8 | number9 | number10
+	| number11 | number12 | number13 | number14 | number15
+	| number16 | number17 | number18 | number19 | number20
+	| number20 | number21 | number22 | number23 | number24
+	| number25 | number26 | number27 | number28 | number29
+	| number30 | number31 ;
+
+numberInDigits : NUMBER ; 
+
+number1 : 'un' ;
+number2 : 'deux' ;
+number3 : 'trois' ;
+number4 : 'quatre' ;
+number5 : 'cinq' ;
+number6 : 'six' ;
+number7 : 'sept' ;
+number8 : 'huit' ;
+number9 : 'neuf' ;
+number10 : 'dix' ;
+number11 : 'onze' ;
+number12 : 'douze' ;
+number13 : 'treize' ;
+number14 : 'quatorze' ;
+number15 : 'quinze' ;
+number16 : 'seize' ;
+number17 : 'dix sept' ;
+number18 : 'dix huit' ;
+number19 : 'dix neuf' ;
+number20 : 'vingt' ;
+number21 : 'vingt et un' ;
+number22 : 'vingt deux' ;
+number23 : 'vingt trois' ;
+number24 : 'vingt quatre' ;
+number25 : 'vingt cinq' ;
+number26 : 'vingt six' ;
+number27 : 'vingt sept' ;
+number28 : 'vingt huit' ;
+number29 : 'vingt neuf' ;
+number30 : 'trente' ;
+number31 : 'trente et un' ;
 
 dayOfWeekOfMonthUnion : dayOfWeekOfMonthIter ;
 dayOfWeekOfMonthIter
@@ -258,6 +272,9 @@ since : A PARTIR DE ;
 LPAR : '(' ;
 RPAR : ')' ;
 
+//ORDINAL : ('0' .. '9')+ ('er' | 'eme' | 'e') ;
+NUMBER : ('0' .. '9')+ ;
+
 SAUF : 'sauf' | 'excepte' ;
 CHAQUE : 'chaque' ;
 JOUR : 'jour' | 'jours' | 'j' ;
@@ -270,3 +287,4 @@ PARTIR : 'partir' ;
 COMPTER : 'compter' ;
 DEPUIS : 'depuis' ;
 JUSQUE : 'jusque' | 'jusqu' | 'jusqu\'' ;
+SUR : 'sur' ;

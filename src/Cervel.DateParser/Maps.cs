@@ -14,6 +14,14 @@ namespace Cervel.TimeParser
     {
         public static StrictOrderPreservingMap<T> Take<T>(int i) => (ts) => ts.Take(i);
         public static StrictOrderPreservingMap<T> Skip<T>(int i) => (ts) => ts.Skip(i);
+        public static StrictOrderPreservingMap<T> NEveryM<T>(int n, int m)
+        {
+            if (n >= m)
+                throw new ArgumentException($"n must be < than m");
+
+            return (ts) => ts.Where((t, i) => i % m < n);
+        }
+
         public static StrictOrderPreservingMap<T> Filter<T>(Func<T, bool> filter) => (ts) => ts.Where(t => filter(t));
         public static OrderPreservingMap<DateTime> StartOfDay() => (ds) => ds.Select(d => d.Date);
         public static OrderPreservingMap<DateTime> StartOfMonth() => (ds) => ds.Select(d => new DateTime(d.Year, d.Month, 1));

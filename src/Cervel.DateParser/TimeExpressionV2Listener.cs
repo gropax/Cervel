@@ -118,6 +118,23 @@ namespace Cervel.TimeParser
                 _scope.DateGenerators.Add(gens.Single());
         }
 
+        public override void EnterDaysNEveryM(TimeExpressionV2Parser.DaysNEveryMContext context)
+        {
+            OpenScope();
+        }
+
+        public override void ExitDaysNEveryM(TimeExpressionV2Parser.DaysNEveryMContext context)
+        {
+            var dates = _scope.DateGenerators.ConsumeSingle();
+            if (_scope.Numbers.HasValues())
+            {
+                var numbers = _scope.Numbers.Consume();
+                dates = Time.NEveryM(numbers[0], numbers[1], dates);
+            }
+            CloseScope();
+            _scope.DateGenerators.Add(dates);
+        }
+
         public override void EnterDaysScoped(TimeExpressionV2Parser.DaysScopedContext context)
         {
             OpenScope();
@@ -146,7 +163,7 @@ namespace Cervel.TimeParser
 
         public override void ExitNthDayExpr(TimeExpressionV2Parser.NthDayExprContext context)
         {
-            var ordinal = _scope.Ordinals.ConsumeSingle();
+            var ordinal = _scope.Numbers.ConsumeSingle();
             var gen = _scope.DateGenerators.ConsumeSingle();
             _scope.DateGenerators.Add(Time.Nth(ordinal, gen));
         }
@@ -178,7 +195,7 @@ namespace Cervel.TimeParser
 
         public override void ExitDayOfMonthUnion(TimeExpressionV2Parser.DayOfMonthUnionContext context)
         {
-            var domGens = _scope.DaysOfMonth.Consume().Distinct()
+            var domGens = _scope.Numbers.Consume().Distinct()
                 .Select(dayOfMonth => Time.Each(dayOfMonth)).ToArray();
 
             if (domGens.Length > 1)
@@ -190,47 +207,54 @@ namespace Cervel.TimeParser
 
         #region Ordinals
 
-        public override void ExitOrdinal1(TimeExpressionV2Parser.Ordinal1Context context) => _scope.Ordinals.Add(1);
-        public override void ExitOrdinal2(TimeExpressionV2Parser.Ordinal2Context context) => _scope.Ordinals.Add(2);
-        public override void ExitOrdinal3(TimeExpressionV2Parser.Ordinal3Context context) => _scope.Ordinals.Add(3);
-        public override void ExitOrdinal4(TimeExpressionV2Parser.Ordinal4Context context) => _scope.Ordinals.Add(4);
-        public override void ExitOrdinal5(TimeExpressionV2Parser.Ordinal5Context context) => _scope.Ordinals.Add(5);
+        public override void ExitOrdinal1(TimeExpressionV2Parser.Ordinal1Context context) => _scope.Numbers.Add(1);
+        public override void ExitOrdinal2(TimeExpressionV2Parser.Ordinal2Context context) => _scope.Numbers.Add(2);
+        public override void ExitOrdinal3(TimeExpressionV2Parser.Ordinal3Context context) => _scope.Numbers.Add(3);
+        public override void ExitOrdinal4(TimeExpressionV2Parser.Ordinal4Context context) => _scope.Numbers.Add(4);
+        public override void ExitOrdinal5(TimeExpressionV2Parser.Ordinal5Context context) => _scope.Numbers.Add(5);
 
         #endregion
 
         #region Days in month
 
-        public override void ExitNumber1(TimeExpressionV2Parser.Number1Context context) => _scope.DaysOfMonth.Add(1);
-        public override void ExitNumber2(TimeExpressionV2Parser.Number2Context context) => _scope.DaysOfMonth.Add(2);
-        public override void ExitNumber3(TimeExpressionV2Parser.Number3Context context) => _scope.DaysOfMonth.Add(3);
-        public override void ExitNumber4(TimeExpressionV2Parser.Number4Context context) => _scope.DaysOfMonth.Add(4);
-        public override void ExitNumber5(TimeExpressionV2Parser.Number5Context context) => _scope.DaysOfMonth.Add(5);
-        public override void ExitNumber6(TimeExpressionV2Parser.Number6Context context) => _scope.DaysOfMonth.Add(6);
-        public override void ExitNumber7(TimeExpressionV2Parser.Number7Context context) => _scope.DaysOfMonth.Add(7);
-        public override void ExitNumber8(TimeExpressionV2Parser.Number8Context context) => _scope.DaysOfMonth.Add(8);
-        public override void ExitNumber9(TimeExpressionV2Parser.Number9Context context) => _scope.DaysOfMonth.Add(9);
-        public override void ExitNumber10(TimeExpressionV2Parser.Number10Context context) => _scope.DaysOfMonth.Add(10);
-        public override void ExitNumber11(TimeExpressionV2Parser.Number11Context context) => _scope.DaysOfMonth.Add(11);
-        public override void ExitNumber12(TimeExpressionV2Parser.Number12Context context) => _scope.DaysOfMonth.Add(12);
-        public override void ExitNumber13(TimeExpressionV2Parser.Number13Context context) => _scope.DaysOfMonth.Add(13);
-        public override void ExitNumber14(TimeExpressionV2Parser.Number14Context context) => _scope.DaysOfMonth.Add(14);
-        public override void ExitNumber15(TimeExpressionV2Parser.Number15Context context) => _scope.DaysOfMonth.Add(15);
-        public override void ExitNumber16(TimeExpressionV2Parser.Number16Context context) => _scope.DaysOfMonth.Add(16);
-        public override void ExitNumber17(TimeExpressionV2Parser.Number17Context context) => _scope.DaysOfMonth.Add(17);
-        public override void ExitNumber18(TimeExpressionV2Parser.Number18Context context) => _scope.DaysOfMonth.Add(18);
-        public override void ExitNumber19(TimeExpressionV2Parser.Number19Context context) => _scope.DaysOfMonth.Add(19);
-        public override void ExitNumber20(TimeExpressionV2Parser.Number20Context context) => _scope.DaysOfMonth.Add(20);
-        public override void ExitNumber21(TimeExpressionV2Parser.Number21Context context) => _scope.DaysOfMonth.Add(21);
-        public override void ExitNumber22(TimeExpressionV2Parser.Number22Context context) => _scope.DaysOfMonth.Add(22);
-        public override void ExitNumber23(TimeExpressionV2Parser.Number23Context context) => _scope.DaysOfMonth.Add(23);
-        public override void ExitNumber24(TimeExpressionV2Parser.Number24Context context) => _scope.DaysOfMonth.Add(24);
-        public override void ExitNumber25(TimeExpressionV2Parser.Number25Context context) => _scope.DaysOfMonth.Add(25);
-        public override void ExitNumber26(TimeExpressionV2Parser.Number26Context context) => _scope.DaysOfMonth.Add(26);
-        public override void ExitNumber27(TimeExpressionV2Parser.Number27Context context) => _scope.DaysOfMonth.Add(27);
-        public override void ExitNumber28(TimeExpressionV2Parser.Number28Context context) => _scope.DaysOfMonth.Add(28);
-        public override void ExitNumber29(TimeExpressionV2Parser.Number29Context context) => _scope.DaysOfMonth.Add(29);
-        public override void ExitNumber30(TimeExpressionV2Parser.Number30Context context) => _scope.DaysOfMonth.Add(30);
-        public override void ExitNumber31(TimeExpressionV2Parser.Number31Context context) => _scope.DaysOfMonth.Add(31);
+        public override void ExitNumberInDigits(TimeExpressionV2Parser.NumberInDigitsContext context)
+        {
+            string field = context.children[0].GetText();
+            int number = int.Parse(context.children[^1].GetText());
+            _scope.Numbers.Add(number);
+        }
+
+        public override void ExitNumber1(TimeExpressionV2Parser.Number1Context context) => _scope.Numbers.Add(1);
+        public override void ExitNumber2(TimeExpressionV2Parser.Number2Context context) => _scope.Numbers.Add(2);
+        public override void ExitNumber3(TimeExpressionV2Parser.Number3Context context) => _scope.Numbers.Add(3);
+        public override void ExitNumber4(TimeExpressionV2Parser.Number4Context context) => _scope.Numbers.Add(4);
+        public override void ExitNumber5(TimeExpressionV2Parser.Number5Context context) => _scope.Numbers.Add(5);
+        public override void ExitNumber6(TimeExpressionV2Parser.Number6Context context) => _scope.Numbers.Add(6);
+        public override void ExitNumber7(TimeExpressionV2Parser.Number7Context context) => _scope.Numbers.Add(7);
+        public override void ExitNumber8(TimeExpressionV2Parser.Number8Context context) => _scope.Numbers.Add(8);
+        public override void ExitNumber9(TimeExpressionV2Parser.Number9Context context) => _scope.Numbers.Add(9);
+        public override void ExitNumber10(TimeExpressionV2Parser.Number10Context context) => _scope.Numbers.Add(10);
+        public override void ExitNumber11(TimeExpressionV2Parser.Number11Context context) => _scope.Numbers.Add(11);
+        public override void ExitNumber12(TimeExpressionV2Parser.Number12Context context) => _scope.Numbers.Add(12);
+        public override void ExitNumber13(TimeExpressionV2Parser.Number13Context context) => _scope.Numbers.Add(13);
+        public override void ExitNumber14(TimeExpressionV2Parser.Number14Context context) => _scope.Numbers.Add(14);
+        public override void ExitNumber15(TimeExpressionV2Parser.Number15Context context) => _scope.Numbers.Add(15);
+        public override void ExitNumber16(TimeExpressionV2Parser.Number16Context context) => _scope.Numbers.Add(16);
+        public override void ExitNumber17(TimeExpressionV2Parser.Number17Context context) => _scope.Numbers.Add(17);
+        public override void ExitNumber18(TimeExpressionV2Parser.Number18Context context) => _scope.Numbers.Add(18);
+        public override void ExitNumber19(TimeExpressionV2Parser.Number19Context context) => _scope.Numbers.Add(19);
+        public override void ExitNumber20(TimeExpressionV2Parser.Number20Context context) => _scope.Numbers.Add(20);
+        public override void ExitNumber21(TimeExpressionV2Parser.Number21Context context) => _scope.Numbers.Add(21);
+        public override void ExitNumber22(TimeExpressionV2Parser.Number22Context context) => _scope.Numbers.Add(22);
+        public override void ExitNumber23(TimeExpressionV2Parser.Number23Context context) => _scope.Numbers.Add(23);
+        public override void ExitNumber24(TimeExpressionV2Parser.Number24Context context) => _scope.Numbers.Add(24);
+        public override void ExitNumber25(TimeExpressionV2Parser.Number25Context context) => _scope.Numbers.Add(25);
+        public override void ExitNumber26(TimeExpressionV2Parser.Number26Context context) => _scope.Numbers.Add(26);
+        public override void ExitNumber27(TimeExpressionV2Parser.Number27Context context) => _scope.Numbers.Add(27);
+        public override void ExitNumber28(TimeExpressionV2Parser.Number28Context context) => _scope.Numbers.Add(28);
+        public override void ExitNumber29(TimeExpressionV2Parser.Number29Context context) => _scope.Numbers.Add(29);
+        public override void ExitNumber30(TimeExpressionV2Parser.Number30Context context) => _scope.Numbers.Add(30);
+        public override void ExitNumber31(TimeExpressionV2Parser.Number31Context context) => _scope.Numbers.Add(31);
 
         #endregion
 
@@ -246,7 +270,7 @@ namespace Cervel.TimeParser
         public override void ExitDayOfWeekOfMonthExpr(TimeExpressionV2Parser.DayOfWeekOfMonthExprContext context)
         {
             var dayOfWeek = _scope.DaysOfWeek.ConsumeSingle();
-            var dayOfMonth = _scope.DaysOfMonth.ConsumeSingle();
+            var dayOfMonth = _scope.Numbers.ConsumeSingle();
             _scope.DateGenerators.Add(Time.Each(dayOfMonth).Where(dayOfWeek));
         }
 
@@ -294,8 +318,7 @@ namespace Cervel.TimeParser
         public TmpVar<IGenerator<DateTime>> DateGenerators = new();
         public TmpVar<IGenerator<TimeInterval>> IntervalGenerators = new();
         public TmpVar<DayOfWeek> DaysOfWeek = new();
-        public TmpVar<int> Ordinals = new();
-        public TmpVar<int> DaysOfMonth = new();
+        public TmpVar<int> Numbers = new();
         public TmpVar<Month> MonthNames = new();
     }
 
