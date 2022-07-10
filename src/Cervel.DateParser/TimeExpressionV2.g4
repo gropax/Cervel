@@ -6,11 +6,11 @@ intvDist  // Point d'entrée du parsing des intervalles
 	| monthIntvDist
 	;
 
-dayIntvDist
+dayIntvDist  // Intervalles exprimés en termes de jours
 	: dayDateDist
 	;
 
-monthIntvDist
+monthIntvDist  // Intervalles exprimés en termes de mois
 	: monthDateDist
 	;
 

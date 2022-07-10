@@ -35,7 +35,12 @@ namespace Cervel.TimeParser
 
         public override void ExitIntvDist(TimeExpressionV2Parser.IntvDistContext context)
         {
-            IntervalDistribution = _scope.IntervalGenerators.ConsumeSingle();
+            IntervalDistribution = _scope.IntervalGenerators
+                .ConsumeSingle();
+                // On ne manipule dans le parsing que des générateurs d'intervalles
+                // "non-normalisés", afin de pouvoir les utiliser comme "scopes".
+                // On coalesce à la toute fin pour obtenir une distribution normalisée.
+                //.Coalesce();
         }
 
         public override void ExitDateDist(TimeExpressionV2Parser.DateDistContext context)

@@ -1,3 +1,4 @@
+using Cervel.TimeParser.Extensions;
 using System;
 using System.Linq;
 using Xunit;
@@ -560,12 +561,16 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            var intervals = intervalParseResult.Value
+                .Coalesce()
+                .Generate(_jan1st2022, _jan1st2023)
+                .ToArray();
+
             Assert.Equal(12, intervals.Length);
             Assert.Equal(
                 Intervals(
                     DayInterval(2022, 1, 6),
-                    DayInterval(2022, 2, 10),
+                    DayInterval(2022, 2, 3),
                     DayInterval(2022, 3, 3),
                     DayInterval(2022, 4, 7),
                     DayInterval(2022, 5, 5)),
@@ -978,7 +983,11 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            var intervals = intervalParseResult.Value
+                .Coalesce()
+                .Generate(_jan1st2022, _jan1st2023)
+                .ToArray();
+
             Assert.Equal(
                 Intervals(
                     Interval(Day(2022, 1, 1), Day(2023, 1, 1))),
@@ -1049,7 +1058,11 @@ namespace Cervel.TimeParser.Tests
             var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
             Assert.True(intervalParseResult.IsSuccess);
 
-            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            var intervals = intervalParseResult.Value
+                .Coalesce()
+                .Generate(_jan1st2022, _jan1st2023)
+                .ToArray();
+
             Assert.Equal(
                 Intervals(
                     DaysInterval(2022, 3, 1, dayNumber: 61),

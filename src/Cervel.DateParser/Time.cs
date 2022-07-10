@@ -166,7 +166,7 @@ namespace Cervel.TimeParser
         /// Return all month-intervals containing dates.
         /// </summary>
         public static IGenerator<TimeInterval> AllMonth(IGenerator<DateTime> g) =>
-            g.StartOfMonth().DuringMonthes(1);
+            g.StartOfMonth().ToIntervals(new MonthMeasure(1));
 
         //public static IGenerator<DateTime> EveryMonth() => Start().StartOfMonth().Monthly();
         //public static IGenerator<DateTime> Each(Month month) => StartOfNext(month).YearlySince();
