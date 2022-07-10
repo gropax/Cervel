@@ -1,64 +1,61 @@
 ﻿grammar TimeExpressionV2;
 
 
-intvDist  // Point d'entrée du parsing des intervalles
-	: dayIntvDist
-	| monthIntvDist
+dates  // Point d'entrée du parsing des dates
+	: days
+	| monthes
+	//| years
 	;
 
-dayIntvDist  // Intervalles exprimés en termes de jours
-	: dayDateDist
+intervals  // Point d'entrée du parsing des intervalles
+	: dayIntervals
+	| monthIntervals
+	//| yearIntervals
 	;
 
-monthIntvDist  // Intervalles exprimés en termes de mois
-	: monthDateDist
-	;
-
-
-dateDist  // Point d'entrée du parsing des dates
-	: dayDateDist
-	| monthDateDist
-	;
+dayIntervals : days ;
+monthIntervals : monthes ;
+//yearIntervals : years ;
 
 
 // ------------------------------------------------------------
 //                Dates express in terms of days
 // ------------------------------------------------------------
 
-dayDateDist  // Appelée par `dayIntvDist`
-	: dayDateUntil
+days  // Appelée par `dayIntervals`
+	: daysUntil
 	;
 
-dayDateUntil
-	: dayDateSince until dayDateExpr
-	| dayDateSince
+daysUntil
+	: daysSince until daysExpr
+	| daysSince
 	;
 
-dayDateSince
-	: dayDateExcept since dayDateExpr
-	| dayDateExcept since monthDateExpr
-	| dayDateExcept
+daysSince
+	: daysExcept since daysExpr
+	| daysExcept since monthesExpr
+	| daysExcept
 	;
 
-dayDateExcept
-	: dayDateScopedUnion SAUF dayIntvDist
-	| dayDateScopedUnion
+daysExcept
+	: daysScopedUnion SAUF dayIntervals
+	| daysScopedUnion
 	;
 
-dayDateScopedUnion : dayDateScopedIter ;
-dayDateScopedIter   // l'ordre des règles est inversé pour privilégier une interprétation locale de ET
-	: dayDateScoped
-	| dayDateScoped (COMMA | ET)? dayDateScopedIter
+daysScopedUnion : daysScopedIter ;
+daysScopedIter   // l'ordre des règles est inversé pour privilégier une interprétation locale de ET
+	: daysScoped
+	| daysScoped (COMMA | ET)? daysScopedIter
 	;
 
-dayDateScoped
-	: dayDateSeq DE? monthIntvDist
-	| dayDateSeq
+daysScoped
+	: daysSeq DE? monthIntervals
+	| daysSeq
 	;
 
-dayDateSeq
+daysSeq
 	: nthDayUnion
-	| dayDateExpr
+	| daysExpr
 	;
 
 nthDayUnion : nthDayIter ;
@@ -68,7 +65,7 @@ nthDayIter
 	;
 
 nthDayExpr
-	: LE? ordinal dayDateExpr
+	: LE? ordinal daysExpr
 	;
 
 ordinal
@@ -79,7 +76,7 @@ ordinal
 	| ordinal5
 	;
 
-dayDateExpr
+daysExpr
 	: everyDay
 	| dayOfWeekUnion
 	| dayOfMonthUnion
@@ -194,21 +191,21 @@ dayOfWeekOfMonthExpr
 //             Dates express in terms of monthes
 // ------------------------------------------------------------
 
-monthDateDist  // Appelée par `monthIntvDist`
-	: monthDateSince
+monthes  // Appelée par `monthIntervals`
+	: monthesSince
 	;
 
-monthDateSince
-	: monthDateExpr since monthDateUntil
-	| monthDateUntil
+monthesSince
+	: monthesExpr since monthesUntil
+	| monthesUntil
 	;
 
-monthDateUntil
-	: monthDateExpr until monthDateExpr
-	| monthDateExpr
+monthesUntil
+	: monthesExpr until monthesExpr
+	| monthesExpr
 	;
 
-monthDateExpr
+monthesExpr
 	: everyMonth
 	| monthNameUnion
 	;

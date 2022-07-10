@@ -16,7 +16,7 @@ namespace Cervel.TimeParser
             if (parserVersion == 1)
                 return ParseSymbol(input, true, (p) => p.dateTimes(), (l) => l.DateTimeGenerator);
             else if (parserVersion == 2)
-                return ParseSymbolV2(input, true, (p) => p.dateDist(), (l) => l.DateDistribution);
+                return ParseSymbolV2(input, true, (p) => p.dates(), (l) => l.DateDistribution);
             else
                 throw new NotImplementedException($"Unsupported parser version [{parserVersion}].");
         }
@@ -26,7 +26,7 @@ namespace Cervel.TimeParser
             if (parserVersion == 1)
                 return ParseSymbol(input, false, (p) => p.timeIntervals(), (l) => l.TimeIntervalGenerator);
             else if (parserVersion == 2)
-                return ParseSymbolV2(input, false, (p) => p.intvDist(), (l) => l.IntervalDistribution);
+                return ParseSymbolV2(input, false, (p) => p.intervals(), (l) => l.IntervalDistribution);
             else
                 throw new NotImplementedException($"Unsupported parser version [{parserVersion}].");
         }
