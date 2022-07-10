@@ -130,6 +130,22 @@ namespace Cervel.TimeParser
             _scope.DateGenerators.Add(dates);
         }
 
+        public override void ExitNthDayUnion(TimeExpressionV2Parser.NthDayUnionContext context)
+        {
+            var gens = _scope.DateGenerators.Consume();
+            if (gens.Length > 1)
+                _scope.DateGenerators.Add(Time.Union(gens));
+            else
+                _scope.DateGenerators.Add(gens.Single());
+        }
+
+        public override void ExitNthDayExpr(TimeExpressionV2Parser.NthDayExprContext context)
+        {
+            var ordinal = _scope.Ordinals.ConsumeSingle();
+            var gen = _scope.DateGenerators.ConsumeSingle();
+            _scope.DateGenerators.Add(Time.Nth(ordinal, gen));
+        }
+
         public override void ExitEveryDay(TimeExpressionV2Parser.EveryDayContext context)
         {
             _scope.DateGenerators.Add(Time.EveryDay());
@@ -165,6 +181,17 @@ namespace Cervel.TimeParser
             else
                 _scope.DateGenerators.Add(domGens.Single());
         }
+
+
+        #region Ordinals
+
+        public override void ExitOrdinal1(TimeExpressionV2Parser.Ordinal1Context context) => _scope.Ordinals.Add(1);
+        public override void ExitOrdinal2(TimeExpressionV2Parser.Ordinal2Context context) => _scope.Ordinals.Add(2);
+        public override void ExitOrdinal3(TimeExpressionV2Parser.Ordinal3Context context) => _scope.Ordinals.Add(3);
+        public override void ExitOrdinal4(TimeExpressionV2Parser.Ordinal4Context context) => _scope.Ordinals.Add(4);
+        public override void ExitOrdinal5(TimeExpressionV2Parser.Ordinal5Context context) => _scope.Ordinals.Add(5);
+
+        #endregion
 
         #region Days in month
 
@@ -262,6 +289,7 @@ namespace Cervel.TimeParser
         public TmpVar<IGenerator<DateTime>> DateGenerators = new();
         public TmpVar<IGenerator<TimeInterval>> IntervalGenerators = new();
         public TmpVar<DayOfWeek> DaysOfWeek = new();
+        public TmpVar<int> Ordinals = new();
         public TmpVar<int> DaysOfMonth = new();
         public TmpVar<Month> MonthNames = new();
     }

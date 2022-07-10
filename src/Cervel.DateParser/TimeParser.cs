@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
@@ -94,10 +95,24 @@ namespace Cervel.TimeParser
             }
         }
 
+        private Regex _duRegex = new Regex(@"\bdu\b");
+        private Regex _desRegex = new Regex(@"\bdes\b");
+        private Regex _auRegex = new Regex(@"\bau\b");
+        private Regex _auxRegex = new Regex(@"\baux\b");
         private string PreprocessInput(string input)
         {
-            return input.Trim()
-                .Replace('-', ' ');
+            var clean = input.Trim()
+                .Replace('-', ' ')
+                .Replace('é', 'e')
+                .Replace('è', 'e')
+                .Replace('ê', 'e');
+
+            clean = _duRegex.Replace(clean, "de le");
+            clean = _desRegex.Replace(clean, "de les");
+            clean = _auRegex.Replace(clean, "a le");
+            clean = _auxRegex.Replace(clean, "a les");
+
+            return clean;
         }
     }
 }

@@ -46,14 +46,37 @@ dayDateExcept
 	;
 
 dayDateScopedUnion : dayDateScopedIter ;
-dayDateScopedIter   // l'ordre des règles est inverser pour privilégier une interprétation locale de ET
+dayDateScopedIter   // l'ordre des règles est inversé pour privilégier une interprétation locale de ET
 	: dayDateScoped
 	| dayDateScoped (COMMA | ET)? dayDateScopedIter
 	;
 
 dayDateScoped
-	: dayDateExpr DE? monthIntvDist
+	: dayDateSeq DE? monthIntvDist
+	| dayDateSeq
+	;
+
+dayDateSeq
+	: nthDayUnion
 	| dayDateExpr
+	;
+
+nthDayUnion : nthDayIter ;
+nthDayIter
+	: nthDayExpr (COMMA | ET)? nthDayIter
+	| nthDayExpr
+	;
+
+nthDayExpr
+	: LE? ordinal dayDateExpr
+	;
+
+ordinal
+	: ordinal1
+	| ordinal2
+	| ordinal3
+	| ordinal4
+	| ordinal5
 	;
 
 dayDateExpr
@@ -65,7 +88,7 @@ dayDateExpr
 
 everyDay
 	: CHAQUE? JOUR
-	| TOUT LE JOUR
+	| TOUT? LE JOUR
 	;
 
 dayOfWeekUnion : dayOfWeekIter ;
@@ -116,6 +139,12 @@ dayOfMonth
 	| number20 | number21 | number22 | number23 | number24
 	| number25 | number26 | number27 | number28 | number29
 	| number30 | number31 ;
+
+ordinal1 : '1er' | '1e' | 'premier' ;
+ordinal2 : '2eme' | '2e' | 'deuxième' ;
+ordinal3 : '3eme' | '3e' | 'troisième' ;
+ordinal4 : '4eme' | '4e' | 'quatrième' ;
+ordinal5 : '5eme' | '5e' | 'cinquième' ;
 
 number1 : '1' | '1er' | '1e' | 'premier' ;
 number2 : '2' | 'deux' ;
@@ -186,7 +215,7 @@ monthDateExpr
 
 everyMonth
 	: CHAQUE? MOIS
-	| TOUT LE MOIS
+	| TOUT? LE MOIS
 	;
 
 monthNameUnion : monthNameIter ;
@@ -211,7 +240,7 @@ monthName
 	;
 
 january : 'janvier' ;
-february : 'février' ;
+february : 'fevrier' ;
 march : 'mars' ;
 april : 'avril' ;
 may : 'mai' ;
@@ -221,7 +250,7 @@ august : 'août' ;
 september : 'septembre' ;
 october : 'octobre' ;
 november : 'novembre' ;
-december : 'décembre' ;
+december : 'decembre' ;
 
 
 
@@ -232,7 +261,7 @@ since : A PARTIR DE ;
 LPAR : '(' ;
 RPAR : ')' ;
 
-SAUF : 'sauf' | 'excepté' ;
+SAUF : 'sauf' | 'excepte' ;
 CHAQUE : 'chaque' ;
 JOUR : 'jour' | 'jours' | 'j' ;
 MOIS : 'mois' ;

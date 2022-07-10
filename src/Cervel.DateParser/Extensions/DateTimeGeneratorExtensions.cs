@@ -31,9 +31,12 @@ namespace Cervel.TimeParser.Extensions
             return generator.Map(Maps.StartOfDay());
         }
 
-        public static IGenerator<DateTime> Take(this IGenerator<DateTime> generator, int n)
+        public static IGenerator<DateTime> Take(
+            this IGenerator<DateTime> generator,
+            int n,
+            string name = null)
         {
-            return generator.Map(Maps.Take<DateTime>(n), $"Take<{n}, {generator.Name}>");
+            return generator.Map(Maps.Take<DateTime>(n), name ?? $"Take<{n}, {generator.Name}>");
         }
 
         public static IGenerator<DateTime> Skip(

@@ -22,6 +22,8 @@ namespace Cervel.TimeParser.Tests
 
 
         [Theory]
+        [InlineData("jour")]
+        [InlineData("le jour")]
         [InlineData("chaque jour")]
         [InlineData("tous les jours")]
         //[InlineData("((chaque jour))")]
@@ -534,6 +536,44 @@ namespace Cervel.TimeParser.Tests
                 intervals);
         }
 
+        #region Opérateurs séquentiels 
+
+        [Theory]
+        [InlineData("le premier jeudi de chaque mois")]
+        [InlineData("le premier jeudi du mois")]
+        public void TestParse_FirstThursdayOfEachMonth(string input)
+        {
+            var dateParseResult = _timeParser.ParseDateTimes(input, parserVersion: 2);
+            Assert.True(dateParseResult.IsSuccess);
+
+            var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(12, dates.Length);
+            Assert.Equal(
+                Dates(
+                    Day(2022, 1, 6),
+                    Day(2022, 2, 3),
+                    Day(2022, 3, 3),
+                    Day(2022, 4, 7),
+                    Day(2022, 5, 5)),
+                dates.Take(5));
+
+            var intervalParseResult = _timeParser.ParseTimeIntervals(input, parserVersion: 2);
+            Assert.True(intervalParseResult.IsSuccess);
+
+            var intervals = intervalParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+            Assert.Equal(12, intervals.Length);
+            Assert.Equal(
+                Intervals(
+                    DayInterval(2022, 1, 6),
+                    DayInterval(2022, 2, 10),
+                    DayInterval(2022, 3, 3),
+                    DayInterval(2022, 4, 7),
+                    DayInterval(2022, 5, 5)),
+                intervals.Take(5));
+        }
+
+        #endregion
+
         #region Opérateur ET
 
         [Theory]
@@ -780,7 +820,7 @@ namespace Cervel.TimeParser.Tests
 
         #endregion
 
-        #region jour à partir de
+        #region Opérateur À PARTIR DE
 
         [Theory]
         [InlineData("chaque jour à partir de jeudi")]
@@ -841,6 +881,8 @@ namespace Cervel.TimeParser.Tests
 
         #endregion
 
+        #region Opérateur JUSQU'À
+
         [Theory]
         [InlineData("chaque jour jusqu'à vendredi")]
         [InlineData("chaque jour jusqu a vendredi")]
@@ -871,6 +913,9 @@ namespace Cervel.TimeParser.Tests
                 intervals);
         }
 
+        #endregion
+
+        #region Opérateur SAUF
 
         [Theory]
         [InlineData("tous les jours sauf le mardi")]
@@ -905,9 +950,12 @@ namespace Cervel.TimeParser.Tests
                 intervals);
         }
 
+        #endregion
 
 
         [Theory]
+        [InlineData("mois")]
+        [InlineData("le mois")]
         [InlineData("chaque mois")]
         [InlineData("tous les mois")]
         //[InlineData("((chaque jour))")]
