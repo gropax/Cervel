@@ -4,21 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class ToPartitionGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class ToPartitionGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         private IGenerator<Date> _generator;
         public ToPartitionGenerator(
             IGenerator<Date> generator,
             string name = null)
-            : base(name ?? $"ToPartition<{generator.Name}>")
         {
             _generator = generator;
+            Name = name ?? $"ToPartition<{generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
             if (!enumerator.MoveNext())

@@ -4,21 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class FirstToInfinityGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class FirstToInfinityGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         private IGenerator<Date> _generator;
         public FirstToInfinityGenerator(
             IGenerator<Date> generator,
             string name = null)
-            : base(name ?? $"FirstToInfinity<{generator.Name}>")
         {
             _generator = generator;
+            Name = name ?? $"FirstToInfinity<{generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             foreach (var date in _generator.Generate(fromDate))
             {

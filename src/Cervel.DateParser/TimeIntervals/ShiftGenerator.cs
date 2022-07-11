@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cervel.TimeParser.Extensions;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class ShiftGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class ShiftGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         private IGenerator<TimeInterval> _generator;
         private TimeSpan _timeSpan;
 
@@ -16,13 +19,13 @@ namespace Cervel.TimeParser.TimeIntervals
             IGenerator<TimeInterval> generator,
             TimeSpan timeSpan,
             string name = null)
-            : base(name ?? $"Shift<{timeSpan}, {generator.Name}>")
         {
             _generator = generator;
             _timeSpan = timeSpan;
+            Name = name ?? $"Shift<{timeSpan}, {generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             return _generator.Generate(fromDate).Select(i => i.Shift(_timeSpan));
         }

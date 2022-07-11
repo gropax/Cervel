@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class ListGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class ListGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         public static ListGenerator Create(IEnumerable<TimeInterval> values)
         {
             var cleanValues = new HashSet<TimeInterval>(values).OrderBy(d => d).ToArray();
@@ -18,12 +21,12 @@ namespace Cervel.TimeParser.TimeIntervals
         public ListGenerator(
             TimeInterval[] values,
             string name = null)
-            : base(name ?? $"List<[{values.Length}]>")
         {
             _values = values;
+            Name = name ?? $"List<[{values.Length}]>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             foreach (var value in _values)
             {

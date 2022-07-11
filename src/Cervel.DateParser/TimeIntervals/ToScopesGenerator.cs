@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
@@ -11,8 +12,10 @@ namespace Cervel.TimeParser.TimeIntervals
     /// Comme ToIntervalsGenerator, mais au lieu de fusionner les intervalles qui devraient se 
     /// rencontrer, on les rétrécie (par la fin) pour qu'ils se touchent sans se chevaucher.
     /// </summary>
-    public class ToScopesGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class ToScopesGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         private IGenerator<Date> _generator;
         private TimeSpan _timeSpan;
 
@@ -20,13 +23,13 @@ namespace Cervel.TimeParser.TimeIntervals
             IGenerator<Date> generator,
             TimeSpan timeSpan,
             string name = null)
-            : base(name ?? $"ToScopes<{timeSpan}, {generator.Name}>")
         {
             _generator = generator;
             _timeSpan = timeSpan;
+            Name = name ?? $"ToScopes<{timeSpan}, {generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
             if (!enumerator.MoveNext())

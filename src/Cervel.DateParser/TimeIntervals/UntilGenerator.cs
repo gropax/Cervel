@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class UntilGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class UntilGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         private IGenerator<TimeInterval> _generator;
         private DateTime _limit;
 
@@ -15,13 +18,13 @@ namespace Cervel.TimeParser.TimeIntervals
             IGenerator<TimeInterval> generator,
             DateTime limit,
             string name = null)
-            : base(name ?? $"Until<{limit}, {generator.Name}>")
         {
             _generator = generator;
             _limit = limit;
+            Name = name ?? $"Until<{limit}, {generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
             while (enumerator.MoveNext())

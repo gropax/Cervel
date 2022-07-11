@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Cervel.TimeParser.DateTimes;
 using Cervel.TimeParser.Extensions;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class ToIntervalsGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class ToIntervalsGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         private IGenerator<Date> _generator;
         private ITimeMeasure _timeMeasure;
 
@@ -17,13 +20,13 @@ namespace Cervel.TimeParser.TimeIntervals
             IGenerator<Date> generator,
             ITimeMeasure timeMeasure,
             string name = null)
-            : base(name ?? $"ToInterval<{timeMeasure.Name}, {generator.Name}>")
         {
             _generator = generator;
             _timeMeasure = timeMeasure;
+            Name = name ?? $"ToInterval<{timeMeasure.Name}, {generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             foreach (var date in _generator.Generate(fromDate))
                 if (TryGetTimeInterval(date, out var interval))

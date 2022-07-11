@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class NeverGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class NeverGenerator : IGenerator<TimeInterval>
     {
-        public NeverGenerator(string name = null) : base(name ?? $"Never<>") { }
+        public string Name { get; }
+        public NeverGenerator(string name = null)
+        {
+            Name = name ?? $"Never<>";
+        }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             yield break;
         }

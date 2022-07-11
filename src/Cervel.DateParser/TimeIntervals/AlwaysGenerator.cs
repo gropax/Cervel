@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class AlwaysGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class AlwaysGenerator : IGenerator<TimeInterval>
     {
-        public AlwaysGenerator(string name = null) : base(name ?? $"Always<>") { }
+        public string Name { get; }
+        public AlwaysGenerator(string name = null)
+        {
+            Name = name ?? $"Always<>";
+        }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             yield return new TimeInterval(fromDate, DateTime.MaxValue);
         }

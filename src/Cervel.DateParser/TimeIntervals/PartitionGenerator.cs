@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class PartitionGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class PartitionGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         private IGenerator<TimeInterval> _generator;
         private IGenerator<Date> _cutGenerator;
 
@@ -16,13 +19,13 @@ namespace Cervel.TimeParser.TimeIntervals
             IGenerator<TimeInterval> generator,
             IGenerator<Date> cutGenerator,
             string name = null)
-            : base(name ?? $"Partition<{cutGenerator.Name}, {generator.Name}>")
         {
             _generator = generator;
             _cutGenerator = cutGenerator;
+            Name = name ?? $"Partition<{cutGenerator.Name}, {generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
             var cutEnumerator = _cutGenerator.Generate(fromDate).GetEnumerator();

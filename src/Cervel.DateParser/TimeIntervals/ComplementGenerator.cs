@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class ComplementGenerator : TimeIntervalGenerator
+    [DebuggerDisplay("{Name}")]
+    public class ComplementGenerator : IGenerator<TimeInterval>
     {
+        public string Name { get; }
         private IGenerator<TimeInterval> _generator;
         public ComplementGenerator(
             IGenerator<TimeInterval> generator,
             string name = null)
-            : base(name ?? $"Compl<{generator.Name}>")
         {
             _generator = generator;
+            Name = name ?? $"Compl<{generator.Name}>";
         }
 
-        public override IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
         {
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
             if (!enumerator.MoveNext())
