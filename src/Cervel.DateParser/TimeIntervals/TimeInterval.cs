@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cervel.TimeParser.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace Cervel.TimeParser
 {
     [DebuggerDisplay("[{Start}, {End}]")]
-    public struct TimeInterval
+    public struct TimeInterval : ITimeInterval
     {
         public DateTime Start { get; }
         public DateTime End { get; }
