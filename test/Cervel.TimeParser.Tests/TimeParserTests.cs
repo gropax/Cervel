@@ -1,4 +1,4 @@
-using Cervel.TimeParser.DateTimes;
+using Cervel.TimeParser.Dates;
 using System;
 using Xunit;
 

@@ -1,4 +1,4 @@
-﻿using Cervel.TimeParser.DateTimes;
+﻿using Cervel.TimeParser.Dates;
 using Cervel.TimeParser.Extensions;
 using Cervel.TimeParser.TimeIntervals;
 using System;
@@ -48,7 +48,7 @@ namespace Cervel.TimeParser
 
         public static IGenerator<Date> Union(params IGenerator<Date>[] generators) => new UnionGenerator(generators);
         public static IGenerator<Date> Since(IGenerator<Date> scope, IGenerator<Date> generator) => new SinceGenerator(scope, generator);
-        public static IGenerator<Date> Until(IGenerator<Date> scope, IGenerator<Date> generator) => new DateTimes.UntilGenerator(scope, generator);
+        public static IGenerator<Date> Until(IGenerator<Date> scope, IGenerator<Date> generator) => new Dates.UntilGenerator(scope, generator);
 
         public static IGenerator<TimeInterval> Complement(IGenerator<TimeInterval> g) => new ComplementGenerator(g);
         public static IGenerator<Date> Inside(IGenerator<TimeInterval> scope, IGenerator<Date> generator) => new ScopeGenerator(scope, generator);

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Cervel.TimeParser.DateTimes.Tests
+namespace Cervel.TimeParser.Dates.Tests
 {
     public class DayFilterGeneratorTests : TestBase
     {

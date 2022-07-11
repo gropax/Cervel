@@ -1,10 +1,10 @@
-using Cervel.TimeParser.DateTimes;
+using Cervel.TimeParser.Dates;
 using Cervel.TimeParser.Tests;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace Cervel.TimeParser.DateTimes.Tests
+namespace Cervel.TimeParser.Dates.Tests
 {
     public class FrequencyGeneratorTests : TestBase
     {

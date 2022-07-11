@@ -1,4 +1,4 @@
-﻿using Cervel.TimeParser.DateTimes;
+﻿using Cervel.TimeParser.Dates;
 using Cervel.TimeParser.TimeIntervals;
 using System;
 using System.Collections.Generic;
@@ -70,12 +70,12 @@ namespace Cervel.TimeParser.Extensions
 
         public static IGenerator<Date> ShiftDay(this IGenerator<Date> generator, int n)
         {
-            return new DateTimes.ShiftGenerator(generator, TimeSpan.FromDays(n));
+            return new Dates.ShiftGenerator(generator, TimeSpan.FromDays(n));
         }
 
         public static IGenerator<Date> Shift(this IGenerator<Date> generator, TimeSpan timeSpan)
         {
-            return new DateTimes.ShiftGenerator(generator, timeSpan);
+            return new Dates.ShiftGenerator(generator, timeSpan);
         }
 
         public static IGenerator<Date> Next(this IGenerator<Date> generator, DayOfWeek dow)
