@@ -56,11 +56,6 @@ namespace Cervel.TimeParser
 
         public static IGenerator<TimeInterval> DayScopes() => new FrequencyGenerator(new DayMeasure()).ToScopes(TimeSpan.FromDays(1));
 
-        public static IGenerator<TimeInterval> EveryDayOfWeekInterval(DayOfWeek dow)
-        {
-            return new TimeIntervals.DayFilterGenerator(TimeSpan.FromDays(1), (d) => d.DayOfWeek == dow);
-        }
-
         public static Func<IGenerator<Date>, IGenerator<Date>> DayShift(int n) => (g) => g.ShiftDay(n);
 
         public static IGenerator<Date> Scope(IGenerator<TimeInterval> scopes, IGenerator<Date> dates)

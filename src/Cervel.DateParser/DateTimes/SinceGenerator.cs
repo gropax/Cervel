@@ -27,7 +27,7 @@ namespace Cervel.TimeParser.DateTimes
             if (!scopeEnum.MoveNext())
                 yield break;
 
-            foreach (var date in _generator.Generate(scopeEnum.Current))
+            foreach (var date in _generator.Generate(scopeEnum.Current.DateTime))
                 yield return date;
         }
     }
