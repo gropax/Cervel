@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Cervel.TimeParser.TimeIntervals.Fuzzy
 {
     [DebuggerDisplay("[{Start}, {End}]")]
-    public struct FuzzyInterval
+    public struct FuzzyInterval : ITimeInterval<FuzzyInterval>
     {
         public DateTime Start { get; }
         public DateTime End { get; }
@@ -71,6 +71,16 @@ namespace Cervel.TimeParser.TimeIntervals.Fuzzy
                 throw new Exception("Date do not belong to interval");
 
             return (StartValue * fromStart + EndValue * toEnd) / (fromStart + toEnd);
+        }
+
+        public FuzzyInterval Cut(DateTime endTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public FuzzyInterval Shift(TimeSpan timeSpan)
+        {
+            return new FuzzyInterval(Start + timeSpan, End + timeSpan, StartValue, EndValue);
         }
     }
 }

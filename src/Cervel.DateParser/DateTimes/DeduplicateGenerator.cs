@@ -6,19 +6,21 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class DeduplicateGenerator : DateTimeGenerator
+    public class DeduplicateGenerator : IGenerator<Date>
     {
-        private readonly IGenerator<DateTime> _generator;
+        public string Name { get; }
+        private readonly IGenerator<Date> _generator;
 
         public DeduplicateGenerator(
-            IGenerator<DateTime> generator,
+            IGenerator<Date> generator,
             string name = null)
-            : base(name ?? $"Dedup<{generator.Name}>")
         {
             _generator = generator;
+            Name = name ?? $"Dedup<{generator.Name}>";
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+
+        public IEnumerable<Date> Generate(DateTime fromDate)
         {
             var enumerator = _generator.Generate(fromDate).GetEnumerator();
             if (!enumerator.MoveNext())
@@ -29,7 +31,7 @@ namespace Cervel.TimeParser.DateTimes
 
             while (enumerator.MoveNext())
             {
-                if (enumerator.Current > last)
+                if (((ITimeInterval)enumerator.Current).IsAfter(last))
                 {
                     last = enumerator.Current;
                     yield return last;

@@ -1,4 +1,5 @@
-﻿using Cervel.TimeParser.Models;
+﻿using Cervel.TimeParser.DateTimes;
+using Cervel.TimeParser.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,10 +10,14 @@ using System.Threading.Tasks;
 namespace Cervel.TimeParser
 {
     [DebuggerDisplay("[{Start}, {End}]")]
-    public struct TimeInterval : ITimeInterval
+    public struct TimeInterval : ITimeInterval<TimeInterval>
     {
         public DateTime Start { get; }
         public DateTime End { get; }
+
+        public TimeInterval(Date start, Date end)
+            : this(start.DateTime, end.DateTime)
+        { }
 
         public TimeInterval(DateTime start, DateTime end)
         {
@@ -29,11 +34,21 @@ namespace Cervel.TimeParser
         {
             return $"[{Start}, {End}]";
         }
+
+        public TimeInterval Cut(DateTime end)
+        {
+            return new TimeInterval(Start, end);
+        }
+
+        public TimeInterval Shift(TimeSpan timeSpan)
+        {
+            return new TimeInterval(Start + timeSpan, End + timeSpan);
+        }
     }
 
 
     [DebuggerDisplay("[{Start}, {End}, {Value}]")]
-    public struct TimeInterval<T>
+    public struct TimeInterval<T> : ITimeInterval<TimeInterval<T>>
     {
         public DateTime Start { get; }
         public DateTime End { get; }
@@ -55,6 +70,16 @@ namespace Cervel.TimeParser
         public override string ToString()
         {
             return $"[{Start}, {End}, {Value}]";
+        }
+
+        public TimeInterval<T> Cut(DateTime endTime)
+        {
+            return new TimeInterval<T>(Start, endTime, Value);
+        }
+
+        public TimeInterval<T> Shift(TimeSpan timeSpan)
+        {
+            return new TimeInterval<T>(Start + timeSpan, End + timeSpan, Value);
         }
     }
 }

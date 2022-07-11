@@ -8,19 +8,19 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class UnionGenerator : DateTimeGenerator
     {
-        private IGenerator<DateTime>[] _generators;
+        private IGenerator<Date>[] _generators;
         public UnionGenerator(
-            IGenerator<DateTime>[] generators,
+            IGenerator<Date>[] generators,
             string name = null)
             : base(name ?? $"Union<{string.Join(", ", generators.Select(g => g.Name))}>")
         {
             _generators = generators;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
             // Initialize dictionary of enumerators
-            var dict = new Dictionary<IEnumerator<DateTime>, DateTime>();
+            var dict = new Dictionary<IEnumerator<Date>, Date>();
             for (int i = 0; i < _generators.Length; i++)
             {
                 var enumerator = _generators[i].Generate(fromDate).GetEnumerator();

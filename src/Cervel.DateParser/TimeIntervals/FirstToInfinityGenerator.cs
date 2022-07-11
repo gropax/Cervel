@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cervel.TimeParser.DateTimes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class FirstToInfinityGenerator : TimeIntervalGenerator
     {
-        private IGenerator<DateTime> _generator;
+        private IGenerator<Date> _generator;
         public FirstToInfinityGenerator(
-            IGenerator<DateTime> generator,
+            IGenerator<Date> generator,
             string name = null)
             : base(name ?? $"FirstToInfinity<{generator.Name}>")
         {
@@ -21,7 +22,7 @@ namespace Cervel.TimeParser.TimeIntervals
         {
             foreach (var date in _generator.Generate(fromDate))
             {
-                yield return new TimeInterval(date, DateTime.MaxValue);
+                yield return new TimeInterval(date.DateTime, DateTime.MaxValue);
                 break;
             }
         }

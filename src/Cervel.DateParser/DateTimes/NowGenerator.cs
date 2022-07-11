@@ -10,9 +10,9 @@ namespace Cervel.TimeParser.DateTimes
     {
         public NowGenerator(string name = null) : base(name ?? "Now") { }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
-            yield return fromDate;
+            yield return new Date(fromDate);
         }
     }
 }

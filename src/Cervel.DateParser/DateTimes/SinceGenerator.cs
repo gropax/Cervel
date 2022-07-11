@@ -8,12 +8,12 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class SinceGenerator : DateTimeGenerator
     {
-        private IGenerator<DateTime> _scope;
-        private IGenerator<DateTime> _generator;
+        private IGenerator<Date> _scope;
+        private IGenerator<Date> _generator;
 
         public SinceGenerator(
-            IGenerator<DateTime> scope,
-            IGenerator<DateTime> generator,
+            IGenerator<Date> scope,
+            IGenerator<Date> generator,
             string name = null)
             : base(name ?? $"Since<{scope.Name}, {generator.Name}>")
         {
@@ -21,7 +21,7 @@ namespace Cervel.TimeParser.DateTimes
             _generator = generator;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
             var scopeEnum = _scope.Generate(fromDate).GetEnumerator();
             if (!scopeEnum.MoveNext())

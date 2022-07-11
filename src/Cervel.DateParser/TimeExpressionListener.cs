@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Cervel.TimeParser;
+using Cervel.TimeParser.DateTimes;
 using Cervel.TimeParser.Extensions;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Cervel.TimeParser
         }
 
         public IGenerator<TimeInterval> TimeIntervalGenerator { get; set; }
-        public IGenerator<DateTime> DateTimeGenerator { get; set; }
+        public IGenerator<Date> DateTimeGenerator { get; set; }
         
         private IGenerator<TimeInterval> _intervals;
 
@@ -97,8 +98,8 @@ namespace Cervel.TimeParser
 
         #region DateGenerator
 
-        private List<IGenerator<DateTime>> _dateGenerators = new List<IGenerator<DateTime>>();
-        private IGenerator<DateTime> ConsumeSingleDateGenerator()
+        private List<IGenerator<Date>> _dateGenerators = new List<IGenerator<Date>>();
+        private IGenerator<Date> ConsumeSingleDateGenerator()
         {
             var gen = _dateGenerators.Single();
             _dateGenerators.Clear();
@@ -109,10 +110,10 @@ namespace Cervel.TimeParser
 
         #region Date shift
 
-        private List<Func<IGenerator<DateTime>, IGenerator<DateTime>>> _dateShifts =
-            new List<Func<IGenerator<DateTime>, IGenerator<DateTime>>>();
+        private List<Func<IGenerator<Date>, IGenerator<Date>>> _dateShifts =
+            new List<Func<IGenerator<Date>, IGenerator<Date>>>();
             
-        private IEnumerable<Func<IGenerator<DateTime>, IGenerator<DateTime>>> ConsumeDateShifts()
+        private IEnumerable<Func<IGenerator<Date>, IGenerator<Date>>> ConsumeDateShifts()
         {
             var shifts = _dateShifts.ToArray();
             _dateShifts.Clear();

@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Cervel.TimeParser;
+using Cervel.TimeParser.DateTimes;
 using Cervel.TimeParser.Extensions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Cervel.TimeParser
     public class TimeExpressionV2Listener : TimeExpressionV2BaseListener
     {
         public IGenerator<TimeInterval> IntervalDistribution { get; set; }
-        public IGenerator<DateTime> DateDistribution { get; set; }
+        public IGenerator<Date> DateDistribution { get; set; }
 
         private Stack<VarScope> _varScopes = new();
         private VarScope _scope;
@@ -315,7 +316,7 @@ namespace Cervel.TimeParser
 
     internal class VarScope
     {
-        public TmpVar<IGenerator<DateTime>> DateGenerators = new();
+        public TmpVar<IGenerator<Date>> DateGenerators = new();
         public TmpVar<IGenerator<TimeInterval>> IntervalGenerators = new();
         public TmpVar<DayOfWeek> DaysOfWeek = new();
         public TmpVar<int> Numbers = new();

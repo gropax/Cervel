@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
 {
-    public interface IGenerator<out T>
-    {
-        string Name { get; }
-        IEnumerable<T> Generate(DateTime fromDate);
-        IEnumerable<T> Generate(ITimeInterval interval) => Generate(interval.Start, interval.End);
-        IEnumerable<T> Generate(DateTime fromDate, DateTime toDate);
-    }
+    //public interface IGenerator<out T>
+    //{
+    //    string Name { get; }
+    //    IEnumerable<T> Generate(DateTime fromDate);
+    //    IEnumerable<T> Generate(ITimeInterval interval) => Generate(interval.Start, interval.End);
+    //    IEnumerable<T> Generate(DateTime fromDate, DateTime toDate);
+    //}
 }

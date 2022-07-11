@@ -30,5 +30,12 @@ namespace Cervel.TimeParser.Models
         {
             return this;
         }
+
+        public DayInterval Shift(TimeSpan timeSpan)
+        {
+            var dayShift = timeSpan.TotalDays;
+            dayShift = dayShift > 0 ? Math.Floor(dayShift) : Math.Ceiling(dayShift);
+            return new DayInterval(Start + TimeSpan.FromDays(dayShift));
+        }
     }
 }

@@ -18,17 +18,17 @@ namespace Cervel.TimeParser.DateTimes
             _timeMeasure = timeMeasure;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
             var date = fromDate;
 
             while (date < DateTime.MaxValue)
             {
-                yield return date;
-                date = _timeMeasure.AddTo(date);
+                yield return new Date(date);
+                date = _timeMeasure.AddTo(new Date(date)).DateTime;
             }
 
-            yield return DateTime.MaxValue;
+            yield return new Date(DateTime.MaxValue);
         }
     }
 }

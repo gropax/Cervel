@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cervel.TimeParser.DateTimes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ namespace Cervel.TimeParser.TimeIntervals
 {
     public class ToPartitionGenerator : TimeIntervalGenerator
     {
-        private IGenerator<DateTime> _generator;
+        private IGenerator<Date> _generator;
         public ToPartitionGenerator(
-            IGenerator<DateTime> generator,
+            IGenerator<Date> generator,
             string name = null)
             : base(name ?? $"ToPartition<{generator.Name}>")
         {
@@ -24,17 +25,17 @@ namespace Cervel.TimeParser.TimeIntervals
                 yield return new TimeInterval(fromDate, DateTime.MaxValue);
 
             var last = enumerator.Current;
-            if (last > fromDate)
-                yield return new TimeInterval(fromDate, last);
+            if (last.DateTime > fromDate)
+                yield return new TimeInterval(fromDate, last.DateTime);
 
             while (enumerator.MoveNext())
             {
-                yield return new TimeInterval(last, enumerator.Current);
+                yield return new TimeInterval(last.DateTime, enumerator.Current.DateTime);
                 last = enumerator.Current;
             }
 
-            if (last < DateTime.MaxValue)
-                yield return new TimeInterval(last, DateTime.MaxValue);
+            if (last.DateTime < DateTime.MaxValue)
+                yield return new TimeInterval(last.DateTime, DateTime.MaxValue);
         }
     }
 }

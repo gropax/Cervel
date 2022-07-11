@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cervel.TimeParser.DateTimes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,11 @@ namespace Cervel.TimeParser.TimeIntervals
     /// </summary>
     public class ToScopesGenerator : TimeIntervalGenerator
     {
-        private IGenerator<DateTime> _generator;
+        private IGenerator<Date> _generator;
         private TimeSpan _timeSpan;
 
         public ToScopesGenerator(
-            IGenerator<DateTime> generator,
+            IGenerator<Date> generator,
             TimeSpan timeSpan,
             string name = null)
             : base(name ?? $"ToScopes<{timeSpan}, {generator.Name}>")
@@ -36,11 +37,11 @@ namespace Cervel.TimeParser.TimeIntervals
             while (enumerator.MoveNext())
             {
                 var next = enumerator.Current;
-                yield return GetInterval(t, next);
+                yield return GetInterval(t.DateTime, next.DateTime);
                 t = next;
             }
 
-            yield return GetInterval(t, null);
+            yield return GetInterval(t.DateTime, null);
         }
 
         private TimeInterval GetInterval(DateTime t, DateTime? next)

@@ -1,3 +1,4 @@
+using Cervel.TimeParser.DateTimes;
 using System;
 using Xunit;
 
@@ -28,7 +29,7 @@ namespace Cervel.TimeParser.Tests
         {
             var result = _timeParser.ParseDateTimes(input);
             Assert.True(result.IsSuccess);
-            Assert.Equal(new DateTime[0],
+            Assert.Equal(new Date[0],
                 result.Value.Generate(_fromDate, _toDate));
         }
         #endregion

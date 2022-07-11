@@ -8,18 +8,18 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class OnceGenerator : DateTimeGenerator
     {
-        private DateTime? _value;
+        private Date _value;
         public OnceGenerator(
-            DateTime? value = null,
+            Date value = null,
             string name = null)
             : base(name ?? $"Once<{value}>")
         {
             _value = value;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
-            yield return _value ?? fromDate;
+            yield return _value ?? new Date(fromDate);
         }
     }
 }

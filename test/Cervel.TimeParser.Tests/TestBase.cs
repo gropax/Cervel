@@ -9,16 +9,16 @@ namespace Cervel.TimeParser.Tests
 {
     public class TestBase
     {
-        protected IGenerator<DateTime>[] DateGenerators(params IGenerator<DateTime>[] generators) => generators;
-        protected IGenerator<DateTime> DateGenerator(params DateTime[] dateTimes) =>
+        protected IGenerator<Date>[] DateGenerators(params IGenerator<Date>[] generators) => generators;
+        protected IGenerator<Date> DateGenerator(params Date[] dateTimes) =>
             ListGenerator.Create(dateTimes);
 
-        protected DateTime[] Dates(params DateTime[] dateTimes) => dateTimes;
-        protected DateTime Day(int year, int month, int day) => new DateTime(year, month, day);
-        protected DateTime Day(int year, int month, int day, int hour, int minute, int second) => new DateTime(year, month, day, hour, minute, second);
+        protected Date[] Dates(params Date[] dateTimes) => dateTimes;
+        protected Date Day(int year, int month, int day) => new Date(new DateTime(year, month, day));
+        protected Date Day(int year, int month, int day, int hour, int minute, int second) => new Date(new DateTime(year, month, day, hour, minute, second));
 
         protected TimeInterval[] Intervals(params TimeInterval[] timeSpans) => timeSpans;
-        protected TimeInterval Interval(DateTime start, DateTime end) => new TimeInterval(start, end);
+        protected TimeInterval Interval(Date start, Date end) => new TimeInterval(start.DateTime, end.DateTime);
 
         protected TimeInterval DayInterval(int year, int month, int day) => DaysInterval(year, month, day, 1);
         protected TimeInterval<T> MonthInterval<T>(int year, int month, T value) => new TimeInterval<T>(MonthesInterval(year, month, 1), value);
@@ -37,14 +37,14 @@ namespace Cervel.TimeParser.Tests
             var start = new DateTime(year, month, 1);
             return new TimeInterval(
                 start: start,
-                end: measure.AddTo(start));
+                end: measure.AddTo(new Date(start)).DateTime);
         }
 
-        protected TimeInterval DaysInterval(DateTime first, DateTime last)
+        protected TimeInterval DaysInterval(Date first, Date last)
         {
             return new TimeInterval(
-                start: first,
-                end: last + TimeSpan.FromDays(1));
+                start: first.DateTime,
+                end: last.DateTime + TimeSpan.FromDays(1));
         }
 
         protected IGenerator<TimeInterval> Generator(params TimeInterval[] intervals)

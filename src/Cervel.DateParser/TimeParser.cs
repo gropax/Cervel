@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using Cervel.TimeParser.DateTimes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Cervel.TimeParser
 {
     public class TimeParser
     {
-        public ParseResult<IGenerator<DateTime>> ParseDateTimes(string input, int parserVersion = 1)
+        public ParseResult<IGenerator<Date>> ParseDateTimes(string input, int parserVersion = 1)
         {
             if (parserVersion == 1)
                 return ParseSymbol(input, true, (p) => p.dateTimes(), (l) => l.DateTimeGenerator);

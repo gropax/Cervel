@@ -22,14 +22,14 @@ namespace Cervel.TimeParser.DateTimes
             _number = number;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
             var start = fromDate.Date;
             if (start < fromDate)
                 start = start + TimeSpan.FromDays(1);
 
             if (TryGetDayOfMonth(start.Year, start.Month, _number, out var date) && date >= start)
-                yield return date;
+                yield return new Date(date);
 
             int inc = 1;
             while (true)
@@ -38,7 +38,7 @@ namespace Cervel.TimeParser.DateTimes
                 if (nextDate.Day == _number)
                 {
                     date = nextDate;
-                    yield return date;
+                    yield return new Date(date);
                     inc = 1;
                 }
                 else

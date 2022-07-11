@@ -13,7 +13,7 @@ namespace Cervel.TimeParser.DateTimes.Tests
         [Fact]
         public void TestGenerate_WithoutParams()
         {
-            var generator = new UnionGenerator(DateGenerators(
+            IGenerator<Date> generator = new UnionGenerator(DateGenerators(
                 DateGenerator(
                     Day(2022, 1, 1),
                     Day(2022, 1, 5),

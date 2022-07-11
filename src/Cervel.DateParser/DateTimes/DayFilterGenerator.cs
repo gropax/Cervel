@@ -28,12 +28,12 @@ namespace Cervel.TimeParser.DateTimes
             _take = take;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
             var dates = DateTimesFrom(fromDate);
 
             if (_dateTimeSelector != null)
-                dates = dates.Where(d => _dateTimeSelector(d));
+                dates = dates.Where(d => _dateTimeSelector(d.DateTime));
 
             if (_indexSelector != null)
                 dates = dates.WhereIndex(i => _indexSelector(i));
@@ -47,18 +47,18 @@ namespace Cervel.TimeParser.DateTimes
             return dates;
         }
 
-        private IEnumerable<DateTime> DateTimesFrom(DateTime fromDate)
+        private IEnumerable<Date> DateTimesFrom(DateTime fromDate)
         {
             var timeSpan = TimeSpan.FromDays(1);
             var date = fromDate;
 
             while (date < DateTime.MaxValue)
             {
-                yield return date;
+                yield return new Date(date);
                 date = date.Shift(timeSpan);
             }
 
-            yield return DateTime.MaxValue;
+            yield return new Date(DateTime.MaxValue);
         }
     }
 }

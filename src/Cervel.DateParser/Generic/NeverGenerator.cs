@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.Generic
 {
-    public class NeverGenerator<T> : IGenerator2<T> where T : ITimeInterval<T>
+    public class NeverGenerator<T> : IGenerator<T> where T : ITimeInterval<T>
     {
         public string Name { get; }
         public NeverGenerator(string name = null)

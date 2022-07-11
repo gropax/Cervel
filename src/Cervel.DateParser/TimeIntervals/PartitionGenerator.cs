@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cervel.TimeParser.DateTimes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,11 @@ namespace Cervel.TimeParser.TimeIntervals
     public class PartitionGenerator : TimeIntervalGenerator
     {
         private IGenerator<TimeInterval> _generator;
-        private IGenerator<DateTime> _cutGenerator;
+        private IGenerator<Date> _cutGenerator;
 
         public PartitionGenerator(
             IGenerator<TimeInterval> generator,
-            IGenerator<DateTime> cutGenerator,
+            IGenerator<Date> cutGenerator,
             string name = null)
             : base(name ?? $"Partition<{cutGenerator.Name}, {generator.Name}>")
         {
@@ -42,7 +43,7 @@ namespace Cervel.TimeParser.TimeIntervals
                         pendingCut = null;
                     }
                     else if (cutEnumerator.MoveNext())
-                        cut = cutEnumerator.Current;
+                        cut = cutEnumerator.Current.DateTime;
                     else
                         break;
 

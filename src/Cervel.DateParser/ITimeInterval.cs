@@ -10,10 +10,15 @@ namespace Cervel.TimeParser
     {
         DateTime Start { get; }
         DateTime End { get; }
+        bool IsBefore(DateTime date) => End < date;
+        bool IsAfter(DateTime date) => date < Start;
+        bool IsBefore(ITimeInterval other) => End < other.Start;
+        bool IsAfter(ITimeInterval other) => other.End < Start;
     }
 
     public interface ITimeInterval<T> : ITimeInterval
     {
         T Cut(DateTime endTime);
+        T Shift(TimeSpan timeSpan);
     }
 }

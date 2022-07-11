@@ -8,11 +8,11 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class ShiftGenerator : DateTimeGenerator
     {
-        private IGenerator<DateTime> _generator;
+        private IGenerator<Date> _generator;
         private TimeSpan _timeSpan;
 
         public ShiftGenerator(
-            IGenerator<DateTime> generator,
+            IGenerator<Date> generator,
             TimeSpan timeSpan,
             string name = null)
             : base(name ?? $"Shift<{timeSpan}, {generator.Name}>")
@@ -21,9 +21,9 @@ namespace Cervel.TimeParser.DateTimes
             _timeSpan = timeSpan;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
-            return _generator.Generate(fromDate).Select(d => d + _timeSpan);
+            return _generator.Generate(fromDate).Select(d => d.Shift(_timeSpan));
         }
     }
 }

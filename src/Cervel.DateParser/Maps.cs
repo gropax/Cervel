@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cervel.TimeParser.DateTimes;
 using Cervel.TimeParser.Extensions;
 
 namespace Cervel.TimeParser
@@ -23,25 +24,25 @@ namespace Cervel.TimeParser
         }
 
         public static StrictOrderPreservingMap<T> Filter<T>(Func<T, bool> filter) => (ts) => ts.Where(t => filter(t));
-        public static OrderPreservingMap<DateTime> StartOfDay() => (ds) => ds.Select(d => d.Date);
-        public static OrderPreservingMap<DateTime> StartOfMonth() => (ds) => ds.Select(d => new DateTime(d.Year, d.Month, 1));
+        public static OrderPreservingMap<Date> StartOfDay() => (ds) => ds.Select(d => new Date(d.DateTime.Date));  // @refactor
+        public static OrderPreservingMap<Date> StartOfMonth() => (ds) => ds.Select(d => new Date(new DateTime(d.DateTime.Year, d.DateTime.Month, 1)));  // @refactor
 
         //public static StrictOrderPreservingMap<DateTime> ShiftDays<DateTime>(int n)
         //    => (ds) => ds.Select(d => d.Shift(TimeSpan.FromDays(n)));
 
-        public static StrictOrderPreservingMap<DateTime> ShiftDays(int n)
+        public static StrictOrderPreservingMap<Date> ShiftDays(int n)
         {
             var timeMeasure = new DayMeasure(n);
             return (ds) => ds.Select(d => timeMeasure.AddTo(d));
         }
 
-        public static OrderPreservingMap<DateTime> ShiftMonth(int n)
+        public static OrderPreservingMap<Date> ShiftMonth(int n)
         {
             var timeMeasure = new MonthMeasure(n);
             return (ds) => ds.Select(d => timeMeasure.AddTo(d));
         }
 
-        public static OrderPreservingMap<DateTime> ShiftYears(int n)
+        public static OrderPreservingMap<Date> ShiftYears(int n)
         {
             var timeMeasure = new YearMeasure(n);
             return (ds) => ds.Select(d => timeMeasure.AddTo(d));

@@ -8,26 +8,26 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class ListGenerator : DateTimeGenerator
     {
-        public static ListGenerator Create(IEnumerable<DateTime> values)
+        public static ListGenerator Create(IEnumerable<Date> values)
         {
-            var cleanValues = new HashSet<DateTime>(values).OrderBy(d => d).ToArray();
+            var cleanValues = new HashSet<Date>(values).OrderBy(d => d).ToArray();
             return new ListGenerator(cleanValues);
         }
 
-        private DateTime[] _values;
+        private Date[] _values;
         public ListGenerator(
-            DateTime[] values,
+            Date[] values,
             string name = null)
             : base(name ?? $"List<[{values.Length}]>")
         {
             _values = values;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
             foreach (var value in _values)
             {
-                if (value >= fromDate)
+                if (value.DateTime >= fromDate)
                     yield return value;
             }
         }

@@ -14,7 +14,7 @@ namespace Cervel.TimeParser.DateTimes.Tests
         [Fact]
         public void TestGenerate_Monthes()
         {
-            var generator = new FrequencyGenerator(new MonthMeasure());
+            IGenerator<Date> generator = new FrequencyGenerator(new MonthMeasure());
             var dates = generator.Generate(_jan1st2022, _jan1st2023).ToArray();
 
             Assert.Equal(

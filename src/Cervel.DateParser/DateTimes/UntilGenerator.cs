@@ -8,12 +8,12 @@ namespace Cervel.TimeParser.DateTimes
 {
     public class UntilGenerator : DateTimeGenerator
     {
-        private readonly IGenerator<DateTime> _scope;
-        private readonly IGenerator<DateTime> _generator;
+        private readonly IGenerator<Date> _scope;
+        private readonly IGenerator<Date> _generator;
 
         public UntilGenerator(
-            IGenerator<DateTime> scope,
-            IGenerator<DateTime> generator,
+            IGenerator<Date> scope,
+            IGenerator<Date> generator,
             string name = null)
             : base(name ?? $"Until<{scope.Name}, {generator.Name}>")
         {
@@ -21,13 +21,13 @@ namespace Cervel.TimeParser.DateTimes
             _generator = generator;
         }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
             var scopeEnum = _scope.Generate(fromDate).GetEnumerator();
             if (!scopeEnum.MoveNext())
                 return _generator.Generate(fromDate);
             else
-                return _generator.Generate(fromDate, scopeEnum.Current);
+                return _generator.Generate(fromDate, scopeEnum.Current.DateTime);
         }
     }
 }

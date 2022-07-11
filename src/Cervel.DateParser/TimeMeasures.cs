@@ -1,4 +1,5 @@
-﻿using Cervel.TimeParser.Extensions;
+﻿using Cervel.TimeParser.DateTimes;
+using Cervel.TimeParser.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Cervel.TimeParser
     public interface ITimeMeasure
     {
         string Name { get; }
-        DateTime AddTo(DateTime date);
+        Date AddTo(Date date);
     }
 
     public class DayMeasure : ITimeMeasure
@@ -23,9 +24,9 @@ namespace Cervel.TimeParser
 
         public string Name => $"Day({_factor})";
 
-        public DateTime AddTo(DateTime date)
+        public Date AddTo(Date date)
         {
-            return date.AddDays(_factor);
+            return new Date(date.DateTime.AddDays(_factor));
         }
     }
 
@@ -39,9 +40,9 @@ namespace Cervel.TimeParser
 
         public string Name => $"Month({_factor})";
 
-        public DateTime AddTo(DateTime date)
+        public Date AddTo(Date date)
         {
-            return date.AddMonths(_factor);
+            return new Date(date.DateTime.AddMonths(_factor));
         }
     }
 
@@ -55,9 +56,9 @@ namespace Cervel.TimeParser
 
         public string Name => $"Year({_factor})";
 
-        public DateTime AddTo(DateTime date)
+        public Date AddTo(Date date)
         {
-            return date.AddYears(_factor);
+            return new Date(date.DateTime.AddYears(_factor));
         }
     }
 }

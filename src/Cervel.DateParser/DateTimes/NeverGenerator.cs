@@ -10,7 +10,7 @@ namespace Cervel.TimeParser.DateTimes
     {
         public NeverGenerator(string name = null) : base(name ?? "Never") { }
 
-        public override IEnumerable<DateTime> Generate(DateTime fromDate)
+        public override IEnumerable<Date> Generate(DateTime fromDate)
         {
             yield break;
         }
