@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class UntilGenerator : DateTimeGenerator
+    [DebuggerDisplay("{Name}")]
+    public class UntilGenerator : IGenerator<Date>
     {
+        public string Name { get; }
         private readonly IGenerator<Date> _scope;
         private readonly IGenerator<Date> _generator;
 
@@ -15,13 +18,13 @@ namespace Cervel.TimeParser.DateTimes
             IGenerator<Date> scope,
             IGenerator<Date> generator,
             string name = null)
-            : base(name ?? $"Until<{scope.Name}, {generator.Name}>")
         {
             _scope = scope;
             _generator = generator;
+            Name = name ?? $"Until<{scope.Name}, {generator.Name}>";
         }
 
-        public override IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<Date> Generate(DateTime fromDate)
         {
             var scopeEnum = _scope.Generate(fromDate).GetEnumerator();
             if (!scopeEnum.MoveNext())

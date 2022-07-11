@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class UnionGenerator : DateTimeGenerator
+    [DebuggerDisplay("{Name}")]
+    public class UnionGenerator : IGenerator<Date>
     {
+        public string Name { get; }
         private IGenerator<Date>[] _generators;
         public UnionGenerator(
             IGenerator<Date>[] generators,
             string name = null)
-            : base(name ?? $"Union<{string.Join(", ", generators.Select(g => g.Name))}>")
         {
             _generators = generators;
+            Name = name ?? $"Union<{string.Join(", ", generators.Select(g => g.Name))}>";
         }
 
-        public override IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<Date> Generate(DateTime fromDate)
         {
             // Initialize dictionary of enumerators
             var dict = new Dictionary<IEnumerator<Date>, Date>();

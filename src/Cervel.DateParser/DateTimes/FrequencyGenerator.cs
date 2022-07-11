@@ -1,24 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class FrequencyGenerator : DateTimeGenerator
+    [DebuggerDisplay("{Name}")]
+    public class FrequencyGenerator : IGenerator<Date>
     {
+        public string Name { get; }
         private ITimeMeasure _timeMeasure;
 
         public FrequencyGenerator(
             ITimeMeasure timeMeasure,
             string name = null)
-            : base(name ?? $"Freq<{timeMeasure.Name}>")
+            : base()
         {
             _timeMeasure = timeMeasure;
+            Name = name ?? $"Freq<{timeMeasure.Name}>";
         }
 
-        public override IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<Date> Generate(DateTime fromDate)
         {
             var date = fromDate;
 

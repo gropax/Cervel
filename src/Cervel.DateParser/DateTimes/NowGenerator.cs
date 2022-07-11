@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class NowGenerator : DateTimeGenerator
+    [DebuggerDisplay("{Name}")]
+    public class NowGenerator : IGenerator<Date>
     {
-        public NowGenerator(string name = null) : base(name ?? "Now") { }
+        public string Name { get; }
+        public NowGenerator(string name = null)
+        {
+            Name = name ?? "Now";
+        }
 
-        public override IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<Date> Generate(DateTime fromDate)
         {
             yield return new Date(fromDate);
         }

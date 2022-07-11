@@ -2,27 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Cervel.TimeParser.Extensions;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class DayOfMonthGenerator : DateTimeGenerator
+    [DebuggerDisplay("{Name}")]
+    public class DayOfMonthGenerator : IGenerator<Date>
     {
+        public string Name { get; }
         private readonly int _number;
 
         public DayOfMonthGenerator(
             int number,
             string name = null)
-            : base(name ?? $"DayNumber({number})")
         {
             if (number < 1 || number > 31)
                 throw new ArgumentOutOfRangeException(nameof(number));
 
             _number = number;
+            Name = name ?? $"DayNumber({number})";
         }
 
-        public override IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<Date> Generate(DateTime fromDate)
         {
             var start = fromDate.Date;
             if (start < fromDate)

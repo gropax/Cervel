@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,8 +8,11 @@ using Cervel.TimeParser.Extensions;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class DayFilterGenerator : DateTimeGenerator
+    [DebuggerDisplay("{Name}")]
+    public class DayFilterGenerator : IGenerator<Date>
     {
+        public string Name { get; }
+
         private readonly Func<DateTime, bool> _dateTimeSelector;
         private readonly Func<int, bool> _indexSelector;
         private readonly int? _skip;
@@ -20,15 +24,15 @@ namespace Cervel.TimeParser.DateTimes
             int? skip = null,
             int? take = null,
             string name = null)
-            : base(name ?? $"DayFilter<>")
         {
             _dateTimeSelector = dateTimeSelector;
             _indexSelector = indexSelector;
             _skip = skip;
             _take = take;
+            Name = name ?? $"DayFilter<>";
         }
 
-        public override IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<Date> Generate(DateTime fromDate)
         {
             var dates = DateTimesFrom(fromDate);
 

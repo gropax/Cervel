@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.DateTimes
 {
-    public class ShiftGenerator : DateTimeGenerator
+    [DebuggerDisplay("{Name}")]
+    public class ShiftGenerator : IGenerator<Date>
     {
+        public string Name { get; }
         private IGenerator<Date> _generator;
         private TimeSpan _timeSpan;
 
@@ -15,13 +18,13 @@ namespace Cervel.TimeParser.DateTimes
             IGenerator<Date> generator,
             TimeSpan timeSpan,
             string name = null)
-            : base(name ?? $"Shift<{timeSpan}, {generator.Name}>")
         {
             _generator = generator;
             _timeSpan = timeSpan;
+            Name = name ?? $"Shift<{timeSpan}, {generator.Name}>";
         }
 
-        public override IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<Date> Generate(DateTime fromDate)
         {
             return _generator.Generate(fromDate).Select(d => d.Shift(_timeSpan));
         }
