@@ -26,10 +26,8 @@ namespace Cervel.TimeParser.Models
         public DateTime End => Start + TimeSpan.FromDays(1);
         public TimeInterval ToTimeInterval() => new TimeInterval(Start, End);
 
-        public DayInterval Cut(DateTime endTime)
-        {
-            return this;
-        }
+        public DayInterval CutStart(DateTime startTime) => this;
+        public DayInterval CutEnd(DateTime endTime) => this;
 
         public DayInterval Shift(TimeSpan timeSpan)
         {

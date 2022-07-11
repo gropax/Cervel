@@ -73,7 +73,12 @@ namespace Cervel.TimeParser.TimeIntervals.Fuzzy
             return (StartValue * fromStart + EndValue * toEnd) / (fromStart + toEnd);
         }
 
-        public FuzzyInterval Cut(DateTime endTime)
+        public FuzzyInterval CutStart(DateTime startTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public FuzzyInterval CutEnd(DateTime endTime)
         {
             throw new NotImplementedException();
         }

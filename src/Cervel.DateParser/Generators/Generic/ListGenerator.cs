@@ -5,28 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace Cervel.TimeParser.TimeIntervals
+namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
-    public class ListGenerator : IGenerator<TimeInterval>
+    public class ListGenerator<T> : IGenerator<T> where T : ITimeInterval<T>
     {
         public string Name { get; }
-        public static ListGenerator Create(IEnumerable<TimeInterval> values)
+        public static ListGenerator<T> Create(IEnumerable<T> values)
         {
-            var cleanValues = new HashSet<TimeInterval>(values).OrderBy(d => d).ToArray();
-            return new ListGenerator(cleanValues);
+            var cleanValues = new HashSet<T>(values).OrderBy(d => d).ToArray();
+            return new ListGenerator<T>(cleanValues);
         }
 
-        private TimeInterval[] _values;
+        private T[] _values;
         public ListGenerator(
-            TimeInterval[] values,
+            T[] values,
             string name = null)
         {
             _values = values;
             Name = name ?? $"List<[{values.Length}]>";
         }
 
-        public IEnumerable<TimeInterval> Generate(DateTime fromDate)
+        public IEnumerable<T> Generate(DateTime fromDate)
         {
             foreach (var value in _values)
             {

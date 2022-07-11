@@ -18,7 +18,8 @@ namespace Cervel.TimeParser
 
     public interface ITimeInterval<T> : ITimeInterval
     {
-        T Cut(DateTime endTime);
+        T CutStart(DateTime startTime);
+        T CutEnd(DateTime endTime);
         T Shift(TimeSpan timeSpan);
     }
 }

@@ -11,7 +11,7 @@ namespace Cervel.TimeParser.Tests
     {
         protected IGenerator<Date>[] DateGenerators(params IGenerator<Date>[] generators) => generators;
         protected IGenerator<Date> DateGenerator(params Date[] dateTimes) =>
-            ListGenerator.Create(dateTimes);
+            ListGenerator<Date>.Create(dateTimes);
 
         protected Date[] Dates(params Date[] dateTimes) => dateTimes;
         protected Date Day(int year, int month, int day) => new Date(new DateTime(year, month, day));
@@ -49,7 +49,7 @@ namespace Cervel.TimeParser.Tests
 
         protected IGenerator<TimeInterval> Generator(params TimeInterval[] intervals)
         {
-            return new TimeIntervals.ListGenerator(intervals);
+            return new ListGenerator<TimeInterval>(intervals);
         }
 
         protected TimeInterval<T>[] Intervals<T>(params TimeInterval<T>[] timeSpans) => timeSpans;

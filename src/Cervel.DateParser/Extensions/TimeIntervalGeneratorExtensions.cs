@@ -1,4 +1,5 @@
-﻿using Cervel.TimeParser.TimeIntervals;
+﻿using Cervel.TimeParser.Dates;
+using Cervel.TimeParser.TimeIntervals;
 using Cervel.TimeParser.TimeIntervals.Fuzzy;
 using System;
 using System.Collections.Generic;
@@ -10,21 +11,17 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class TimeIntervalGeneratorExtensions
     {
-        public static IGenerator<TimeInterval> Until(
-            this IGenerator<TimeInterval> generator,
-            DateTime limit)
-        {
-            return new UntilGenerator(generator, limit);
-        }
-
         public static IGenerator<FuzzyInterval> ToFuzzy(this IGenerator<TimeInterval> generator)
         {
             return new CrispToFuzzyGenerator(generator);
         }
 
-        public static IGenerator<TimeInterval> Shift(this IGenerator<TimeInterval> generator, TimeSpan timeSpan)
+        public static IGenerator<T> Shift<T>(
+            this IGenerator<T> generator,
+            TimeSpan timeSpan)
+            where T : ITimeInterval<T>
         {
-            return new ShiftGenerator(generator, timeSpan);
+            return new ShiftGenerator<T>(generator, timeSpan);
         }
 
         public static IGenerator<TimeInterval> Coalesce(this IGenerator<TimeInterval> g) => Time.Coalesce(g);

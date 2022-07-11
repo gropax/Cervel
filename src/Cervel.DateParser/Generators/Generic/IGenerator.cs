@@ -22,7 +22,7 @@ namespace Cervel.TimeParser
                 else
                 {
                     if (enumerator.Current.Start < toDate)
-                        yield return enumerator.Current.Cut(toDate);
+                        yield return enumerator.Current.CutEnd(toDate);
 
                     yield break;
                 }

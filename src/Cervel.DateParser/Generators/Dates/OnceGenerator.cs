@@ -12,6 +12,7 @@ namespace Cervel.TimeParser.Dates
     {
         public string Name { get; }
         private Date _value;
+
         public OnceGenerator(
             Date value = null,
             string name = null)

@@ -12,6 +12,7 @@ namespace Cervel.TimeParser.TimeIntervals
     {
         public string Name { get; }
         private IGenerator<TimeInterval> _generator;
+
         public ComplementGenerator(
             IGenerator<TimeInterval> generator,
             string name = null)

@@ -40,9 +40,9 @@ namespace Cervel.TimeParser
         public override void ExitNever(TimeExpressionParser.NeverContext context)
         {
             if (_parseDateTime)
-                _dateGenerators.Add(new Dates.NeverGenerator());
+                _dateGenerators.Add(Time.Never<Date>());
             else
-                _intervals = new TimeIntervals.NeverGenerator();
+                _intervals = Time.Never<TimeInterval>();
         }
 
         public override void ExitNow(TimeExpressionParser.NowContext context) =>

@@ -35,7 +35,12 @@ namespace Cervel.TimeParser
             return $"[{Start}, {End}]";
         }
 
-        public TimeInterval Cut(DateTime end)
+        public TimeInterval CutStart(DateTime startTime)
+        {
+            return new TimeInterval(startTime, End);
+        }
+
+        public TimeInterval CutEnd(DateTime end)
         {
             return new TimeInterval(Start, end);
         }
@@ -72,7 +77,12 @@ namespace Cervel.TimeParser
             return $"[{Start}, {End}, {Value}]";
         }
 
-        public TimeInterval<T> Cut(DateTime endTime)
+        public TimeInterval<T> CutStart(DateTime startTime)
+        {
+            return new TimeInterval<T>(startTime, End, Value);
+        }
+
+        public TimeInterval<T> CutEnd(DateTime endTime)
         {
             return new TimeInterval<T>(Start, endTime, Value);
         }

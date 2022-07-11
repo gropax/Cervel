@@ -1,5 +1,6 @@
 ﻿using Cervel.TimeParser.Dates;
 using Cervel.TimeParser.Extensions;
+using Cervel.TimeParser.Generic;
 using Cervel.TimeParser.TimeIntervals;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace Cervel.TimeParser
         {
             return dateTime >= other ? dateTime : other;
         }
+
+        public static IGenerator<T> Never<T>() where T : ITimeInterval<T> => new NeverGenerator<T>();
 
         public static IGenerator<Date> Start() => new OnceGenerator();
 
@@ -47,8 +50,17 @@ namespace Cervel.TimeParser
         public static IGenerator<Date> NEveryM(int n, int m, IGenerator<Date> g) => g.NEveryM(n, m);
 
         public static IGenerator<Date> Union(params IGenerator<Date>[] generators) => new UnionGenerator(generators);
-        public static IGenerator<Date> Since(IGenerator<Date> scope, IGenerator<Date> generator) => new SinceGenerator(scope, generator);
-        public static IGenerator<Date> Until(IGenerator<Date> scope, IGenerator<Date> generator) => new Dates.UntilGenerator(scope, generator);
+        public static IGenerator<T> Since<T>(
+            IGenerator<Date> scope,
+            IGenerator<T> generator)
+            where T : ITimeInterval<T>
+            => new SinceGenerator<T>(scope, generator);
+
+        public static IGenerator<T> Until<T>(
+            IGenerator<Date> scope,
+            IGenerator<T> generator)
+            where T : ITimeInterval<T>
+            => new UntilGenerator<T>(scope, generator);
 
         public static IGenerator<TimeInterval> Complement(IGenerator<TimeInterval> g) => new ComplementGenerator(g);
         public static IGenerator<Date> Inside(IGenerator<TimeInterval> scope, IGenerator<Date> generator) => new ScopeGenerator(scope, generator);

@@ -8,17 +8,18 @@ using System.Diagnostics;
 namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
-    public class NeverGenerator : IGenerator<Date>
+    public class NowGenerator : IGenerator<Date>
     {
         public string Name { get; }
-        public NeverGenerator(string name = null)
+
+        public NowGenerator(string name = null)
         {
-            Name = name ?? "Never";
+            Name = name ?? "Now";
         }
 
         public IEnumerable<Date> Generate(DateTime fromDate)
         {
-            yield break;
+            yield return new Date(fromDate);
         }
     }
 }

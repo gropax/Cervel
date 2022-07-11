@@ -25,10 +25,8 @@ namespace Cervel.TimeParser.Dates
                 return new TimeInterval(DateTime, DateTime + timeSpan);
         }
 
-        public Date Cut(DateTime endTime)
-        {
-            return this;
-        }
+        public Date CutStart(DateTime endTime) => this;
+        public Date CutEnd(DateTime endTime) => this;
 
         public Date Shift(TimeSpan timeSpan)
         {

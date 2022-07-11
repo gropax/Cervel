@@ -68,14 +68,20 @@ namespace Cervel.TimeParser.Extensions
             return new FirstToInfinityGenerator(generator);
         }
 
-        public static IGenerator<Date> ShiftDay(this IGenerator<Date> generator, int n)
+        public static IGenerator<T> ShiftDay<T>(
+            this IGenerator<T> generator,
+            int n)
+            where T : ITimeInterval<T>
         {
-            return new Dates.ShiftGenerator(generator, TimeSpan.FromDays(n));
+            return new ShiftGenerator<T>(generator, TimeSpan.FromDays(n));
         }
 
-        public static IGenerator<Date> Shift(this IGenerator<Date> generator, TimeSpan timeSpan)
+        public static IGenerator<T> Shift<T>(
+            this IGenerator<T> generator,
+            TimeSpan timeSpan)
+            where T : ITimeInterval<T>
         {
-            return new Dates.ShiftGenerator(generator, timeSpan);
+            return new ShiftGenerator<T>(generator, timeSpan);
         }
 
         public static IGenerator<Date> Next(this IGenerator<Date> generator, DayOfWeek dow)
@@ -136,12 +142,13 @@ namespace Cervel.TimeParser.Extensions
         }
 
 
-        public static IGenerator<Date> Since(
-            this IGenerator<Date> generator,
+        public static IGenerator<T> Since<T>(
+            this IGenerator<T> generator,
             IGenerator<Date> scopeGenerator,
             string name = null)
+            where T : ITimeInterval<T>
         {
-            return new SinceGenerator(scopeGenerator, generator, name);
+            return new SinceGenerator<T>(scopeGenerator, generator, name);
         }
 
         public static IGenerator<Date> Scope(

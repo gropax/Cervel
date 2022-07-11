@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
-    public class ShiftGenerator : IGenerator<Date>
+    public class ShiftGenerator<T> : IGenerator<T> where T : ITimeInterval<T>
     {
         public string Name { get; }
-        private IGenerator<Date> _generator;
+        private IGenerator<T> _generator;
         private TimeSpan _timeSpan;
 
         public ShiftGenerator(
-            IGenerator<Date> generator,
+            IGenerator<T> generator,
             TimeSpan timeSpan,
             string name = null)
         {
@@ -24,7 +24,7 @@ namespace Cervel.TimeParser.Dates
             Name = name ?? $"Shift<{timeSpan}, {generator.Name}>";
         }
 
-        public IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<T> Generate(DateTime fromDate)
         {
             return _generator.Generate(fromDate).Select(d => d.Shift(_timeSpan));
         }
