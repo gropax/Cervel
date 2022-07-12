@@ -24,8 +24,6 @@ namespace Cervel.TimeParser.Extensions
             return new ShiftGenerator<T>(generator, timeSpan);
         }
 
-        public static IGenerator<TimeInterval> Coalesce(this IGenerator<TimeInterval> g) => Time.Coalesce(g);
-
         public static IGenerator<TimeInterval<double>> Quantize(this IGenerator<TimeInterval> g, ITimeMeasure timeMeasure) =>
             Time.Quantize(timeMeasure, g);
     }

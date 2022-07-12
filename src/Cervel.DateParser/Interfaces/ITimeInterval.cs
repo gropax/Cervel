@@ -16,7 +16,7 @@ namespace Cervel.TimeParser
         bool IsAfter(ITimeInterval other) => other.End < Start;
     }
 
-    public interface ITimeInterval<T> : ITimeInterval
+    public interface ITimeInterval<out T> : ITimeInterval
     {
         T CutStart(DateTime startTime);
         T CutEnd(DateTime endTime);

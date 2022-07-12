@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class CoalesceGenerator : IGenerator<TimeInterval>
+    public class CoalesceGenerator<T> : IGenerator<TimeInterval>
+        where T : ITimeInterval<T>
     {
         public string Name { get; }
 
-        private IGenerator<TimeInterval> _generator;
+        private IGenerator<T> _generator;
         public CoalesceGenerator(
-            IGenerator<TimeInterval> generator,
+            IGenerator<T> generator,
             string name = null)
         {
             _generator = generator;

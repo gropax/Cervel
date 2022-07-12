@@ -8,13 +8,14 @@ using System.Diagnostics;
 namespace Cervel.TimeParser.TimeIntervals
 {
     [DebuggerDisplay("{Name}")]
-    public class ComplementGenerator : IGenerator<TimeInterval>
+    public class ComplementGenerator<T> : IGenerator<TimeInterval>
+        where T : ITimeInterval<T>
     {
+        private IGenerator<T> _generator;
         public string Name { get; }
-        private IGenerator<TimeInterval> _generator;
 
         public ComplementGenerator(
-            IGenerator<TimeInterval> generator,
+            IGenerator<T> generator,
             string name = null)
         {
             _generator = generator;

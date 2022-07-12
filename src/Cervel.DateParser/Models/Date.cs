@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervel.TimeParser.Dates
+namespace Cervel.TimeParser
 {
     public class Date : ITimeInterval<Date>, IEquatable<Date>, IComparable<Date>
     {

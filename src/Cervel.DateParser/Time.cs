@@ -33,13 +33,11 @@ namespace Cervel.TimeParser
 
         public static IGenerator<Date> Now() => new OnceGenerator(GetNow());
 
-        public static IGenerator<Date> Yesterday() => Today().ShiftDay(-1);
-        public static IGenerator<Date> Today() => Now().StartOfDay();
-        public static IGenerator<Date> Tomorrow() => Today().ShiftDay(1);
+        public static IGenerator<DayInterval> Yesterday() => Today().Increment(-1);
+        public static IGenerator<DayInterval> Today() => Now().CoveringDays();
+        public static IGenerator<DayInterval> Tomorrow() => Today().Increment(1);
 
         public static IGenerator<Date> EveryDay() => Start().Daily();
-
-        public static IGenerator<Date> Next(DayOfWeek dow) => Tomorrow().Next(dow);
 
         public static IGenerator<Date> Each(DayOfWeek dow) => Start().Next(dow).Weekly();
         public static IGenerator<Date> Each(int dayOfMonth) => new DayOfMonthGenerator(dayOfMonth);
@@ -62,9 +60,21 @@ namespace Cervel.TimeParser
             where T : ITimeInterval<T>
             => new UntilGenerator<T>(scope, generator);
 
-        public static IGenerator<TimeInterval> Complement(IGenerator<TimeInterval> g) => new ComplementGenerator(g);
+        public static IGenerator<TimeInterval> Complement<T>(
+            IGenerator<T> generator)
+            where T : ITimeInterval<T>
+        {
+            return new ComplementGenerator<T>(generator);
+        } 
+
         public static IGenerator<Date> Inside(IGenerator<TimeInterval> scope, IGenerator<Date> generator) => new ScopeGenerator(scope, generator);
-        public static IGenerator<Date> Outside(IGenerator<TimeInterval> scope, IGenerator<Date> generator) => new ScopeGenerator(Complement(scope), generator);
+        public static IGenerator<Date> Outside<T>(
+            IGenerator<T> scope,
+            IGenerator<Date> generator)
+            where T : ITimeInterval<T>
+        {
+            return new ScopeGenerator(Complement(scope), generator);
+        } 
 
         public static IGenerator<TimeInterval> DayScopes() => new FrequencyGenerator(new DayMeasure()).ToScopes(TimeSpan.FromDays(1));
 
@@ -76,8 +86,6 @@ namespace Cervel.TimeParser
         }
 
         #region Interval related combinators
-
-        public static IGenerator<TimeInterval> Coalesce(IGenerator<TimeInterval> g) => new CoalesceGenerator(g);
         public static IGenerator<TimeInterval<double>> Quantize(ITimeMeasure timeMeasure, IGenerator<TimeInterval> g) =>
             new QuantizeGenerator(timeMeasure, g);
 

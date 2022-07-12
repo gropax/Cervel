@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.Extensions
 {
-    public static class DateTimeGeneratorExtensions
+    public static class DateGeneratorExtensions
     {
         public static IGenerator<Date> Map(
             this IGenerator<Date> generator,
@@ -24,11 +24,6 @@ namespace Cervel.TimeParser.Extensions
             string name = null)
         {
             return new DeduplicateGenerator(new MapGenerator(generator, map.Invoke), name ?? $"Map<{generator.Name}>");
-        }
-
-        public static IGenerator<Date> StartOfDay(this IGenerator<Date> generator)
-        {
-            return generator.Map(Maps.StartOfDay());
         }
 
         public static IGenerator<Date> Take(
@@ -115,13 +110,9 @@ namespace Cervel.TimeParser.Extensions
         }
 
 
-        public static IGenerator<TimeInterval> AllDay(this IGenerator<Date> generator)
-        {
-            return generator.StartOfDay().ToIntervals(new DayMeasure()).Coalesce();
-        }
-
         public static IGenerator<TimeInterval> ToScopes(
-            this IGenerator<Date> generator, TimeSpan timeSpan)
+            this IGenerator<Date> generator,
+            TimeSpan timeSpan)
         {
             return new ToScopesGenerator(generator, timeSpan);
         }

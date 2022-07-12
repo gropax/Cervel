@@ -36,12 +36,13 @@ namespace Cervel.TimeParser
 
         public override void ExitIntervals(TimeExpressionV2Parser.IntervalsContext context)
         {
-            IntervalDistribution = _scope.IntervalGenerators
-                .ConsumeSingle();
-                // On ne manipule dans le parsing que des générateurs d'intervalles
-                // "non-normalisés", afin de pouvoir les utiliser comme "scopes".
-                // On coalesce à la toute fin pour obtenir une distribution normalisée.
-                //.Coalesce();
+            if (_scope.DayGenerators.HasValues())
+                IntervalDistribution = _scope.DayGenerators
+                    .ConsumeSingle()
+                    .Coalesce();
+            else
+                IntervalDistribution = _scope.IntervalGenerators
+                    .ConsumeSingle();
         }
 
         public override void ExitDates(TimeExpressionV2Parser.DatesContext context)
@@ -57,9 +58,9 @@ namespace Cervel.TimeParser
 
         public override void ExitDayIntervals(TimeExpressionV2Parser.DayIntervalsContext context)
         {
-            var intervalGenerator = _scope.DateGenerators.ConsumeSingle().AllDay();
+            var intervalGenerator = _scope.DateGenerators.ConsumeSingle().CoveringDays();
             CloseScope();
-            _scope.IntervalGenerators.Set(intervalGenerator);
+            _scope.DayGenerators.Set(intervalGenerator);
         }
 
         public override void EnterMonthIntervals(TimeExpressionV2Parser.MonthIntervalsContext context)
@@ -105,7 +106,7 @@ namespace Cervel.TimeParser
             if (context.children.Count > 1)
             {
                 var dates = _scope.DateGenerators.ConsumeSingle();
-                var exception = _scope.IntervalGenerators.ConsumeSingle();
+                var exception = _scope.DayGenerators.ConsumeSingle();
                 _scope.DateGenerators.Set(Time.Outside(exception, dates));
             }
         }
@@ -317,6 +318,7 @@ namespace Cervel.TimeParser
     internal class VarScope
     {
         public TmpVar<IGenerator<Date>> DateGenerators = new();
+        public TmpVar<IGenerator<DayInterval>> DayGenerators = new();
         public TmpVar<IGenerator<TimeInterval>> IntervalGenerators = new();
         public TmpVar<DayOfWeek> DaysOfWeek = new();
         public TmpVar<int> Numbers = new();
