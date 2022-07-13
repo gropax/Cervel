@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
 {
-    public class Date : ITimeInterval<Date>, IEquatable<Date>, IComparable<Date>
+    public class Date :
+        ITimeMeasure<Date>,
+        IEquatable<Date>,
+        IComparable<Date>
     {
         public DateTime DateTime { get; }
         public Date(DateTime dateTime)
@@ -51,6 +54,11 @@ namespace Cervel.TimeParser
         public override int GetHashCode()
         {
             return DateTime.GetHashCode();
+        }
+
+        public Date Increment(int number)
+        {
+            return this;
         }
 
         public static bool operator <(Date left, Date right)

@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
-    public class SinceGenerator<T> : IGenerator<T> where T : ITimeInterval<T>
+    public class SinceGenerator<T, TScope> : IGenerator<T>
+        where T : ITimeInterval<T>
+        where TScope : ITimeInterval<TScope>
     {
         public string Name { get; }
-        private IGenerator<Date> _scope;
+        private IGenerator<TScope> _scope;
         private IGenerator<T> _generator;
 
         public SinceGenerator(
-            IGenerator<Date> scope,
+            IGenerator<TScope> scope,
             IGenerator<T> generator,
             string name = null)
         {
@@ -30,7 +32,7 @@ namespace Cervel.TimeParser.Dates
             if (!scopeEnum.MoveNext())
                 yield break;
 
-            foreach (var date in _generator.Generate(scopeEnum.Current.DateTime))
+            foreach (var date in _generator.Generate(scopeEnum.Current.Start))
                 yield return date;
         }
     }

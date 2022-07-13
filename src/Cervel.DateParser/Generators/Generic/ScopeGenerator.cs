@@ -6,24 +6,26 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.Dates
 {
-    public class ScopeGenerator : IGenerator<Date>
+    public class ScopeGenerator<T, TScope> : IGenerator<T>
+        where T : ITimeInterval<T>
+        where TScope : ITimeInterval<TScope>
     {
         public string Name { get; }
 
-        private IGenerator<TimeInterval> _scopeGenerator;
-        private IGenerator<Date> _dateGenerator;
+        private IGenerator<TScope> _scopeGenerator;
+        private IGenerator<T> _dateGenerator;
 
         public ScopeGenerator(
-            IGenerator<TimeInterval> scopeGenerator,
-            IGenerator<Date> dateGenerator,
+            IGenerator<TScope> scopeGenerator,
+            IGenerator<T> dateGenerator,
             string name = null)
         {
             _scopeGenerator = scopeGenerator;
             _dateGenerator = dateGenerator;
             Name = name ?? $"Scope<{scopeGenerator.Name}, {dateGenerator.Name}>";
         }
-        public IEnumerable<Date> Generate(DateTime fromDate) => Generate(fromDate, DateTime.MaxValue);
-        public IEnumerable<Date> Generate(DateTime fromDate, DateTime toDate)
+        public IEnumerable<T> Generate(DateTime fromDate) => Generate(fromDate, DateTime.MaxValue);
+        public IEnumerable<T> Generate(DateTime fromDate, DateTime toDate)
         {
             foreach (var interval in _scopeGenerator.Generate(fromDate, toDate))
                 foreach (var date in _dateGenerator.Generate(interval))

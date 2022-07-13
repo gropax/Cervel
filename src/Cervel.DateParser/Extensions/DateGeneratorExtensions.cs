@@ -10,54 +10,6 @@ namespace Cervel.TimeParser.Extensions
 {
     public static class DateGeneratorExtensions
     {
-        public static IGenerator<Date> Map(
-            this IGenerator<Date> generator,
-            StrictOrderPreservingMap<Date> map,
-            string name = null)
-        {
-            return new MapGenerator(generator, map.Invoke, name);
-        }
-
-        public static IGenerator<Date> Map(
-            this IGenerator<Date> generator,
-            OrderPreservingMap<Date> map,
-            string name = null)
-        {
-            return new DeduplicateGenerator(new MapGenerator(generator, map.Invoke), name ?? $"Map<{generator.Name}>");
-        }
-
-        public static IGenerator<Date> Take(
-            this IGenerator<Date> generator,
-            int n,
-            string name = null)
-        {
-            return generator.Map(Maps.Take<Date>(n), name ?? $"Take<{n}, {generator.Name}>");
-        }
-
-        public static IGenerator<Date> Skip(
-            this IGenerator<Date> generator,
-            int n,
-            string name = null)
-        {
-            return generator.Map(Maps.Skip<Date>(n), name ?? $"Skip<{n}, {generator.Name}>");
-        }
-
-        public static IGenerator<Date> NEveryM(
-            this IGenerator<Date> generator,
-            int n,
-            int m,
-            string name = null)
-        {
-            return generator.Map(Maps.NEveryM<Date>(n, m), name ?? $"NEveryM<{n}, {m}, {generator.Name}>");
-        }
-
-        public static IGenerator<Date> First(
-            this IGenerator<Date> generator,
-            string name = null)
-        {
-            return generator.Map(Maps.Take<Date>(1), name ?? $"First<{generator.Name}>");
-        }
-
         public static IGenerator<TimeInterval> FirstToInfinity(this IGenerator<Date> generator)
         {
             return new FirstToInfinityGenerator(generator);
@@ -79,36 +31,12 @@ namespace Cervel.TimeParser.Extensions
             return new ShiftGenerator<T>(generator, timeSpan);
         }
 
-        public static IGenerator<Date> Next(this IGenerator<Date> generator, DayOfWeek dow)
-        {
-            return generator.Daily().Where(dow).First();
-        }
-
         public static IGenerator<Date> Where(this IGenerator<Date> generator, DayOfWeek dow)
         {
             return generator.Map(Maps.Filter<Date>(d => d.DateTime.DayOfWeek == dow));  // @refactor
         }
 
         public static IGenerator<TimeInterval> ToPartition(this IGenerator<Date> g) => new ToPartitionGenerator(g);
-
-        public static IGenerator<Date> Daily(this IGenerator<Date> generator)
-        {
-            return new FrequencyGenerator(new DayMeasure()).Since(generator);
-        }
-
-        public static IGenerator<Date> Weekly(this IGenerator<Date> generator)
-        {
-            return Scope(new FrequencyGenerator(new DayMeasure(7)), generator.FirstToInfinity());
-        }
-
-        public static IGenerator<Date> YearlySince(
-            this IGenerator<Date> generator,
-            string name = null)
-        {
-            //return new YearlyGenerator().Scope(generator.FirstToInfinity());
-            return new FrequencyGenerator(new YearMeasure()).Since(generator, name ?? $"YearlySince<{generator.Name}>");
-        }
-
 
         public static IGenerator<TimeInterval> ToScopes(
             this IGenerator<Date> generator,
@@ -125,29 +53,14 @@ namespace Cervel.TimeParser.Extensions
         }
 
 
-        public static IGenerator<TimeInterval> Partition(
-            this IGenerator<TimeInterval> generator,
-            IGenerator<Date> cutGenerator)
-        {
-            return new PartitionGenerator(generator, cutGenerator);
-        }
-
-
-        public static IGenerator<T> Since<T>(
+        public static IGenerator<T> Scope<T, TScope>(
             this IGenerator<T> generator,
-            IGenerator<Date> scopeGenerator,
+            IGenerator<TScope> scopeGenerator,
             string name = null)
             where T : ITimeInterval<T>
+            where TScope : ITimeInterval<TScope>
         {
-            return new SinceGenerator<T>(scopeGenerator, generator, name);
-        }
-
-        public static IGenerator<Date> Scope(
-            this IGenerator<Date> generator,
-            IGenerator<TimeInterval> scopeGenerator,
-            string name = null)
-        {
-            return new ScopeGenerator(scopeGenerator, generator, name);
+            return new ScopeGenerator<T, TScope>(scopeGenerator, generator, name);
         }
 
 
@@ -168,11 +81,6 @@ namespace Cervel.TimeParser.Extensions
         }
 
         public static IGenerator<TimeInterval> AllMonth(this IGenerator<Date> g) => Time.AllMonth(g);
-
-        public static IGenerator<Date> Next(this IGenerator<Date> generator, Month month)
-        {
-            return generator.Monthly().Where(month).First();
-        }
 
         public static IGenerator<Date> StartOfMonth(this IGenerator<Date> g) => Time.StartOfMonth(g);
 

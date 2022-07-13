@@ -22,9 +22,12 @@ namespace Cervel.TimeParser
             return dateTime >= other ? dateTime : other;
         }
 
-        public static IGenerator<T> Never<T>() where T : ITimeInterval<T> => new NeverGenerator<T>();
+        public static IGenerator<T> Never<T>()
+            where T : ITimeInterval<T>
+            => new NeverGenerator<T>();
 
-        public static IGenerator<Date> Start() => new OnceGenerator();
+        public static IGenerator<Date> Start()
+            => new OnceGenerator();
 
 
         private static DateTime? _now;
@@ -33,32 +36,48 @@ namespace Cervel.TimeParser
 
         public static IGenerator<Date> Now() => new OnceGenerator(GetNow());
 
-        public static IGenerator<DayInterval> Yesterday() => Today().Increment(-1);
-        public static IGenerator<DayInterval> Today() => Now().CoveringDays();
-        public static IGenerator<DayInterval> Tomorrow() => Today().Increment(1);
+        public static IGenerator<Day> Yesterday() => Today().Increment(-1);
+        public static IGenerator<Day> Today() => Now().CoveringDays();
+        public static IGenerator<Day> Tomorrow() => Today().Increment(1);
 
-        public static IGenerator<Date> EveryDay() => Start().Daily();
+        public static IGenerator<Day> EveryDay() => new EveryDayGenerator();
+        public static IGenerator<Day> Each(DayOfWeek dow) => new DayOfWeekGenerator(dow);
+        public static IGenerator<Day> Each(int dayOfMonth) => new DayOfMonthGenerator(dayOfMonth);
 
-        public static IGenerator<Date> Each(DayOfWeek dow) => Start().Next(dow).Weekly();
-        public static IGenerator<Date> Each(int dayOfMonth) => new DayOfMonthGenerator(dayOfMonth);
+        public static IGenerator<T> Nth<T>(int n, IGenerator<T> g)
+            where T : ITimeInterval<T>
+        {
+            return g.Skip<T>(n - 1).Take<T>(1, name: $"Nth<{n}, {g.Name}>");
+        }
 
-        public static IGenerator<Date> Nth(int n, IGenerator<Date> g) =>
-            g.Skip(n - 1).Take(1, name: $"Nth<{n}, {g.Name}>");
+        public static IGenerator<T> NEveryM<T>(
+            int n, int m,
+            IGenerator<T> g)
+            where T : ITimeInterval<T>
+        {
+            return g.NEveryM(n, m);
+        }
 
-        public static IGenerator<Date> NEveryM(int n, int m, IGenerator<Date> g) => g.NEveryM(n, m);
+        public static IGenerator<T> Union<T>(
+            params IGenerator<T>[] generators)
+            where T : ITimeMeasure<T>, IComparable<T>
+        {
+            return new UnionGenerator<T>(generators);
+        }
 
-        public static IGenerator<Date> Union(params IGenerator<Date>[] generators) => new UnionGenerator(generators);
-        public static IGenerator<T> Since<T>(
-            IGenerator<Date> scope,
+        public static IGenerator<T> Since<T, TScope>(
+            IGenerator<TScope> scope,
             IGenerator<T> generator)
             where T : ITimeInterval<T>
-            => new SinceGenerator<T>(scope, generator);
+            where TScope : ITimeInterval<TScope>
+            => new SinceGenerator<T, TScope>(scope, generator);
 
-        public static IGenerator<T> Until<T>(
-            IGenerator<Date> scope,
+        public static IGenerator<T> Until<T, TScope>(
+            IGenerator<TScope> scope,
             IGenerator<T> generator)
             where T : ITimeInterval<T>
-            => new UntilGenerator<T>(scope, generator);
+            where TScope : ITimeInterval<TScope>
+            => new UntilGenerator<T, TScope>(scope, generator);
 
         public static IGenerator<TimeInterval> Complement<T>(
             IGenerator<T> generator)
@@ -67,22 +86,35 @@ namespace Cervel.TimeParser
             return new ComplementGenerator<T>(generator);
         } 
 
-        public static IGenerator<Date> Inside(IGenerator<TimeInterval> scope, IGenerator<Date> generator) => new ScopeGenerator(scope, generator);
-        public static IGenerator<Date> Outside<T>(
-            IGenerator<T> scope,
-            IGenerator<Date> generator)
+        public static IGenerator<T> Inside<T, TScope>(
+            IGenerator<TScope> scope,
+            IGenerator<T> generator)
             where T : ITimeInterval<T>
+            where TScope : ITimeInterval<TScope>
         {
-            return new ScopeGenerator(Complement(scope), generator);
+            return new ScopeGenerator<T, TScope>(scope, generator);
+        }
+            
+        public static IGenerator<T> Outside<T, TScope>(
+            IGenerator<TScope> scope,
+            IGenerator<T> generator)
+            where T : ITimeInterval<T>
+            where TScope : ITimeInterval<TScope>
+        {
+            return new ScopeGenerator<T, TimeInterval>(Complement(scope), generator);
         } 
 
         public static IGenerator<TimeInterval> DayScopes() => new FrequencyGenerator(new DayMeasure()).ToScopes(TimeSpan.FromDays(1));
 
         public static Func<IGenerator<Date>, IGenerator<Date>> DayShift(int n) => (g) => g.ShiftDay(n);
 
-        public static IGenerator<Date> Scope(IGenerator<TimeInterval> scopes, IGenerator<Date> dates)
+        public static IGenerator<T> Scope<T, TScope>(
+            IGenerator<TScope> scopes,
+            IGenerator<T> dates)
+            where T : ITimeInterval<T>
+            where TScope : ITimeInterval<TScope>
         {
-            return new ScopeGenerator(scopes, dates);
+            return new ScopeGenerator<T, TScope>(scopes, dates);
         }
 
         #region Interval related combinators

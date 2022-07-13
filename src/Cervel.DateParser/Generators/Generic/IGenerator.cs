@@ -11,7 +11,7 @@ namespace Cervel.TimeParser
     {
         string Name { get; }
         IEnumerable<T> Generate(DateTime fromDate);
-        IEnumerable<T> Generate(TimeInterval interval) => Generate(interval.Start, interval.End);
+        IEnumerable<T> Generate(ITimeInterval interval) => Generate(interval.Start, interval.End);
         IEnumerable<T> Generate(DateTime fromDate, DateTime toDate)
         {
             var enumerator = Generate(fromDate).GetEnumerator();

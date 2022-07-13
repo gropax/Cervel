@@ -6,38 +6,41 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
 {
-    public class DayInterval :
-        ITimeMeasure<DayInterval>,
-        IEquatable<DayInterval>,
-        IComparable<DayInterval>
+    public class Day :
+        ITimeMeasure<Day>,
+        IEquatable<Day>,
+        IComparable<Day>
     {
         public int Year { get; }
         public int Month { get; }
-        public int Day { get; }
+        public int DayInMonth { get; }
+        public DayOfWeek DayOfWeek { get; }
         public DateTime Start { get; }
         public DateTime End => Start + TimeSpan.FromDays(1);
 
-        public DayInterval(Date d) : this(d.DateTime) { }
-        public DayInterval(DateTime d)
+        public Day(Date d) : this(d.DateTime) { }
+        public Day(DateTime d)
         {
             Year = d.Year;
             Month = d.Month;
-            Day = d.Day;
+            DayInMonth = d.Day;
             Start = d;
+            DayOfWeek = Start.DayOfWeek;
         }
 
-        public DayInterval(int year, int month, int day)
+        public Day(int year, int month, int day)
         {
             Year = year;
             Month = month;
-            Day = day;
+            DayInMonth = day;
             Start = new DateTime(year, month, day);
+            DayOfWeek = Start.DayOfWeek;
         }
 
         public TimeInterval ToTimeInterval() => new TimeInterval(Start, End);
 
-        public DayInterval Next() => new DayInterval(Start + TimeSpan.FromDays(1));
-        public bool TryGetNext(out DayInterval dayInterval)
+        public Day Next() => new Day(Start + TimeSpan.FromDays(1));
+        public bool TryGetNext(out Day dayInterval)
         {
             try
             {
@@ -51,36 +54,31 @@ namespace Cervel.TimeParser
             }
         }
 
-        public DayInterval CutStart(DateTime startTime) => this;
-        public DayInterval CutEnd(DateTime endTime) => this;
+        public Day CutStart(DateTime startTime) => this;
+        public Day CutEnd(DateTime endTime) => this;
 
-        public DayInterval Shift(TimeSpan timeSpan)
+        public Day Shift(TimeSpan timeSpan)
         {
             var dayShift = timeSpan.TotalDays;
             dayShift = dayShift > 0 ? Math.Floor(dayShift) : Math.Ceiling(dayShift);
-            return new DayInterval(Start + TimeSpan.FromDays(dayShift));
+            return new Day(Start + TimeSpan.FromDays(dayShift));
         }
 
-        public DayInterval Increment(int shift)
+        public Day Increment(int shift)
         {
-            return new DayInterval(Start + TimeSpan.FromDays(shift));
+            return new Day(Start + TimeSpan.FromDays(shift));
         }
 
-        public bool Equals(DayInterval other)
+        public bool Equals(Day other)
         {
             return Start.Equals(other.Start);
         }
 
 
 
-        public int CompareTo(DayInterval other)
-        {
-            return Start.CompareTo(other.Start);
-        }
-
         public override bool Equals(object obj)
         {
-            return obj is DayInterval other && Equals(other);
+            return obj is Day other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -88,22 +86,27 @@ namespace Cervel.TimeParser
             return Start.GetHashCode();
         }
 
-        public static bool operator < (DayInterval left, DayInterval right)
+        public int CompareTo(Day other)
+        {
+            return Start.CompareTo(other.Start);
+        }
+
+        public static bool operator < (Day left, Day right)
         {
             return left.CompareTo(right) < 0;
         }
 
-        public static bool operator <= (DayInterval left, DayInterval right)
+        public static bool operator <= (Day left, Day right)
         {
             return left.CompareTo(right) <= 0;
         }
 
-        public static bool operator > (DayInterval left, DayInterval right)
+        public static bool operator > (Day left, Day right)
         {
             return left.CompareTo(right) > 0;
         }
 
-        public static bool operator >= (DayInterval left, DayInterval right)
+        public static bool operator >= (Day left, Day right)
         {
             return left.CompareTo(right) >= 0;
         }

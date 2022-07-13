@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Cervel.TimeParser.Generators.DayIntervals
 {
     [DebuggerDisplay("{Name}")]
-    public class CoveringDaysGenerator<T> : IGenerator<DayInterval>
+    public class CoveringDaysGenerator<T> : IGenerator<Day>
         where T : ITimeInterval<T>
     {
         public string Name { get; }
@@ -22,12 +22,12 @@ namespace Cervel.TimeParser.Generators.DayIntervals
             Name = name ?? $"CovDays<{_generator.Name}>";
         }
 
-        public IEnumerable<DayInterval> Generate(DateTime fromDate)
+        public IEnumerable<Day> Generate(DateTime fromDate)
         {
-            DayInterval last = null;
+            Day last = null;
             foreach (var interval in _generator.Generate(fromDate))
             {
-                var current = new DayInterval(interval.Start);
+                var current = new Day(interval.Start);
                 if (last == null || last < current)
                 {
                     yield return current;

@@ -9,7 +9,7 @@ using Cervel.TimeParser.Extensions;
 namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
-    public class DayOfMonthGenerator : IGenerator<Date>
+    public class DayOfMonthGenerator : IGenerator<Day>
     {
         public string Name { get; }
         private readonly int _number;
@@ -25,14 +25,14 @@ namespace Cervel.TimeParser.Dates
             Name = name ?? $"DayNumber({number})";
         }
 
-        public IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<Day> Generate(DateTime fromDate)
         {
             var start = fromDate.Date;
             if (start < fromDate)
                 start = start + TimeSpan.FromDays(1);
 
             if (TryGetDayOfMonth(start.Year, start.Month, _number, out var date) && date >= start)
-                yield return new Date(date);
+                yield return new Day(date);
 
             int inc = 1;
             while (true)
@@ -41,7 +41,7 @@ namespace Cervel.TimeParser.Dates
                 if (nextDate.Day == _number)
                 {
                     date = nextDate;
-                    yield return new Date(date);
+                    yield return new Day(date);
                     inc = 1;
                 }
                 else

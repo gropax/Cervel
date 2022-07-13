@@ -8,14 +8,16 @@ using System.Diagnostics;
 namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
-    public class UntilGenerator<T> : IGenerator<T> where T : ITimeInterval<T>
+    public class UntilGenerator<T, TScope> : IGenerator<T>
+        where T : ITimeInterval<T>
+        where TScope : ITimeInterval<TScope>
     {
         public string Name { get; }
-        private readonly IGenerator<Date> _scope;
+        private readonly IGenerator<TScope> _scope;
         private readonly IGenerator<T> _generator;
 
         public UntilGenerator(
-            IGenerator<Date> scope,
+            IGenerator<TScope> scope,
             IGenerator<T> generator,
             string name = null)
         {
@@ -30,7 +32,7 @@ namespace Cervel.TimeParser.Dates
             if (!scopeEnum.MoveNext())
                 return _generator.Generate(fromDate);
             else
-                return _generator.Generate(fromDate, scopeEnum.Current.DateTime);
+                return _generator.Generate(fromDate, scopeEnum.Current.Start);
         }
     }
 }

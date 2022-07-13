@@ -8,14 +8,20 @@ using Cervel.TimeParser.Extensions;
 
 namespace Cervel.TimeParser
 {
-    public delegate IEnumerable<T> StrictOrderPreservingMap<T>(IEnumerable<T> elements);
-    public delegate IEnumerable<T> OrderPreservingMap<T>(IEnumerable<T> elements);
+    public delegate IEnumerable<U> StrictOrderPreservingMap<T, U>(IEnumerable<T> elements);
+    public delegate IEnumerable<U> OrderPreservingMap<T, U>(IEnumerable<T> elements);
 
     public static class Maps
     {
-        public static StrictOrderPreservingMap<T> Take<T>(int i) => (ts) => ts.Take(i);
-        public static StrictOrderPreservingMap<T> Skip<T>(int i) => (ts) => ts.Skip(i);
-        public static StrictOrderPreservingMap<T> NEveryM<T>(int n, int m)
+        public static StrictOrderPreservingMap<T, Date> StartDate<T>()
+            where T : ITimeInterval
+        {
+            return (ts) => ts.Select(t => t.StartDate);
+        }
+
+        public static StrictOrderPreservingMap<T, T> Take<T>(int i) => (ts) => ts.Take(i);
+        public static StrictOrderPreservingMap<T, T> Skip<T>(int i) => (ts) => ts.Skip(i);
+        public static StrictOrderPreservingMap<T, T> NEveryM<T>(int n, int m)
         {
             if (n >= m)
                 throw new ArgumentException($"n must be < than m");
@@ -23,28 +29,12 @@ namespace Cervel.TimeParser
             return (ts) => ts.Where((t, i) => i % m < n);
         }
 
-        public static StrictOrderPreservingMap<T> Filter<T>(Func<T, bool> filter) => (ts) => ts.Where(t => filter(t));
-        public static OrderPreservingMap<Date> StartOfDay() => (ds) => ds.Select(d => new Date(d.DateTime.Date));  // @refactor
-        public static OrderPreservingMap<Date> StartOfMonth() => (ds) => ds.Select(d => new Date(new DateTime(d.DateTime.Year, d.DateTime.Month, 1)));  // @refactor
+        public static StrictOrderPreservingMap<T, T> Filter<T>(Func<T, bool> filter) => (ts) => ts.Where(t => filter(t));
+        public static OrderPreservingMap<Date, Date> StartOfMonth() => (ds) => ds.Select(d => new Date(new DateTime(d.DateTime.Year, d.DateTime.Month, 1)));  // @refactor
 
-        //public static StrictOrderPreservingMap<DateTime> ShiftDays<DateTime>(int n)
-        //    => (ds) => ds.Select(d => d.Shift(TimeSpan.FromDays(n)));
-
-        public static StrictOrderPreservingMap<Date> ShiftDays(int n)
-        {
-            var timeMeasure = new DayMeasure(n);
-            return (ds) => ds.Select(d => timeMeasure.AddTo(d));
-        }
-
-        public static OrderPreservingMap<Date> ShiftMonth(int n)
+        public static OrderPreservingMap<Date, Date> ShiftMonth(int n)
         {
             var timeMeasure = new MonthMeasure(n);
-            return (ds) => ds.Select(d => timeMeasure.AddTo(d));
-        }
-
-        public static OrderPreservingMap<Date> ShiftYears(int n)
-        {
-            var timeMeasure = new YearMeasure(n);
             return (ds) => ds.Select(d => timeMeasure.AddTo(d));
         }
     }

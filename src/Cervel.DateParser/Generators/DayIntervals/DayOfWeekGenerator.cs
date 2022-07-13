@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Cervel.TimeParser.TimeIntervals
 {
     [DebuggerDisplay("{Name}")]
-    public class DayOfWeekGenerator : IGenerator<DayInterval>
+    public class DayOfWeekGenerator : IGenerator<Day>
     {
         private DayOfWeek _dayOfWeek;
         public string Name { get; }
@@ -21,13 +21,13 @@ namespace Cervel.TimeParser.TimeIntervals
             Name = name ?? $"DayOfWeek<{dayOfWeek}>";
         }
 
-        public IEnumerable<DayInterval> Generate(DateTime fromDate)
+        public IEnumerable<Day> Generate(DateTime fromDate)
         {
             var currentDow = fromDate.DayOfWeek;
-            int nextTargetDow = _dayOfWeek > currentDow ? (int)_dayOfWeek : (int)_dayOfWeek + 7;
-            int inc = nextTargetDow - (int)_dayOfWeek;
+            int nextTargetDow = _dayOfWeek >= currentDow ? (int)_dayOfWeek : (int)_dayOfWeek + 7;
+            int inc = nextTargetDow - (int)currentDow;
 
-            var day = new DayInterval(fromDate).Increment(inc);
+            var day = new Day(fromDate).Increment(inc);
             yield return day;
 
             while (true)

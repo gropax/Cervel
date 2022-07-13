@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
-    public class MapGenerator : IGenerator<Date>
+    public class MapGenerator<T, U> : IGenerator<U>
+        where T : ITimeInterval<T>
+        where U : ITimeInterval<U>
     {
         public string Name { get; }
-        private readonly IGenerator<Date> _generator;
-        private readonly Func<IEnumerable<Date>, IEnumerable<Date>> _modifier;
+        private readonly IGenerator<T> _generator;
+        private readonly Func<IEnumerable<T>, IEnumerable<U>> _modifier;
 
         public MapGenerator(
-            IGenerator<Date> generator,
-            Func<IEnumerable<Date>, IEnumerable<Date>> modifier,
+            IGenerator<T> generator,
+            Func<IEnumerable<T>, IEnumerable<U>> modifier,
             string name = null)
         {
             _generator = generator;
@@ -24,7 +26,7 @@ namespace Cervel.TimeParser.Dates
             Name = name ?? $"Map<{generator.Name}>";
         }
 
-        public IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<U> Generate(DateTime fromDate)
         {
             return _modifier(_generator.Generate(fromDate));
         }

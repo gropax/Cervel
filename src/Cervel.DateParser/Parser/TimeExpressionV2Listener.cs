@@ -47,7 +47,10 @@ namespace Cervel.TimeParser
 
         public override void ExitDates(TimeExpressionV2Parser.DatesContext context)
         {
-            DateDistribution = _scope.DateGenerators.ConsumeSingle();
+            if (_scope.DayGenerators.HasValues())
+                DateDistribution = _scope.DayGenerators.ConsumeSingle().StartDate();
+            else
+                DateDistribution = _scope.DateGenerators.ConsumeSingle();
         }
 
 
@@ -58,7 +61,7 @@ namespace Cervel.TimeParser
 
         public override void ExitDayIntervals(TimeExpressionV2Parser.DayIntervalsContext context)
         {
-            var intervalGenerator = _scope.DateGenerators.ConsumeSingle().CoveringDays();
+            var intervalGenerator = _scope.DayGenerators.ConsumeSingle().CoveringDays();
             CloseScope();
             _scope.DayGenerators.Set(intervalGenerator);
         }
@@ -82,42 +85,69 @@ namespace Cervel.TimeParser
 
         public override void ExitDays(TimeExpressionV2Parser.DaysContext context)
         {
-            var dateGenerator = _scope.DateGenerators.ConsumeSingle();
+            var dayGenerator = _scope.DayGenerators.ConsumeSingle();
             CloseScope();
-            _scope.DateGenerators.Set(dateGenerator);
-        }
-
-        public override void ExitDaysSince(TimeExpressionV2Parser.DaysSinceContext context)
-        {
-            var gens = _scope.DateGenerators.Get();
-            if (context.children.Count > 1)
-                _scope.DateGenerators.Set(Time.Since(gens[1], gens[0]));
+            _scope.DayGenerators.Set(dayGenerator);
         }
 
         public override void ExitDaysUntil(TimeExpressionV2Parser.DaysUntilContext context)
         {
-            var gens = _scope.DateGenerators.Get();
+            var gens = _scope.DayGenerators.Get();
             if (context.children.Count > 1)
-                _scope.DateGenerators.Set(Time.Until(gens[1], gens[0]));
+                _scope.DayGenerators.Set(Time.Until(gens[1], gens[0]));
+        }
+
+        public override void ExitDaysSince(TimeExpressionV2Parser.DaysSinceContext context)
+        {
+            var gens = _scope.DayGenerators.Get();
+            if (context.children.Count > 1)
+            {
+                if (gens.Length > 1)
+                    _scope.DayGenerators.Set(Time.Since(gens[1], gens[0]));
+                else
+                    _scope.DayGenerators.Set(Time.Since(_scope.DateGenerators.ConsumeSingle(), gens[0]));
+            }
+        }
+
+        public override void EnterDaysExcept(TimeExpressionV2Parser.DaysExceptContext context)
+        {
+            OpenScope();
         }
 
         public override void ExitDaysExcept(TimeExpressionV2Parser.DaysExceptContext context)
         {
             if (context.children.Count > 1)
             {
-                var dates = _scope.DateGenerators.ConsumeSingle();
-                var exception = _scope.DayGenerators.ConsumeSingle();
-                _scope.DateGenerators.Set(Time.Outside(exception, dates));
+                var gens = _scope.DayGenerators.Consume();
+                var days = gens[0];
+                if (gens.Length > 1)
+                {
+                    CloseScope();
+                    _scope.DayGenerators.Set(Time.Outside(gens[1], days));
+                }
+                else
+                {
+                    var scope = _scope.DateGenerators.ConsumeSingle();
+                    CloseScope();
+                    _scope.DayGenerators.Set(Time.Outside(scope, days));
+                }
             }
+        }
+
+        public override void EnterDaysScopedUnion(TimeExpressionV2Parser.DaysScopedUnionContext context)
+        {
+            OpenScope();
         }
 
         public override void ExitDaysScopedUnion(TimeExpressionV2Parser.DaysScopedUnionContext context)
         {
-            var gens = _scope.DateGenerators.Consume();
+            var gens = _scope.DayGenerators.Consume();
+            CloseScope();
+
             if (gens.Length > 1)
-                _scope.DateGenerators.Add(Time.Union(gens));
+                _scope.DayGenerators.Add(Time.Union(gens));
             else
-                _scope.DateGenerators.Add(gens.Single());
+                _scope.DayGenerators.Add(gens.Single());
         }
 
         public override void EnterDaysNEveryM(TimeExpressionV2Parser.DaysNEveryMContext context)
@@ -127,14 +157,14 @@ namespace Cervel.TimeParser
 
         public override void ExitDaysNEveryM(TimeExpressionV2Parser.DaysNEveryMContext context)
         {
-            var dates = _scope.DateGenerators.ConsumeSingle();
+            var days = _scope.DayGenerators.ConsumeSingle();
             if (_scope.Numbers.HasValues())
             {
                 var numbers = _scope.Numbers.Consume();
-                dates = Time.NEveryM(numbers[0], numbers[1], dates);
+                days = days.NEveryM(numbers[0], numbers[1]);
             }
             CloseScope();
-            _scope.DateGenerators.Add(dates);
+            _scope.DayGenerators.Add(days);
         }
 
         public override void EnterDaysScoped(TimeExpressionV2Parser.DaysScopedContext context)
@@ -144,35 +174,35 @@ namespace Cervel.TimeParser
 
         public override void ExitDaysScoped(TimeExpressionV2Parser.DaysScopedContext context)
         {
-            var dates = _scope.DateGenerators.ConsumeSingle();
+            var days = _scope.DayGenerators.ConsumeSingle();
             if (_scope.IntervalGenerators.HasValues())
             {
                 var scope = _scope.IntervalGenerators.ConsumeSingle();
-                dates = Time.Scope(scope, dates);
+                days = Time.Scope(scope, days);
             }
             CloseScope();
-            _scope.DateGenerators.Add(dates);
+            _scope.DayGenerators.Add(days);
         }
 
         public override void ExitNthDayUnion(TimeExpressionV2Parser.NthDayUnionContext context)
         {
-            var gens = _scope.DateGenerators.Consume();
+            var gens = _scope.DayGenerators.Consume();
             if (gens.Length > 1)
-                _scope.DateGenerators.Add(Time.Union(gens));
+                _scope.DayGenerators.Add(Time.Union(gens));
             else
-                _scope.DateGenerators.Add(gens.Single());
+                _scope.DayGenerators.Add(gens.Single());
         }
 
         public override void ExitNthDayExpr(TimeExpressionV2Parser.NthDayExprContext context)
         {
             var ordinal = _scope.Numbers.ConsumeSingle();
-            var gen = _scope.DateGenerators.ConsumeSingle();
-            _scope.DateGenerators.Add(Time.Nth(ordinal, gen));
+            var gen = _scope.DayGenerators.ConsumeSingle();
+            _scope.DayGenerators.Add(Time.Nth(ordinal, gen));
         }
 
         public override void ExitEveryDay(TimeExpressionV2Parser.EveryDayContext context)
         {
-            _scope.DateGenerators.Add(Time.EveryDay());
+            _scope.DayGenerators.Add(Time.EveryDay());
         }
 
         public override void ExitDayOfWeekUnion(TimeExpressionV2Parser.DayOfWeekUnionContext context)
@@ -181,9 +211,9 @@ namespace Cervel.TimeParser
                 .Select(dow => Time.Each(dow)).ToArray();
 
             if (dowGens.Length > 1)
-                _scope.DateGenerators.Add(Time.Union(dowGens));
+                _scope.DayGenerators.Add(Time.Union(dowGens));
             else
-                _scope.DateGenerators.Add(dowGens.Single());
+                _scope.DayGenerators.Add(dowGens.Single());
         }
 
         public override void ExitMonday(TimeExpressionV2Parser.MondayContext context) => _scope.DaysOfWeek.Add(DayOfWeek.Monday);
@@ -201,9 +231,9 @@ namespace Cervel.TimeParser
                 .Select(dayOfMonth => Time.Each(dayOfMonth)).ToArray();
 
             if (domGens.Length > 1)
-                _scope.DateGenerators.Add(Time.Union(domGens));
+                _scope.DayGenerators.Add(Time.Union(domGens));
             else
-                _scope.DateGenerators.Add(domGens.Single());
+                _scope.DayGenerators.Add(domGens.Single());
         }
 
 
@@ -262,18 +292,18 @@ namespace Cervel.TimeParser
 
         public override void ExitDayOfWeekOfMonthUnion(TimeExpressionV2Parser.DayOfWeekOfMonthUnionContext context)
         {
-            var domGens = _scope.DateGenerators.Consume();
+            var domGens = _scope.DayGenerators.Consume();
             if (domGens.Length > 1)
-                _scope.DateGenerators.Add(Time.Union(domGens));
+                _scope.DayGenerators.Add(Time.Union(domGens));
             else
-                _scope.DateGenerators.Add(domGens.Single());
+                _scope.DayGenerators.Add(domGens.Single());
         }
 
         public override void ExitDayOfWeekOfMonthExpr(TimeExpressionV2Parser.DayOfWeekOfMonthExprContext context)
         {
             var dayOfWeek = _scope.DaysOfWeek.ConsumeSingle();
             var dayOfMonth = _scope.Numbers.ConsumeSingle();
-            _scope.DateGenerators.Add(Time.Each(dayOfMonth).Where(dayOfWeek));
+            _scope.DayGenerators.Add(Time.Each(dayOfMonth).Where(dayOfWeek));
         }
 
 
@@ -318,7 +348,7 @@ namespace Cervel.TimeParser
     internal class VarScope
     {
         public TmpVar<IGenerator<Date>> DateGenerators = new();
-        public TmpVar<IGenerator<DayInterval>> DayGenerators = new();
+        public TmpVar<IGenerator<Day>> DayGenerators = new();
         public TmpVar<IGenerator<TimeInterval>> IntervalGenerators = new();
         public TmpVar<DayOfWeek> DaysOfWeek = new();
         public TmpVar<int> Numbers = new();
