@@ -12,6 +12,7 @@ namespace Cervel.TimeParser
         DateTime End { get; }
         Date StartDate => new Date(Start);
         Date EndDate => new Date(End);
+        TimeInterval ToTimeInterval() => new TimeInterval(Start, End);
         bool IsBefore(DateTime date) => End < date;
         bool IsAfter(DateTime date) => date < Start;
         bool IsBefore(ITimeInterval other) => End < other.Start;

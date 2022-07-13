@@ -1,29 +1,19 @@
 ﻿grammar TimeExpressionV2;
 
 
-dates  // Point d'entrée du parsing des dates
+time : intervals ;  // Parsing entry point
+
+intervals
 	: days
-	//| weeks
 	| monthes
 	//| years
 	;
-
-intervals  // Point d'entrée du parsing des intervalles
-	: dayIntervals
-	| monthIntervals
-	//| yearIntervals
-	;
-
-dayIntervals : days ;
-monthIntervals : monthes ;
-//yearIntervals : years ;
-
 
 // ------------------------------------------------------------
 //                Dates express in terms of days
 // ------------------------------------------------------------
 
-days  // Appelée par `dayIntervals`
+days
 	: daysUntil
 	;
 
@@ -39,7 +29,7 @@ daysSince
 	;
 
 daysExcept
-	: daysScopedUnion SAUF dayIntervals
+	: daysScopedUnion SAUF intervals
 	| daysScopedUnion
 	;
 
@@ -50,7 +40,7 @@ daysScopedIter   // l'ordre des règles est inversé pour privilégier une inter
 	;
 
 daysScoped
-    : daysNEveryM DE? monthIntervals
+    : daysNEveryM DE? monthes
     | daysNEveryM
     ;
 
@@ -205,7 +195,7 @@ dayOfWeekOfMonthExpr
 //             Dates express in terms of monthes
 // ------------------------------------------------------------
 
-monthes  // Appelée par `monthIntervals`
+monthes
 	: monthesSince
 	;
 

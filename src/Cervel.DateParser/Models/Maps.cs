@@ -14,9 +14,15 @@ namespace Cervel.TimeParser
     public static class Maps
     {
         public static StrictOrderPreservingMap<T, Date> StartDate<T>()
-            where T : ITimeInterval
+            where T : ITimeInterval<T>
         {
             return (ts) => ts.Select(t => t.StartDate);
+        }
+
+        public static StrictOrderPreservingMap<T, TimeInterval> ToTimeInterval<T>()
+            where T : ITimeInterval<T>
+        {
+            return (ts) => ts.Select(t => t.ToTimeInterval());
         }
 
         public static StrictOrderPreservingMap<T, T> Take<T>(int i) => (ts) => ts.Take(i);

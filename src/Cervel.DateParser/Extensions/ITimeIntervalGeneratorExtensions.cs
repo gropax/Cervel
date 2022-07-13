@@ -64,8 +64,20 @@ namespace Cervel.TimeParser.Extensions
             string name = null)
             where T : ITimeInterval<T>
         {
-            return generator.Map(Maps.Take<T>(1), name ?? $"First<{generator.Name}>");
+            return generator.Map(
+                Maps.Take<T>(1),
+                name ?? $"First<{generator.Name}>");
         }
+
+        public static IGenerator<TimeInterval> ToTimeInterval<T>(
+            this IGenerator<T> generator,
+            string name = null)
+            where T : ITimeInterval<T>
+        {
+            return generator.Map(
+                Maps.ToTimeInterval<T>(),
+                name ?? $"TimeIntv<{generator.Name}>");
+        } 
 
         public static IGenerator<Date> StartDate<T>(
             this IGenerator<T> generator,

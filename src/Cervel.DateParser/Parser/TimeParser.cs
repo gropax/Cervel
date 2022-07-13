@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Cervel.TimeParser.Dates;
+using Cervel.TimeParser.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,16 @@ namespace Cervel.TimeParser
     {
         public ParseResult<IGenerator<Date>> ParseDateTimes(string input)
         {
-            return ParseSymbolV2(input, true, (p) => p.dates(), (l) => l.DateDistribution);
+            return ParseSymbolV2(input, true,
+                (p) => p.time(),
+                (l) => l.TimeIntervals.StartDate());
         }
 
         public ParseResult<IGenerator<TimeInterval>> ParseTimeIntervals(string input)
         {
-            return ParseSymbolV2(input, false, (p) => p.intervals(), (l) => l.IntervalDistribution);
+            return ParseSymbolV2(input, false,
+                (p) => p.time(),
+                (l) => l.TimeIntervals.Coalesce());
         }
 
         private ParseResult<TResult> ParseSymbolV2<TResult>(
