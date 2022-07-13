@@ -102,14 +102,15 @@ namespace Cervel.TimeParser
 
         public override void ExitDaysUntil(TimeExpressionV2Parser.DaysUntilContext context)
         {
-            var gens = _scope.DayGenerators.Get();
+            var days = _scope.DayGenerators.ConsumeSingle();
+            var scope = _scope.IntervalGenerators.Consume();
 
             CloseScope();
 
-            if (context.children.Count > 1)
-                _scope.DayGenerators.Add(Time.Until(gens[1], gens[0]));
+            if (scope.Length > 0)
+                _scope.DayGenerators.Add(Time.Until(scope[0], days));
             else
-                _scope.DayGenerators.Add(gens[0]);
+                _scope.DayGenerators.Add(days);
         }
 
 
@@ -120,19 +121,15 @@ namespace Cervel.TimeParser
 
         public override void ExitDaysSince(TimeExpressionV2Parser.DaysSinceContext context)
         {
-            var gens = _scope.DayGenerators.Consume();
+            var days = _scope.DayGenerators.ConsumeSingle();
+            var scope = _scope.IntervalGenerators.Consume();
 
             CloseScope();
 
-            if (context.children.Count > 1)
-            {
-                if (gens.Length > 1)
-                    _scope.DayGenerators.Add(Time.Since(gens[1], gens[0]));
-                else
-                    _scope.DayGenerators.Add(Time.Since(_scope.DateGenerators.ConsumeSingle(), gens[0]));
-            }
+            if (scope.Length > 0)
+                _scope.DayGenerators.Add(Time.Since(scope[0], days));
             else
-                _scope.DayGenerators.Add(gens[0]);
+                _scope.DayGenerators.Add(days);
         }
 
 
@@ -144,12 +141,12 @@ namespace Cervel.TimeParser
         public override void ExitDaysExcept(TimeExpressionV2Parser.DaysExceptContext context)
         {
             var days = _scope.DayGenerators.ConsumeSingle();
-            var exclude = _scope.IntervalGenerators.Consume();
+            var scope = _scope.IntervalGenerators.Consume();
 
             CloseScope();
 
-            if (context.children.Count > 1)
-                _scope.DayGenerators.Add(Time.Outside(exclude[0], days));
+            if (scope.Length > 0)
+                _scope.DayGenerators.Add(Time.Outside(scope[0], days));
             else
                 _scope.DayGenerators.Add(days);
         }

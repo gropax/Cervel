@@ -18,13 +18,12 @@ days
 	;
 
 daysUntil
-	: daysSince until daysExpr
+	: daysSince until intervals
 	| daysSince
 	;
 
 daysSince
-	: daysExcept since daysExpr
-	| daysExcept since monthesExpr
+	: daysExcept since intervals
 	| daysExcept
 	;
 
