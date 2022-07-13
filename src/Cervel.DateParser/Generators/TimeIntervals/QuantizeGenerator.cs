@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser.TimeIntervals
 {
-    public class QuantizeGenerator : IGenerator<TimeInterval<double>>
+    public class QuantizeGenerator<T> : IGenerator<TimeInterval<double>>
+        where T : ITimeUnit<T>
     {
         public string Name { get; }
-        private IGenerator<TimeInterval> _partition;
+        private IGenerator<T> _partition;
         private IGenerator<TimeInterval> _generator;
 
         public QuantizeGenerator(
-            ITimeMeasure timeMeasure,
+            ITimeMeasure<T> timeMeasure,
             IGenerator<TimeInterval> generator,
             string name = null)
         {
             _generator = generator;
-            _partition = Time.Frequency(timeMeasure).ToPartition();
-            Name = name ?? $"Quantize({timeMeasure.Name})<{generator.Name}>";
+            _partition = new EveryUnitGenerator<T>(timeMeasure);
+            Name = name ?? $"Quantize<{generator.Name}>";
         }
 
         public IEnumerable<TimeInterval<double>> Generate(DateTime fromDate, DateTime toDate)

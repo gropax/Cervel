@@ -5,7 +5,7 @@ time : intervals ;  // Parsing entry point
 
 intervals
 	: days
-	| monthes
+	| months
 	//| years
 	;
 
@@ -39,7 +39,7 @@ daysScopedIter   // l'ordre des règles est inversé pour privilégier une inter
 	;
 
 daysScoped
-    : daysNEveryM DE? monthes
+    : daysNEveryM DE? months
     | daysNEveryM
     ;
 
@@ -191,24 +191,24 @@ dayOfWeekOfMonthExpr
 
 
 // ------------------------------------------------------------
-//             Dates express in terms of monthes
+//             Dates express in terms of months
 // ------------------------------------------------------------
 
-monthes
-	: monthesSince
+months
+	: monthsSince
 	;
 
-monthesSince
-	: monthesExpr since monthesUntil
-	| monthesUntil
+monthsSince
+	: monthsExpr since monthsUntil
+	| monthsUntil
 	;
 
-monthesUntil
-	: monthesExpr until monthesExpr
-	| monthesExpr
+monthsUntil
+	: monthsExpr until monthsExpr
+	| monthsExpr
 	;
 
-monthesExpr
+monthsExpr
 	: everyMonth
 	| monthNameUnion
 	;

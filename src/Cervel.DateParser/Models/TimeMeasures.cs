@@ -8,57 +8,87 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
 {
-    public interface ITimeMeasure
+    public interface ITimeMeasure<T> where T : ITimeUnit<T>
     {
         string Name { get; }
-        Date AddTo(Date date);
+        DateTime Shift(DateTime date, int factor);
+        Date Shift(Date date, int factor);
+        T Shift(T date, int factor);
+        T GetUnit(DateTime dateTime);
+        T GetUnit(Date date) => GetUnit(date.DateTime);
     }
 
-    public class DayMeasure : ITimeMeasure
+    public static class TimeMeasures
     {
-        private int _factor;
-        public DayMeasure(int factor = 1)
-        {
-            _factor = factor;
-        }
-
-        public string Name => $"Day({_factor})";
-
-        public Date AddTo(Date date)
-        {
-            return new Date(date.DateTime.AddDays(_factor));
-        }
+        public static DayMeasure Day = new DayMeasure();
+        public static MonthMeasure Month = new MonthMeasure();
+        //public static YearMeasure Year = new YearMeasure();
     }
 
-    public class MonthMeasure : ITimeMeasure
+    public class DayMeasure : ITimeMeasure<Day>
     {
-        private int _factor;
-        public MonthMeasure(int factor = 1)
+        public string Name => "Day";
+
+        public Day GetUnit(DateTime dateTime)
         {
-            _factor = factor;
+            return new Day(dateTime.Date);
         }
 
-        public string Name => $"Month({_factor})";
+        public DateTime Shift(DateTime date, int factor) => date.AddDays(factor);
+        public Date Shift(Date date, int factor) => new Date(date.DateTime.AddDays(factor));
 
-        public Date AddTo(Date date)
+        public Day Shift(Day day, int factor)
         {
-            return new Date(date.DateTime.AddMonths(_factor));
+            return new Day(day.Start.AddDays(factor));
         }
     }
 
-    public class YearMeasure : ITimeMeasure
+    public class MonthMeasure : ITimeMeasure<Month>
     {
-        private int _factor;
-        public YearMeasure(int factor = 1)
+        public string Name => "Month";
+
+        public Month GetUnit(DateTime dateTime)
         {
-            _factor = factor;
+            return new Month(dateTime.Year, dateTime.Month);
         }
 
-        public string Name => $"Year({_factor})";
+        public DateTime Shift(DateTime date, int factor) => date.AddMonths(factor);
+        public Date Shift(Date date, int factor) => new Date(date.DateTime.AddMonths(factor));
 
-        public Date AddTo(Date date)
+        public Month Shift(Month month, int factor)
         {
-            return new Date(date.DateTime.AddYears(_factor));
+            return new Month(month.Start.AddMonths(factor));
         }
     }
+
+    //public class YearMeasure : ITimeMeasure<Year>
+    //{
+    //    private int _factor;
+    //    public YearMeasure(int factor = 1)
+    //    {
+    //        _factor = factor;
+    //    }
+
+    //    public string Name => $"Year({_factor})";
+
+    //    public Date AddTo(Date date)
+    //    {
+    //        return new Date(date.DateTime.AddYears(_factor));
+    //    }
+
+    //    public Year GetUnit(DateTime dateTime)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public Date Shift(Date date, int factor)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public Year Shift(Year date, int factor)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

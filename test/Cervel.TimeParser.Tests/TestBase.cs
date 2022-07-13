@@ -37,7 +37,7 @@ namespace Cervel.TimeParser.Tests
             var start = new DateTime(year, month, 1);
             return new TimeInterval(
                 start: start,
-                end: measure.AddTo(new Date(start)).DateTime);
+                end: measure.Shift(new Date(start), 1).DateTime);
         }
 
         protected TimeInterval DaysInterval(Date first, Date last)

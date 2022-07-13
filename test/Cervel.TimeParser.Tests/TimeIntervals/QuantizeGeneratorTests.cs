@@ -19,7 +19,7 @@ namespace Cervel.TimeParser.TimeIntervals.Tests
                 DaysInterval(2022, 4, 25, dayNumber: 40),
                 DaysInterval(2022, 6, 15, dayNumber: 5));
 
-            var quantizeGen = new QuantizeGenerator(new MonthMeasure(), generator);
+            var quantizeGen = new QuantizeGenerator<Month>(new MonthMeasure(), generator);
             var quantized = quantizeGen.Generate(_fromDate).Take(8).ToArray();
 
             Assert.Equal(

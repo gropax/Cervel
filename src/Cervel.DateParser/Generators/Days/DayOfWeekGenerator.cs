@@ -27,12 +27,12 @@ namespace Cervel.TimeParser.TimeIntervals
             int nextTargetDow = _dayOfWeek >= currentDow ? (int)_dayOfWeek : (int)_dayOfWeek + 7;
             int inc = nextTargetDow - (int)currentDow;
 
-            var day = new Day(fromDate).Increment(inc);
+            var day = new Day(fromDate).Next(inc);
             yield return day;
 
             while (true)
             {
-                day = day.Increment(7);
+                day = day.Next(7);
                 yield return day;
             }
         }

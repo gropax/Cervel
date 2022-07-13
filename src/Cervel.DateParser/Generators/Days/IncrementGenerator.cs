@@ -9,7 +9,7 @@ namespace Cervel.TimeParser.Generators.DayIntervals
 {
     [DebuggerDisplay("{Name}")]
     public class IncrementGenerator<T> : IGenerator<T>
-        where T : ITimeMeasure<T>
+        where T : ITimeUnit<T>
     {
         private IGenerator<T> _generator;
         private int _shift { get; }
@@ -26,7 +26,7 @@ namespace Cervel.TimeParser.Generators.DayIntervals
         public IEnumerable<T> Generate(DateTime fromDate)
         {
             foreach (var t in _generator.Generate(fromDate))
-                yield return t.Increment(_shift);
+                yield return t.Next(_shift);
         }
     }
 }

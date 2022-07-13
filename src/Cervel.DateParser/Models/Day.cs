@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Cervel.TimeParser
 {
     public class Day :
-        ITimeMeasure<Day>,
+        ITimeUnit<Day>,
         IEquatable<Day>,
         IComparable<Day>
     {
@@ -39,7 +39,6 @@ namespace Cervel.TimeParser
 
         public TimeInterval ToTimeInterval() => new TimeInterval(Start, End);
 
-        public Day Next() => new Day(Start + TimeSpan.FromDays(1));
         public bool TryGetNext(out Day dayInterval)
         {
             try
@@ -57,6 +56,7 @@ namespace Cervel.TimeParser
         public Day CutStart(DateTime startTime) => this;
         public Day CutEnd(DateTime endTime) => this;
 
+        public Day Next(int shift = 1) => TimeMeasures.Day.Shift(this, shift);
         public Day Shift(TimeSpan timeSpan)
         {
             var dayShift = timeSpan.TotalDays;
@@ -64,16 +64,10 @@ namespace Cervel.TimeParser
             return new Day(Start + TimeSpan.FromDays(dayShift));
         }
 
-        public Day Increment(int shift)
-        {
-            return new Day(Start + TimeSpan.FromDays(shift));
-        }
-
         public bool Equals(Day other)
         {
             return Start.Equals(other.Start);
         }
-
 
 
         public override bool Equals(object obj)

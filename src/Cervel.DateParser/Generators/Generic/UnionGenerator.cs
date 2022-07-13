@@ -9,7 +9,7 @@ namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
     public class UnionGenerator<T> : IGenerator<T>
-        where T : ITimeMeasure<T>, IComparable<T>
+        where T : ITimeUnit<T>, IComparable<T>
     {
         public string Name { get; }
         private IGenerator<T>[] _generators;

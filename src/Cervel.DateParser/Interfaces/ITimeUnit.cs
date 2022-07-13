@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Cervel.TimeParser
 {
-    public interface ITimeMeasure<out T> : ITimeInterval<T>
+    public interface ITimeUnit<out T> : ITimeInterval<T>
     {
-        T Increment(int number);
+        T Next(int number = 1);
     }
 }

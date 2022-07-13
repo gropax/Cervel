@@ -1070,19 +1070,19 @@ namespace Cervel.TimeParser.Tests
 
 
         [Theory]
-        [InlineData("janvier", Month.January)]
-        [InlineData("février", Month.February)]
-        [InlineData("mars", Month.March)]
-        [InlineData("avril", Month.April)]
-        [InlineData("mai", Month.May)]
-        [InlineData("juin", Month.June)]
-        [InlineData("juillet", Month.July)]
-        [InlineData("août", Month.August)]
-        [InlineData("septembre", Month.September)]
-        [InlineData("octobre", Month.October)]
-        [InlineData("novembre", Month.November)]
-        [InlineData("décembre", Month.December)]
-        public void TestParse_MonthByName(string input, Month month)
+        [InlineData("janvier", MonthOfYear.January)]
+        [InlineData("février", MonthOfYear.February)]
+        [InlineData("mars", MonthOfYear.March)]
+        [InlineData("avril", MonthOfYear.April)]
+        [InlineData("mai", MonthOfYear.May)]
+        [InlineData("juin", MonthOfYear.June)]
+        [InlineData("juillet", MonthOfYear.July)]
+        [InlineData("août", MonthOfYear.August)]
+        [InlineData("septembre", MonthOfYear.September)]
+        [InlineData("octobre", MonthOfYear.October)]
+        [InlineData("novembre", MonthOfYear.November)]
+        [InlineData("décembre", MonthOfYear.December)]
+        public void TestParse_MonthByName(string input, MonthOfYear month)
         {
             int monthIdx = (int)month;
 

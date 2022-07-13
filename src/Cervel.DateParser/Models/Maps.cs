@@ -40,8 +40,7 @@ namespace Cervel.TimeParser
 
         public static OrderPreservingMap<Date, Date> ShiftMonth(int n)
         {
-            var timeMeasure = new MonthMeasure(n);
-            return (ds) => ds.Select(d => timeMeasure.AddTo(d));
+            return (ds) => ds.Select(d => TimeMeasures.Month.Shift(d, n));
         }
     }
 

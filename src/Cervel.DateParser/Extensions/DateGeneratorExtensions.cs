@@ -45,13 +45,6 @@ namespace Cervel.TimeParser.Extensions
             return new ToScopesGenerator(generator, timeSpan);
         }
 
-        public static IGenerator<TimeInterval> ToIntervals(
-            this IGenerator<Date> generator,
-            ITimeMeasure timeMeasure)
-        {
-            return new ToIntervalsGenerator(generator, timeMeasure);
-        }
-
 
         public static IGenerator<T> Scope<T, TScope>(
             this IGenerator<T> generator,
@@ -66,32 +59,14 @@ namespace Cervel.TimeParser.Extensions
 
         #region Month related methods
 
-        public static IGenerator<Date> Monthly(
-            this IGenerator<Date> g,
-            string name = null)
-        {
-            return new FrequencyGenerator(new MonthMeasure()).Scope(g.FirstToInfinity(), name ?? $"EveryMonth");
-        }
-
-        public static IGenerator<Date> Yearly(
-            this IGenerator<Date> g,
-            string name = null)
-        {
-            return new FrequencyGenerator(new YearMeasure()).Scope(g.FirstToInfinity(), name ?? $"EveryYear");
-        }
-
-        public static IGenerator<TimeInterval> AllMonth(this IGenerator<Date> g) => Time.AllMonth(g);
-
         public static IGenerator<Date> StartOfMonth(this IGenerator<Date> g) => Time.StartOfMonth(g);
 
         public static IGenerator<Date> ShiftMonth(this IGenerator<Date> g, int n) => Time.ShiftMonth(g, n);
 
-        public static IGenerator<Date> Where(this IGenerator<Date> generator, Month month)
+        public static IGenerator<Date> Where(this IGenerator<Date> generator, MonthOfYear month)
         {
             return generator.Map(Maps.Filter<Date>(d => d.DateTime.Month == (int)month));  // @refactor
         }
-
-        public static IGenerator<TimeInterval> DuringMonthes(this IGenerator<Date> g, int n) => Time.DuringMonthes(g, n);
 
         #endregion
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Cervel.TimeParser
 {
     public class Date :
-        ITimeMeasure<Date>,
+        ITimeUnit<Date>,
         IEquatable<Date>,
         IComparable<Date>
     {
@@ -56,7 +56,7 @@ namespace Cervel.TimeParser
             return DateTime.GetHashCode();
         }
 
-        public Date Increment(int number)
+        public Date Next(int number)
         {
             return this;
         }

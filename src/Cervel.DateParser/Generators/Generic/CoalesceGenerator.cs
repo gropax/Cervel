@@ -23,7 +23,7 @@ namespace Cervel.TimeParser.TimeIntervals
         public IEnumerable<TimeInterval> Generate(DateTime fromDate) => Generate(fromDate, DateTime.MaxValue);
         public IEnumerable<TimeInterval> Generate(DateTime fromDate, DateTime toDate)
         {
-            var enumerator = _generator.Generate(fromDate).GetEnumerator();
+            var enumerator = _generator.Generate(fromDate, toDate).GetEnumerator();
             if (!enumerator.MoveNext())
                 yield break;
 

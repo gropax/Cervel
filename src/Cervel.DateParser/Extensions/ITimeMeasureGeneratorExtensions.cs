@@ -14,7 +14,7 @@ namespace Cervel.TimeParser.Extensions
         public static IGenerator<T> Increment<T>(
             this IGenerator<T> generator,
             int shift)
-            where T : ITimeMeasure<T>
+            where T : ITimeUnit<T>
         {
             return new IncrementGenerator<T>(generator, shift);
         }
