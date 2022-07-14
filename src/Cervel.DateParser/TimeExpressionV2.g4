@@ -63,14 +63,6 @@ nthDayExpr
 	: LE? ordinal daysExpr
 	;
 
-ordinal
-	: ordinal1
-	| ordinal2
-	| ordinal3
-	| ordinal4
-	| ordinal5
-	;
-
 daysExpr
 	: everyDay
 	| dayOfWeekUnion
@@ -114,7 +106,7 @@ sunday : 'dimanche' | 'dimanches' | 'dim' | 'di' ;
 
 dayOfMonthUnion : dayOfMonthIter ;
 dayOfMonthIter
-	: dayOfMonthExpr (COMMA | ET)? dayOfMonthIter
+	: dayOfMonthExpr (COMMA | ET) dayOfMonthIter
 	| dayOfMonthExpr
 	;
 
@@ -128,55 +120,94 @@ dayOfMonth
 	| number
 	;
 
-ordinal1 : '1er' | '1e' | 'premier' ;
-ordinal2 : '2eme' | '2e' | 'deuxième' ;
-ordinal3 : '3eme' | '3e' | 'troisième' ;
-ordinal4 : '4eme' | '4e' | 'quatrième' ;
-ordinal5 : '5eme' | '5e' | 'cinquième' ;
+ordinal
+	: ordinalInDigits
+	| ordinal1 | ordinal2 | ordinal3 | ordinal4 | ordinal5
+	| ordinal6 | ordinal7 | ordinal8 | ordinal9 | ordinal10
+	| ordinal11 | ordinal12 | ordinal13 | ordinal14 | ordinal15
+	| ordinal16 | ordinal17 | ordinal18 | ordinal19 | ordinal20
+	| ordinal20 | ordinal21 | ordinal22 | ordinal23 | ordinal24
+	| ordinal25 | ordinal26 | ordinal27 | ordinal28 | ordinal29
+	| ordinal30 | ordinal31
+	;
+
+ordinalInDigits :  ORDINAL ;
+
+ordinal1 : ORDINAL1 | '1er' ;  // dirty fix for dayOfMonth
+ordinal2 : ORDINAL2 ;
+ordinal3 : ORDINAL3 ;
+ordinal4 : ORDINAL4 ;
+ordinal5 : ORDINAL5 ;
+ordinal6 : ORDINAL6 ;
+ordinal7 : ORDINAL7 ;
+ordinal8 : ORDINAL8 ;
+ordinal9 : ORDINAL9 ;
+ordinal10 : ORDINAL10 ;
+ordinal11 : ORDINAL11 ;
+ordinal12 : ORDINAL12 ;
+ordinal13 : ORDINAL13 ;
+ordinal14 : ORDINAL14 ;
+ordinal15 : ORDINAL15 ;
+ordinal16 : ORDINAL16 ;
+ordinal17 : NUMBER10 ORDINAL7 ;
+ordinal18 : NUMBER10 ORDINAL8 ;
+ordinal19 : NUMBER10 ORDINAL9 ;
+ordinal20 : ORDINAL20 ;
+ordinal21 : NUMBER20 ET? UNIEME ;
+ordinal22 : NUMBER20 ORDINAL2 ;
+ordinal23 : NUMBER20 ORDINAL3 ;
+ordinal24 : NUMBER20 ORDINAL4 ;
+ordinal25 : NUMBER20 ORDINAL5 ;
+ordinal26 : NUMBER20 ORDINAL6 ;
+ordinal27 : NUMBER20 ORDINAL7 ;
+ordinal28 : NUMBER20 ORDINAL8 ;
+ordinal29 : NUMBER20 ORDINAL9 ;
+ordinal30 : ORDINAL30 ;
+ordinal31 : NUMBER30 ET? UNIEME ;
 
 number
 	: numberInDigits
 	| number1 | number2 | number3 | number4 | number5
-	| number6 | number7 | number8 | number9 | number10
-	| number11 | number12 | number13 | number14 | number15
-	| number16 | number17 | number18 | number19 | number20
-	| number20 | number21 | number22 | number23 | number24
-	| number25 | number26 | number27 | number28 | number29
-	| number30 | number31 ;
+	| number6 | number7 | number8 | number9 | number17
+	| number18 | number19 | number10 | number11
+	| number12 | number13 | number14 | number15 | number16 
+	| number21 | number22 | number23 | number24 | number25
+	| number26 | number27 | number28 | number29 | number20 
+	| number31 | number30 ;
 
 numberInDigits : {_input.Lt(1).Text.Length <= 2}? NUMBER ;
 
-number1 : 'un' ;
-number2 : 'deux' ;
-number3 : 'trois' ;
-number4 : 'quatre' ;
-number5 : 'cinq' ;
-number6 : 'six' ;
-number7 : 'sept' ;
-number8 : 'huit' ;
-number9 : 'neuf' ;
-number10 : 'dix' ;
-number11 : 'onze' ;
-number12 : 'douze' ;
-number13 : 'treize' ;
-number14 : 'quatorze' ;
-number15 : 'quinze' ;
-number16 : 'seize' ;
-number17 : 'dix sept' ;
-number18 : 'dix huit' ;
-number19 : 'dix neuf' ;
-number20 : 'vingt' ;
-number21 : 'vingt et un' ;
-number22 : 'vingt deux' ;
-number23 : 'vingt trois' ;
-number24 : 'vingt quatre' ;
-number25 : 'vingt cinq' ;
-number26 : 'vingt six' ;
-number27 : 'vingt sept' ;
-number28 : 'vingt huit' ;
-number29 : 'vingt neuf' ;
-number30 : 'trente' ;
-number31 : 'trente et un' ;
+number1 : NUMBER1 ;
+number2 : NUMBER2 ;
+number3 : NUMBER3 ;
+number4 : NUMBER4 ;
+number5 : NUMBER5 ;
+number6 : NUMBER6 ;
+number7 : NUMBER7 ;
+number8 : NUMBER8 ;
+number9 : NUMBER9 ;
+number10 : NUMBER10 ;
+number11 : NUMBER11 ;
+number12 : NUMBER12 ;
+number13 : NUMBER13 ;
+number14 : NUMBER14 ;
+number15 : NUMBER15 ;
+number16 : NUMBER16 ;
+number17 : NUMBER10 NUMBER7 ;
+number18 : NUMBER10 NUMBER8 ;
+number19 : NUMBER10 NUMBER9 ;
+number20 : NUMBER20 ;
+number21 : NUMBER21 ;
+number22 : NUMBER20 NUMBER2 ;
+number23 : NUMBER20 NUMBER3 ;
+number24 : NUMBER20 NUMBER4 ;
+number25 : NUMBER20 NUMBER5 ;
+number26 : NUMBER20 NUMBER6 ;
+number27 : NUMBER20 NUMBER7 ;
+number28 : NUMBER20 NUMBER8 ;
+number29 : NUMBER20 NUMBER9 ;
+number30 : NUMBER30 ;
+number31 : NUMBER31 ;
 
 dayOfWeekOfMonthUnion : dayOfWeekOfMonthIter ;
 dayOfWeekOfMonthIter
@@ -328,9 +359,49 @@ since : A PARTIR DE ;
 LPAR : '(' ;
 RPAR : ')' ;
 
-//ORDINAL : ('0' .. '9')+ ('er' | 'eme' | 'e') ;
-//YEAR_NAME : ('0' .. '9'){4} ;
+ORDINAL : ('0' .. '9')+ ('er' | 'ere' | 're' | 'eme' | 'me' | 'e') ;
 NUMBER : ('0' .. '9')+ ;
+
+UNIEME : 'unieme' 's'? ;
+ORDINAL1 : 'premier' 'e'? 's'? ;
+ORDINAL2 : 'deuxieme' 's'? ;
+ORDINAL3 : 'troisieme' 's'? ;
+ORDINAL4 : 'quatrieme' 's'? ;
+ORDINAL5 : 'cinquieme' 's'? ;
+ORDINAL6 : 'sixieme' 's'? ;
+ORDINAL7 : 'septieme' 's'? ;
+ORDINAL8 : 'huitieme' 's'? ;
+ORDINAL9 : 'neuvieme' 's'? ;
+ORDINAL10 : 'dixieme' 's'? ;
+ORDINAL11 : 'onzieme' 's'? ;
+ORDINAL12 : 'douzieme' 's'? ;
+ORDINAL13 : 'treizieme' 's'? ;
+ORDINAL14 : 'quatorzieme' 's'? ;
+ORDINAL15 : 'quinzieme' 's'? ;
+ORDINAL16 : 'seizieme' 's'? ;
+ORDINAL20 : 'vingtieme' 's'? ;
+ORDINAL30 : 'trentieme' 's'? ;
+
+NUMBER1 : 'un' ;
+NUMBER2 : 'deux' ;
+NUMBER3 : 'trois' ;
+NUMBER4 : 'quatre' ;
+NUMBER5 : 'cinq' ;
+NUMBER6 : 'six' ;
+NUMBER7 : 'sept' ;
+NUMBER8 : 'huit' ;
+NUMBER9 : 'neuf' ;
+NUMBER10 : 'dix' ;
+NUMBER11 : 'onze' ;
+NUMBER12 : 'douze' ;
+NUMBER13 : 'treize' ;
+NUMBER14 : 'quatorze' ;
+NUMBER15 : 'quinze' ;
+NUMBER16 : 'seize' ;
+NUMBER20 : 'vingt' ;
+NUMBER21 : 'vingt et un' ;
+NUMBER30 : 'trente' ;
+NUMBER31 : 'trente et un' ;
 
 SAUF : 'sauf' | 'excepte' ;
 CHAQUE : 'chaque' ;
@@ -347,3 +418,5 @@ DEPUIS : 'depuis' ;
 JUSQUE : 'jusque' | 'jusqu' | 'jusqu\'' ;
 SUR : 'sur' ;
 EN : 'en' ;
+ET : 'et' ;
+COMMA : ',' ;

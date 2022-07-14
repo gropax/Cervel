@@ -1,0 +1,24 @@
+﻿- 
+    input:
+        - la première année
+        - la premiere annee
+        - la 1ère année
+        - la 1ere année
+        - la 1re année
+        - la 1e année
+    generate:
+        from: 2022
+        to: 2027
+    expect: [2022]
+- 
+    input:
+        - la deuxième année
+        - la deuxieme annee
+        - la 2ème année
+        - la 2eme année
+        - la 2me année
+        - la 2e année
+    generate:
+        from: 2022
+        to: 2027
+    expect: [2023]

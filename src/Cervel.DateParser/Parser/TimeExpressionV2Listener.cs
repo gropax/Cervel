@@ -317,18 +317,9 @@ namespace Cervel.TimeParser
         }
 
 
-        #region Ordinals
-
-        public override void ExitOrdinal1(TimeExpressionV2Parser.Ordinal1Context context) => _scope.Numbers.Add(1);
-        public override void ExitOrdinal2(TimeExpressionV2Parser.Ordinal2Context context) => _scope.Numbers.Add(2);
-        public override void ExitOrdinal3(TimeExpressionV2Parser.Ordinal3Context context) => _scope.Numbers.Add(3);
-        public override void ExitOrdinal4(TimeExpressionV2Parser.Ordinal4Context context) => _scope.Numbers.Add(4);
-        public override void ExitOrdinal5(TimeExpressionV2Parser.Ordinal5Context context) => _scope.Numbers.Add(5);
-
-        #endregion
-
         #region Days in month
 
+        #region Numbers
         public override void ExitNumberInDigits(TimeExpressionV2Parser.NumberInDigitsContext context)
         {
             string field = context.children[0].GetText();
@@ -367,6 +358,49 @@ namespace Cervel.TimeParser
         public override void ExitNumber29(TimeExpressionV2Parser.Number29Context context) => _scope.Numbers.Add(29);
         public override void ExitNumber30(TimeExpressionV2Parser.Number30Context context) => _scope.Numbers.Add(30);
         public override void ExitNumber31(TimeExpressionV2Parser.Number31Context context) => _scope.Numbers.Add(31);
+        #endregion
+
+        #region Ordinals
+        public override void ExitOrdinalInDigits(TimeExpressionV2Parser.OrdinalInDigitsContext context)
+        {
+            string field = context.children[0].GetText();
+            string digits = new string(field.TakeWhile(c => char.IsDigit(c)).ToArray());
+            int number = int.Parse(digits);
+            _scope.Numbers.Add(number);
+        }
+
+        public override void ExitOrdinal1(TimeExpressionV2Parser.Ordinal1Context context) => _scope.Numbers.Add(1);
+        public override void ExitOrdinal2(TimeExpressionV2Parser.Ordinal2Context context) => _scope.Numbers.Add(2);
+        public override void ExitOrdinal3(TimeExpressionV2Parser.Ordinal3Context context) => _scope.Numbers.Add(3);
+        public override void ExitOrdinal4(TimeExpressionV2Parser.Ordinal4Context context) => _scope.Numbers.Add(4);
+        public override void ExitOrdinal5(TimeExpressionV2Parser.Ordinal5Context context) => _scope.Numbers.Add(5);
+        public override void ExitOrdinal6(TimeExpressionV2Parser.Ordinal6Context context) => _scope.Numbers.Add(6);
+        public override void ExitOrdinal7(TimeExpressionV2Parser.Ordinal7Context context) => _scope.Numbers.Add(7);
+        public override void ExitOrdinal8(TimeExpressionV2Parser.Ordinal8Context context) => _scope.Numbers.Add(8);
+        public override void ExitOrdinal9(TimeExpressionV2Parser.Ordinal9Context context) => _scope.Numbers.Add(9);
+        public override void ExitOrdinal10(TimeExpressionV2Parser.Ordinal10Context context) => _scope.Numbers.Add(10);
+        public override void ExitOrdinal11(TimeExpressionV2Parser.Ordinal11Context context) => _scope.Numbers.Add(11);
+        public override void ExitOrdinal12(TimeExpressionV2Parser.Ordinal12Context context) => _scope.Numbers.Add(12);
+        public override void ExitOrdinal13(TimeExpressionV2Parser.Ordinal13Context context) => _scope.Numbers.Add(13);
+        public override void ExitOrdinal14(TimeExpressionV2Parser.Ordinal14Context context) => _scope.Numbers.Add(14);
+        public override void ExitOrdinal15(TimeExpressionV2Parser.Ordinal15Context context) => _scope.Numbers.Add(15);
+        public override void ExitOrdinal16(TimeExpressionV2Parser.Ordinal16Context context) => _scope.Numbers.Add(16);
+        public override void ExitOrdinal17(TimeExpressionV2Parser.Ordinal17Context context) => _scope.Numbers.Add(17);
+        public override void ExitOrdinal18(TimeExpressionV2Parser.Ordinal18Context context) => _scope.Numbers.Add(18);
+        public override void ExitOrdinal19(TimeExpressionV2Parser.Ordinal19Context context) => _scope.Numbers.Add(19);
+        public override void ExitOrdinal20(TimeExpressionV2Parser.Ordinal20Context context) => _scope.Numbers.Add(20);
+        public override void ExitOrdinal21(TimeExpressionV2Parser.Ordinal21Context context) => _scope.Numbers.Add(21);
+        public override void ExitOrdinal22(TimeExpressionV2Parser.Ordinal22Context context) => _scope.Numbers.Add(22);
+        public override void ExitOrdinal23(TimeExpressionV2Parser.Ordinal23Context context) => _scope.Numbers.Add(23);
+        public override void ExitOrdinal24(TimeExpressionV2Parser.Ordinal24Context context) => _scope.Numbers.Add(24);
+        public override void ExitOrdinal25(TimeExpressionV2Parser.Ordinal25Context context) => _scope.Numbers.Add(25);
+        public override void ExitOrdinal26(TimeExpressionV2Parser.Ordinal26Context context) => _scope.Numbers.Add(26);
+        public override void ExitOrdinal27(TimeExpressionV2Parser.Ordinal27Context context) => _scope.Numbers.Add(27);
+        public override void ExitOrdinal28(TimeExpressionV2Parser.Ordinal28Context context) => _scope.Numbers.Add(28);
+        public override void ExitOrdinal29(TimeExpressionV2Parser.Ordinal29Context context) => _scope.Numbers.Add(29);
+        public override void ExitOrdinal30(TimeExpressionV2Parser.Ordinal30Context context) => _scope.Numbers.Add(30);
+        public override void ExitOrdinal31(TimeExpressionV2Parser.Ordinal31Context context) => _scope.Numbers.Add(31);
+        #endregion
 
         #endregion
 
@@ -439,6 +473,39 @@ namespace Cervel.TimeParser
         public override void ExitNovember(TimeExpressionV2Parser.NovemberContext context) => _scope.MonthNames.Add(MonthOfYear.November);
         public override void ExitDecember(TimeExpressionV2Parser.DecemberContext context) => _scope.MonthNames.Add(MonthOfYear.December);
 
+
+        public override void EnterNthYearUnion(TimeExpressionV2Parser.NthYearUnionContext context)
+        {
+            OpenScope(nameof(EnterNthYearUnion));
+        }
+
+        public override void ExitNthYearUnion(TimeExpressionV2Parser.NthYearUnionContext context)
+        {
+            var gens = _scope.YearGenerators.Consume();
+
+            CloseScope();
+
+            if (gens.Length > 1)
+                _scope.YearGenerators.Add(Time.Union(gens));
+            else
+                _scope.YearGenerators.Add(gens.Single());
+        }
+
+
+        public override void EnterNthYearExpr(TimeExpressionV2Parser.NthYearExprContext context)
+        {
+            OpenScope(nameof(EnterNthYearExpr));
+        }
+
+        public override void ExitNthYearExpr(TimeExpressionV2Parser.NthYearExprContext context)
+        {
+            var ordinal = _scope.Numbers.ConsumeSingle();
+            var gen = _scope.YearGenerators.ConsumeSingle();
+
+            CloseScope();
+
+            _scope.YearGenerators.Add(Time.Nth(ordinal, gen));
+        }
 
         public override void EnterYearNameUnion(TimeExpressionV2Parser.YearNameUnionContext context)
         {
