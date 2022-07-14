@@ -10,6 +10,7 @@
         from: 2022
         to: 2027
     expect: [2022]
+
 - 
     input:
         - la deuxième année
@@ -22,3 +23,53 @@
         from: 2022
         to: 2027
     expect: [2023]
+
+- 
+    input:
+        - la troisième année
+        - la troisième annee
+        - la 3ème année
+        - la 3eme année
+        - la 3me année
+        - la 3e année
+    generate:
+        from: 2022
+        to: 2027
+    expect: [2024]
+
+- 
+    input:
+        - la quatrième année
+        - la quatrième annee
+        - la 4ème année
+        - la 4eme année
+        - la 4me année
+        - la 4e année
+    generate:
+        from: 2022
+        to: 2027
+    expect: [2025]
+
+- 
+    input:
+        - la cinquième année
+        - la cinquième annee
+        - la 5ème année
+        - la 5eme année
+        - la 5me année
+        - la 5e année
+    generate:
+        from: 2022
+        to: 2027
+    expect: [2026]
+
+# Conjonction
+- 
+    input:
+        - la première année, la troisième année et la cinquième année
+        - la première, la troisième et la cinquième année
+        - les première, troisième et cinquième années
+    generate:
+        from: 2022
+        to: 2027
+    expect: [2022, 2024, 2026]

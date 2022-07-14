@@ -573,12 +573,13 @@ namespace Cervel.TimeParser
 
         public override void ExitNthYearExpr(TimeExpressionV2Parser.NthYearExprContext context)
         {
-            var ordinal = _scope.Numbers.ConsumeSingle();
+            var ordinals = _scope.Numbers.Consume();
             var gen = _scope.YearGenerators.ConsumeSingle();
 
             CloseScope();
 
-            _scope.YearGenerators.Add(Time.Nth(ordinal, gen));
+            _scope.YearGenerators.Add(Time.Union(
+                ordinals.Select(o => Time.Nth(o, gen)).ToArray()));
         }
 
         public override void EnterYearNameUnion(TimeExpressionV2Parser.YearNameUnionContext context)

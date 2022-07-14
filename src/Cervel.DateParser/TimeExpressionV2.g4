@@ -60,7 +60,7 @@ nthDayIter
 	;
 
 nthDayExpr
-	: LE? ordinal daysExpr
+	: ordinalUnion daysExpr
 	;
 
 daysExpr
@@ -118,6 +118,12 @@ dayOfMonthExpr
 dayOfMonth
 	: ordinal1
 	| number
+	;
+
+
+ordinalUnion
+	: LE? ordinal (COMMA | ET) ordinalUnion
+	| LE? ordinal
 	;
 
 ordinal
@@ -325,7 +331,7 @@ nthYearIter
 	;
 
 nthYearExpr
-	: LE? ordinal yearsExpr
+	: ordinalUnion yearsExpr
 	;
 
 yearsExpr

@@ -8,6 +8,8 @@
         from: 2022
         to: 2027
     expect: [2025]
+
+# Conjonction
 - 
     input:
         - 2025, 2027 et 2029
