@@ -73,10 +73,13 @@ namespace Cervel.TimeParser
         private Regex _desRegex = new Regex(@"\bdes\b");
         private Regex _auRegex = new Regex(@"\bau\b");
         private Regex _auxRegex = new Regex(@"\baux\b");
+        private Regex _whitespacesRegex = new Regex(@"\s+");
         private string PreprocessInput(string input)
         {
             var clean = input.Trim()
                 .Replace('-', ' ')
+                .Replace('\'', ' ')
+                .Replace('à', 'a')
                 .Replace('é', 'e')
                 .Replace('è', 'e')
                 .Replace('ê', 'e');
@@ -85,6 +88,9 @@ namespace Cervel.TimeParser
             clean = _desRegex.Replace(clean, "de les");
             clean = _auRegex.Replace(clean, "a le");
             clean = _auxRegex.Replace(clean, "a les");
+
+            // Collapse sequences of multiple whitespace chars
+            clean = _whitespacesRegex.Replace(clean, " ");
 
             return clean;
         }

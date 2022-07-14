@@ -1,0 +1,14 @@
+﻿- 
+    input:
+        - tous les ans sauf 2025
+        - tous les ans à part 2025
+        - tous les ans excepté 2025
+        - tous les ans hors 2025
+        - tous les ans hormis 2025
+        - tous les ans en dehors de 2025
+        - tous les ans à l'exception de 2025
+        - tous les ans à l'exclusion de 2025
+    generate:
+        from: 2022
+        to: 2028
+    expect: [2022, 2023, 2024, 2026, 2027]

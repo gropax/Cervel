@@ -474,6 +474,24 @@ namespace Cervel.TimeParser
         public override void ExitDecember(TimeExpressionV2Parser.DecemberContext context) => _scope.MonthNames.Add(MonthOfYear.December);
 
 
+        public override void EnterYearsExcept(TimeExpressionV2Parser.YearsExceptContext context)
+        {
+            OpenScope(nameof(EnterYearsExcept));
+        }
+
+        public override void ExitYearsExcept(TimeExpressionV2Parser.YearsExceptContext context)
+        {
+            var years = _scope.YearGenerators.Consume();
+
+            CloseScope();
+
+            if (years.Length > 1)
+                _scope.YearGenerators.Add(Time.Outside(years[1], years[0]));
+            else
+                _scope.YearGenerators.Add(years[0]);
+        }
+
+
         public override void EnterYearsNEveryM(TimeExpressionV2Parser.YearsNEveryMContext context)
         {
             OpenScope(nameof(EnterYearsNEveryM));
