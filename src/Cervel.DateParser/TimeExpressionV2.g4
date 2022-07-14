@@ -6,7 +6,7 @@ time : intervals ;  // Parsing entry point
 intervals
 	: days
 	| months
-	//| years
+	| years
 	;
 
 // ------------------------------------------------------------
@@ -254,6 +254,42 @@ december : 'decembre' ;
 
 
 
+// ------------------------------------------------------------
+//             Dates express in terms of years
+// ------------------------------------------------------------
+
+years
+	: yearsSince
+	;
+
+yearsSince
+	: yearsExpr since yearsUntil
+	| yearsUntil
+	;
+
+yearsUntil
+	: yearsExpr until yearsExpr
+	| yearsExpr
+	;
+
+yearsExpr
+	: everyYear
+	//| yearNameUnion
+	;
+
+everyYear
+	: CHAQUE? ANNEE
+	| TOUT? LE ANNEE
+	;
+
+//yearNameUnion : yearNameIter ;
+//yearNameIter
+//	: yearName (COMMA | ET)? yearNameIter
+//	| yearName
+//	;
+
+
+
 until : JUSQUE A ;
 since : A PARTIR DE ;
 
@@ -268,6 +304,7 @@ SAUF : 'sauf' | 'excepte' ;
 CHAQUE : 'chaque' ;
 JOUR : 'jour' | 'jours' | 'j' ;
 MOIS : 'mois' ;
+ANNEE : 'an' | 'ans' | 'annee' | 'annees' ;
 TOUT : 'tout' | 'toute' | 'tous' | 'toutes' | 'tt' ;
 LE : 'le' | 'la' | 'les' | 'l' | 'l\'' ;
 A : 'a' | 'à' ;

@@ -50,6 +50,11 @@ namespace Cervel.TimeParser
             return new EveryUnitGenerator<Month>(TimeMeasures.Month);
         }
 
+        public static IGenerator<Year> EveryYear()
+        {
+            return new EveryUnitGenerator<Year>(TimeMeasures.Year);
+        }
+
         public static IGenerator<Day> Each(DayOfWeek dow) => new DayOfWeekGenerator(dow);
         public static IGenerator<Day> Each(int dayOfMonth) => new DayOfMonthGenerator(dayOfMonth);
         public static IGenerator<Month> Each(MonthOfYear moy) => new MonthByNameGenerator(moy);

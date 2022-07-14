@@ -58,6 +58,12 @@ namespace Cervel.TimeParser
                 CloseScope();
                 _scope.IntervalGenerators.Add(months.ToTimeInterval());
             }
+            else if (_scope.YearGenerators.HasValues())
+            {
+                var years = _scope.YearGenerators.ConsumeSingle();
+                CloseScope();
+                _scope.IntervalGenerators.Add(years.ToTimeInterval());
+            }
             else
             {
             }
@@ -92,6 +98,21 @@ namespace Cervel.TimeParser
 
             _scope.MonthGenerators.Add(intervalGenerator);
         }
+
+        public override void EnterYears(TimeExpressionV2Parser.YearsContext context)
+        {
+            OpenScope(nameof(EnterYears));
+        }
+
+        public override void ExitYears(TimeExpressionV2Parser.YearsContext context)
+        {
+            var intervalGenerator = _scope.YearGenerators.ConsumeSingle();
+
+            CloseScope();
+
+            _scope.YearGenerators.Add(intervalGenerator);
+        }
+
 
 
         public override void EnterDaysUntil(TimeExpressionV2Parser.DaysUntilContext context)
@@ -419,6 +440,12 @@ namespace Cervel.TimeParser
         public override void ExitDecember(TimeExpressionV2Parser.DecemberContext context) => _scope.MonthNames.Add(MonthOfYear.December);
 
 
+        public override void ExitEveryYear(TimeExpressionV2Parser.EveryYearContext context)
+        {
+            _scope.YearGenerators.Add(Time.EveryYear());
+        }
+
+
         private static void EnsureSuccess(ParserRuleContext context)
         {
             if (context.exception != null)
@@ -438,6 +465,7 @@ namespace Cervel.TimeParser
 
         public TmpVar<IGenerator<Day>> DayGenerators = new();
         public TmpVar<IGenerator<Month>> MonthGenerators = new();
+        public TmpVar<IGenerator<Year>> YearGenerators = new();
         public TmpVar<IGenerator<TimeInterval>> IntervalGenerators = new();
 
         public TmpVar<DayOfWeek> DaysOfWeek = new();
