@@ -458,16 +458,16 @@ namespace Cervel.TimeParser
                 _scope.YearGenerators.Add(yearGens.Single());
         }
 
+        public override void ExitEveryYear(TimeExpressionV2Parser.EveryYearContext context)
+        {
+            _scope.YearGenerators.Add(Time.EveryYear());
+        }
+
         public override void ExitYearName(TimeExpressionV2Parser.YearNameContext context)
         {
             string field = context.children[0].GetText();
             int number = int.Parse(context.children[^1].GetText());
             _scope.Numbers.Add(number);
-        }
-
-        public override void ExitEveryYear(TimeExpressionV2Parser.EveryYearContext context)
-        {
-            _scope.YearGenerators.Add(Time.EveryYear());
         }
 
 

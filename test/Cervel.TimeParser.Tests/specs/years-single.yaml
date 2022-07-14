@@ -1,5 +1,4 @@
 ﻿- 
-    debug: true
     input:
         - 2025
         - en 2025
@@ -9,3 +8,14 @@
         from: 2022
         to: 2027
     expect: [2025]
+- 
+    input:
+        - 2025, 2027 et 2029
+        - en 2025, en 2027 et en 2029
+        - en 2025, 2027 et 2029
+        - les ans 2025, 2027 et 2029
+        - les années 2025, 2027 et 2029
+    generate:
+        from: 2022
+        to: 2030
+    expect: [2025, 2027, 2029]

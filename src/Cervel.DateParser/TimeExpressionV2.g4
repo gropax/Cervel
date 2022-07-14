@@ -259,17 +259,42 @@ december : 'decembre' ;
 // ------------------------------------------------------------
 
 years
-	: yearsSince
-	;
-
-yearsSince
-	: yearsExpr since yearsUntil
-	| yearsUntil
+	: yearsUntil
 	;
 
 yearsUntil
-	: yearsExpr until yearsExpr
+	: yearsSince until years
+	| yearsSince
+	;
+
+yearsSince
+	: yearsExcept since years
+	| yearsExcept
+	;
+
+yearsExcept
+	: yearsSeq SAUF years
+	| yearsSeq
+	;
+
+yearsSeq
+	: yearsNEveryM
+	| nthYearUnion
 	| yearsExpr
+	;
+
+yearsNEveryM
+    : number yearsExpr SUR number
+    ;
+
+nthYearUnion : nthYearIter ;
+nthYearIter
+	: nthYearExpr (COMMA | ET)? nthYearIter
+	| nthYearExpr
+	;
+
+nthYearExpr
+	: LE? ordinal yearsExpr
 	;
 
 yearsExpr
