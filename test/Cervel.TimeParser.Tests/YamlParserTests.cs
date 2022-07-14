@@ -51,8 +51,8 @@ namespace Cervel.TimeParser.Tests
 
             var expected = new List<TestCase>()
             {
-                new TestCase("chaque année", generateFrom, generateTo, expectedIntervals),
-                new TestCase("tous les ans", generateFrom, generateTo, expectedIntervals),
+                new TestCase("chaque année", generateFrom, generateTo, expectedIntervals, false),
+                new TestCase("tous les ans", generateFrom, generateTo, expectedIntervals, false),
             };
 
             Assert.Equal(expected, testCases);

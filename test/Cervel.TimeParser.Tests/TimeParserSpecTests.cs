@@ -1,5 +1,6 @@
 using Cervel.TimeParser.Extensions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -13,11 +14,16 @@ namespace Cervel.TimeParser.Tests
             get
             {
                 var parser = new YamlParser();
+                var testCases = new List<TestCase>();
 
-                var path = @".\specs\years.yaml";
+                var specFiles = Directory.GetFiles(@".\specs", "*.yaml", SearchOption.AllDirectories);
+                foreach (var specFile in specFiles)
+                {
+                    using (StreamReader reader = File.OpenText(specFile))
+                        testCases.AddRange(parser.ParseTestCases(reader));
+                }
 
-                using (StreamReader reader = File.OpenText(path))
-                    return new TestCaseData(parser.ParseTestCases(reader).ToList());
+                return new TestCaseData(testCases);
             }
         }
 
@@ -34,6 +40,10 @@ namespace Cervel.TimeParser.Tests
         [MemberData(nameof(TestCases))]
         public void Test(TestCase testCase)
         {
+            if (testCase.Debug)
+            {
+            }
+
             var parseResult = _timeParser.ParseTimeIntervals2(testCase.Input);
             Assert.True(parseResult.IsSuccess);
 

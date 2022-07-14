@@ -8,22 +8,24 @@ using System.Diagnostics;
 namespace Cervel.TimeParser.Dates
 {
     [DebuggerDisplay("{Name}")]
-    public class OnceGenerator : IGenerator<Date>
+    public class OnceGenerator<T> : IGenerator<T>
+        where T : ITimeInterval<T>
     {
         public string Name { get; }
-        private Date _value;
+        private T _value;
 
         public OnceGenerator(
-            Date value = null,
+            T value,
             string name = null)
         {
             _value = value;
             Name = name ?? $"Once<{value}>";
         }
 
-        public IEnumerable<Date> Generate(DateTime fromDate)
+        public IEnumerable<T> Generate(DateTime fromDate)
         {
-            yield return _value ?? new Date(fromDate);
+            if (fromDate < _value.End)
+                yield return _value;
         }
     }
 }

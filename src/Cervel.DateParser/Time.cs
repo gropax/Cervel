@@ -26,15 +26,12 @@ namespace Cervel.TimeParser
             where T : ITimeInterval<T>
             => new NeverGenerator<T>();
 
-        public static IGenerator<Date> Start()
-            => new OnceGenerator();
-
 
         private static DateTime? _now;
         public static void SetNow(DateTime date) => _now = date;
         public static Date GetNow() => _now.HasValue ? new Date(_now.Value) : new Date(DateTime.Now);
 
-        public static IGenerator<Date> Now() => new OnceGenerator(GetNow());
+        public static IGenerator<Date> Now() => new OnceGenerator<Date>(GetNow());
 
         public static IGenerator<Day> Yesterday() => Today().Increment(-1);
         public static IGenerator<Day> Today() => Now().CoveringDays();
@@ -58,6 +55,8 @@ namespace Cervel.TimeParser
         public static IGenerator<Day> Each(DayOfWeek dow) => new DayOfWeekGenerator(dow);
         public static IGenerator<Day> Each(int dayOfMonth) => new DayOfMonthGenerator(dayOfMonth);
         public static IGenerator<Month> Each(MonthOfYear moy) => new MonthByNameGenerator(moy);
+
+        public static IGenerator<Year> Year(int number) => new OnceGenerator<Year>(new Year(number));
 
         public static IGenerator<T> Nth<T>(int n, IGenerator<T> g)
             where T : ITimeInterval<T>
@@ -139,11 +138,6 @@ namespace Cervel.TimeParser
 
 
         #region Month related methods
-
-        /// <summary>
-        /// Le mois-date précédent (ou la date en cours)
-        /// </summary>
-        public static IGenerator<Date> StartOfCurrentMonth() => Start().StartOfMonth().First($"SOMonth");
 
         /// <summary>
         /// Premier jour-date du mois de chaque date

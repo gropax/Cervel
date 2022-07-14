@@ -29,9 +29,13 @@ namespace Cervel.TimeParser.Tests
                 var to = ParseTimeInterval(toStr).Start;
                 var expect = expectStr.Select(s => ParseTimeInterval(s)).ToArray();
 
+                bool debug = false;
+                if (dict.ContainsKey("debug"))
+                    debug = (string)dict["debug"] == "true";
+
                 foreach (var input in inputs)
                 {
-                    var testCase = new TestCase(input, from, to, expect);
+                    var testCase = new TestCase(input, from, to, expect, debug);
                     yield return testCase;
                 }
             }

@@ -1,0 +1,11 @@
+﻿- 
+    debug: true
+    input:
+        - 2025
+        - en 2025
+        - l'an 2025
+        - l'année 2025
+    generate:
+        from: 2022
+        to: 2027
+    expect: [2025]

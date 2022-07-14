@@ -30,7 +30,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="specs\years.yaml">
+    <None Update="specs\years-single.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="specs\years-since.yaml.tmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="specs\years-every.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

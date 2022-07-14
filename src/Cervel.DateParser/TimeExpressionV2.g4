@@ -144,7 +144,7 @@ number
 	| number25 | number26 | number27 | number28 | number29
 	| number30 | number31 ;
 
-numberInDigits : NUMBER ; 
+numberInDigits : {_input.Lt(1).Text.Length <= 2}? NUMBER ;
 
 number1 : 'un' ;
 number2 : 'deux' ;
@@ -274,7 +274,7 @@ yearsUntil
 
 yearsExpr
 	: everyYear
-	//| yearNameUnion
+	| yearNameUnion
 	;
 
 everyYear
@@ -282,12 +282,18 @@ everyYear
 	| TOUT? LE ANNEE
 	;
 
-//yearNameUnion : yearNameIter ;
-//yearNameIter
-//	: yearName (COMMA | ET)? yearNameIter
-//	| yearName
-//	;
+yearNameUnion : yearNameIter ;
+yearNameIter
+	: yearByName (COMMA | ET)? yearNameIter
+	| yearByName
+	;
 
+yearByName
+	: EN? yearName
+	| LE? ANNEE yearName
+	;
+
+yearName : {_input.Lt(1).Text.Length == 4}? NUMBER ;
 
 
 until : JUSQUE A ;
@@ -298,6 +304,7 @@ LPAR : '(' ;
 RPAR : ')' ;
 
 //ORDINAL : ('0' .. '9')+ ('er' | 'eme' | 'e') ;
+//YEAR_NAME : ('0' .. '9'){4} ;
 NUMBER : ('0' .. '9')+ ;
 
 SAUF : 'sauf' | 'excepte' ;
@@ -314,3 +321,4 @@ COMPTER : 'compter' ;
 DEPUIS : 'depuis' ;
 JUSQUE : 'jusque' | 'jusqu' | 'jusqu\'' ;
 SUR : 'sur' ;
+EN : 'en' ;
