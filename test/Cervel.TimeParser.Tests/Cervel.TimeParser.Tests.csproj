@@ -42,7 +42,7 @@
     <None Update="specs\years-single.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="specs\years-since.yaml.tmp">
+    <None Update="specs\years-since.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="specs\years-every.yaml">
