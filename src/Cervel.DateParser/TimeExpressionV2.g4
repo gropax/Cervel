@@ -6,8 +6,15 @@ time : intervals ;  // Parsing entry point
 intervals
 	: days
 	| months
+	| yearsUnion
+	;
+
+yearsUnion : yearsIter ;
+yearsIter
+	: years (COMMA | ET) yearsIter
 	| years
 	;
+
 
 // ------------------------------------------------------------
 //                Dates express in terms of days

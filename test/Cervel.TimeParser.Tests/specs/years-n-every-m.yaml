@@ -6,6 +6,7 @@
         from: 2022
         to: 2032
     expect: [2022, 2024, 2026, 2028, 2030]
+
 - 
     input:
         - deux années sur trois
@@ -14,3 +15,12 @@
         from: 2022
         to: 2032
     expect: [2022, 2023, 2025, 2026, 2028, 2029, 2031]
+
+# Conjonction
+- 
+    input:
+        - une année sur trois et deux années sur cinq
+    generate:
+        from: 2022
+        to: 2032
+    expect: [2022, 2023, 2025, 2027, 2028, 2031]

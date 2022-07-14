@@ -99,6 +99,25 @@ namespace Cervel.TimeParser
             _scope.MonthGenerators.Add(intervalGenerator);
         }
 
+
+        public override void EnterYearsUnion(TimeExpressionV2Parser.YearsUnionContext context)
+        {
+            OpenScope(nameof(EnterYearsUnion));
+        }
+
+        public override void ExitYearsUnion(TimeExpressionV2Parser.YearsUnionContext context)
+        {
+            var yearGenerators = _scope.YearGenerators.Consume();
+
+            CloseScope();
+
+            if (yearGenerators.Length > 1)
+                _scope.YearGenerators.Add(Time.Union(yearGenerators));
+            else
+                _scope.YearGenerators.Add(yearGenerators[0]);
+        }
+
+
         public override void EnterYears(TimeExpressionV2Parser.YearsContext context)
         {
             OpenScope(nameof(EnterYears));
