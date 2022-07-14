@@ -1,0 +1,8 @@
+﻿- 
+    input:
+        - tous les ans jusqu'à 2026
+        - tous les ans jusqu'en 2026
+    generate:
+        from: 2022
+        to: 2028
+    expect: [2022, 2023, 2024, 2025]

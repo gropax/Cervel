@@ -23,12 +23,12 @@ daysUntil
 	;
 
 daysSince
-	: daysExcept DEPUIS intervals
+	: daysExcept since intervals
 	| daysExcept
 	;
 
 daysExcept
-	: daysScopedUnion SAUF intervals
+	: daysScopedUnion except intervals
 	| daysScopedUnion
 	;
 
@@ -230,7 +230,7 @@ months
 	;
 
 monthsSince
-	: monthsExpr DEPUIS monthsUntil
+	: monthsExpr since monthsUntil
 	| monthsUntil
 	;
 
@@ -299,12 +299,12 @@ yearsUntil
 	;
 
 yearsSince
-	: yearsExcept DEPUIS years
+	: yearsExcept since years
 	| yearsExcept
 	;
 
 yearsExcept
-	: yearsSeq SAUF years
+	: yearsSeq except years
 	| yearsSeq
 	;
 
@@ -352,7 +352,9 @@ yearByName
 yearName : {_input.Lt(1).Text.Length == 4}? NUMBER ;
 
 
-until : JUSQUE A ;
+until : 'jusqu a' | 'jusqu en' ;
+since : 'depuis' | 'a partir de' | 'a compter de' | 'des' ;
+except : 'sauf' | 'excepte' | 'hors' | 'hormis' | 'a part' | 'a l exception de' | 'a l exclusion de' | 'en dehors de' ;
 
 
 LPAR : '(' ;
@@ -402,17 +404,16 @@ NUMBER21 : 'vingt et un' ;
 NUMBER30 : 'trente' ;
 NUMBER31 : 'trente et un' ;
 
-SAUF : 'sauf' | 'excepte' | 'hors' | 'hormis' | 'a part' | 'a l exception de' | 'a l exclusion de' | 'en dehors de' ;
 CHAQUE : 'chaque' ;
+TOUT : 'tout' | 'toute' | 'tous' | 'toutes' | 'tt' ;
+
 JOUR : 'jour' | 'jours' | 'j' ;
 MOIS : 'mois' ;
 ANNEE : 'an' | 'ans' | 'annee' | 'annees' ;
-TOUT : 'tout' | 'toute' | 'tous' | 'toutes' | 'tt' ;
+
 LE : 'le' | 'la' | 'les' | 'l' | 'l\'' ;
 A : 'a' | 'à' ;
 DE : 'de' | 'd\'' | 'd' ;
-DEPUIS : 'depuis' | 'a partir de' | 'a compter de' | 'des' ;
-JUSQUE : 'jusque' | 'jusqu' | 'jusqu\'' ;
 SUR : 'sur' ;
 EN : 'en' ;
 ET : 'et' ;
