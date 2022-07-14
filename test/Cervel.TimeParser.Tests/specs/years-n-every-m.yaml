@@ -1,0 +1,16 @@
+﻿- 
+    input:
+        - une année sur deux
+        - 1 année sur 2
+    generate:
+        from: 2022
+        to: 2032
+    expect: [2022, 2024, 2026, 2028, 2030]
+- 
+    input:
+        - deux années sur trois
+        - 2 années sur 3
+    generate:
+        from: 2022
+        to: 2032
+    expect: [2022, 2023, 2025, 2026, 2028, 2029, 2031]
