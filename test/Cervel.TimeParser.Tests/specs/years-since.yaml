@@ -8,3 +8,12 @@
         from: 2022
         to: 2028
     expect: [2024, 2025, 2026, 2027]
+
+# Conjunction
+- 
+    input:
+        - 1 année sur 4 depuis 2026 et 1 année sur 3 à partir de 2030
+    generate:
+        from: 2022
+        to: 2040
+    expect: [2026, 2030, 2033, 2034, 2036, 2038, 2039]
