@@ -27,6 +27,13 @@ namespace Cervel.TimeParser
                 (l) => l.TimeIntervals.Coalesce());
         }
 
+        public ParseResult<IGenerator<TimeInterval>> ParseTimeIntervals2(string input)
+        {
+            return ParseSymbolV2(input, false,
+                (p) => p.time(),
+                (l) => l.TimeIntervals);
+        }
+
         private ParseResult<TResult> ParseSymbolV2<TResult>(
             string input,
             bool parseDateTime,

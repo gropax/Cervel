@@ -1032,6 +1032,8 @@ namespace Cervel.TimeParser.Tests
         #endregion
 
 
+        #region Months
+
         [Theory]
         [InlineData("mois")]
         [InlineData("le mois")]
@@ -1143,6 +1145,8 @@ namespace Cervel.TimeParser.Tests
                     DaysInterval(2022, 7, 1, dayNumber: 31)),
                 intervals);
         }
+
+        #endregion
 
 
         [Theory]
@@ -1273,5 +1277,46 @@ namespace Cervel.TimeParser.Tests
                     DayInterval(2022, 7, 26)),
                 intervals);
         }
+
+
+        #region Years
+
+        //[Theory]
+        //[InlineData("mois")]
+        //[InlineData("le mois")]
+        //[InlineData("chaque mois")]
+        //[InlineData("tous les mois")]
+        //[InlineData("((chaque jour))")]
+        //public void TestParse_EveryMonth(string input)
+        //{
+        //    var dateParseResult = _timeParser.ParseDateTimes(input);
+        //    Assert.True(dateParseResult.IsSuccess);
+
+        //    var dates = dateParseResult.Value.Generate(_jan1st2022, _jan1st2023).ToArray();
+        //    Assert.Equal(12, dates.Count());
+        //    Assert.Equal(
+        //        Dates(
+        //            Day(2022, 1, 1),
+        //            Day(2022, 2, 1),
+        //            Day(2022, 3, 1),
+        //            Day(2022, 4, 1),
+        //            Day(2022, 5, 1)),
+        //        dates.Take(5));
+
+        //    var intervalParseResult = _timeParser.ParseTimeIntervals(input);
+        //    Assert.True(intervalParseResult.IsSuccess);
+
+        //    var intervals = intervalParseResult.Value
+        //        .Coalesce()
+        //        .Generate(_jan1st2022, _jan1st2023)
+        //        .ToArray();
+
+        //    Assert.Equal(
+        //        Intervals(
+        //            Interval(Day(2022, 1, 1), Day(2023, 1, 1))),
+        //        intervals);
+        //}
+
+        #endregion
     }
 }

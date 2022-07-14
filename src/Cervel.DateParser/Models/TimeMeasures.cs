@@ -22,7 +22,7 @@ namespace Cervel.TimeParser
     {
         public static DayMeasure Day = new DayMeasure();
         public static MonthMeasure Month = new MonthMeasure();
-        //public static YearMeasure Year = new YearMeasure();
+        public static YearMeasure Year = new YearMeasure();
     }
 
     public class DayMeasure : ITimeMeasure<Day>
@@ -61,34 +61,21 @@ namespace Cervel.TimeParser
         }
     }
 
-    //public class YearMeasure : ITimeMeasure<Year>
-    //{
-    //    private int _factor;
-    //    public YearMeasure(int factor = 1)
-    //    {
-    //        _factor = factor;
-    //    }
+    public class YearMeasure : ITimeMeasure<Year>
+    {
+        public string Name => "Year";
 
-    //    public string Name => $"Year({_factor})";
+        public Year GetUnit(DateTime dateTime)
+        {
+            return new Year(dateTime.Year);
+        }
 
-    //    public Date AddTo(Date date)
-    //    {
-    //        return new Date(date.DateTime.AddYears(_factor));
-    //    }
+        public DateTime Shift(DateTime date, int factor) => date.AddYears(factor);
+        public Date Shift(Date date, int factor) => new Date(date.DateTime.AddYears(factor));
 
-    //    public Year GetUnit(DateTime dateTime)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public Date Shift(Date date, int factor)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public Year Shift(Year date, int factor)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
+        public Year Shift(Year month, int factor)
+        {
+            return new Year(month.Start.AddYears(factor));
+        }
+    }
 }
